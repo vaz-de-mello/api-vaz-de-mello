@@ -63,22 +63,23 @@ enum PlataformaDistribuicao {
 // Models
 
 model Usuario {
-  id               String      @id @default(uuid())
+  id               String       @id @default(uuid())
   nome             String
-  login            String      @unique
-  email            String      @unique
+  login            String       @unique
+  email            String       @unique
   senha            String
-  cpf              String      @unique
+  cpf              String       @unique
   data_nascimento  DateTime
-  escritorio       Escritorio? @relation(fields: [escritorio_id], references: [id])
+  escritorio       Escritorio?  @relation(fields: [escritorio_id], references: [id])
   escritorio_id    String?
-  tipo_perfil      Perfil      @relation(fields: [tipo_perfil_id], references: [id])
+  tipo_perfil      Perfil       @relation(fields: [tipo_perfil_id], references: [id])
   tipo_perfil_id   Int
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @default(now())
-  email_verificado Boolean     @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
+  email_verificado Boolean      @default(false)
   email_token      String?
   status           Int // 1: Ativo, 0: Inativo, 2: Aguardando
+  Precatorio       Precatorio[]
 
   @@map("usuarios")
 }
@@ -96,8 +97,9 @@ model Escritorio {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @default(now())
 
-  usuarios  Usuario[]
-  processos Processo[]
+  usuarios   Usuario[]
+  processos  Processo[]
+  Precatorio Precatorio[]
 
   @@map("escritorios")
 }
@@ -139,6 +141,10 @@ model Precatorio {
   comprovante_pdf       String
   createdAt             DateTime             @default(now())
   updatedAt             DateTime             @default(now())
+  usuario_id            String?
+  usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
+  escritorio_id         String?
+  escritorio            Escritorio?          @relation(fields: [escritorio_id], references: [id])
 
   restituicoes Restituicao[]
 
