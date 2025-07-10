@@ -1,0 +1,20 @@
+import { HonorariosDestacados, TipoVerba } from "src/shared/enum";
+
+export class Precatorio {
+    id: string;
+    cliente_id: string;
+    data_levantamento: Date;
+    valor_bruto: number;
+    valor_irrf_retido: number;
+    rra_meses: number;
+    tribunal_pagador: string;
+    tipo_verba: TipoVerba;
+    honorarios_destacados: HonorariosDestacados;
+    percentual_honorario: number;
+    valor_honorario: number;
+    processo_origem: string;
+    oficio_pdf: string;
+    comprovante_pdf: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

@@ -1,0 +1,1 @@
+export const roundNumber2Cases = (value: number): number => Math.round(value * 100) / 100;  
