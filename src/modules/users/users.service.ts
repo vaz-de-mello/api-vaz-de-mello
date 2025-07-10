@@ -85,7 +85,7 @@ export class UsersService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException('Escritório não encontrado.');
+                    throw new NotFoundException('Usuário não encontrado.');
                 }
             }
 

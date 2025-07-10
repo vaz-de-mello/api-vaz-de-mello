@@ -11,12 +11,21 @@ import {
     Max,
     IsEnum,
     IsUrl,
+    IsOptional,
 } from 'class-validator';
 
 export class CreatePrecatorioDto {
     @IsUUID(undefined, { message: '`cliente_id` deve ser um UUID válido.' })
     @IsNotEmpty({ message: '`cliente_id` é obrigatório.' })
     cliente_id: string;
+
+    @IsOptional()
+    @IsUUID(undefined, { message: '`usuario_id` deve ser um UUID válido.' })
+    usuario_id: string;
+
+    @IsOptional()
+    @IsUUID(undefined, { message: '`escritorio_id` deve ser um UUID válido.' })
+    escritorio_id: string;
 
     @IsDateString({}, { message: '`data_levantamento` deve ser uma data válida no formato ISO.' })
     data_levantamento: string;

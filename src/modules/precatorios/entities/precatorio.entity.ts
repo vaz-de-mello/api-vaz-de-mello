@@ -1,6 +1,7 @@
-import { HonorariosDestacados, TipoVerba } from "src/shared/enum";
+import { HonorariosDestacados, TipoVerba } from "@prisma/client";
 
-export class Precatorio {
+
+export class PrecatorioEntity {
     id: string;
     cliente_id: string;
     data_levantamento: Date;
@@ -17,4 +18,6 @@ export class Precatorio {
     comprovante_pdf: string;
     createdAt: Date;
     updatedAt: Date;
+    usuario_id: string;
+    escritorio_id: string;
 }

@@ -1,9 +1,17 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreatePrecatorioDto } from './dto/create-precatorio.dto';
-import { UpdatePrecatorioDto } from './dto/update-precatorio.dto';
-import { DatabaseService } from '../database/database.service';
+import {
+    BadRequestException,
+    ConflictException,
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
+import { DatabaseService } from '../database/database.service';
+
+import { PrecatorioEntity } from './entities';
+import { PageDto } from 'src/shared/@types';
 
 @Injectable()
 export class PrecatoriosService {
@@ -43,19 +51,58 @@ export class PrecatoriosService {
         }
     }
 
-    async findAll() {
-        return `This action returns all precatorios`;
+    async findAll(query: Partial<PrecatorioEntity>, page: PageDto) {
+        return this.db.$transaction([
+            this.db.precatorio.count({ where: query }),
+            this.db.precatorio.findMany({
+                where: query,
+                ...page,
+                orderBy: { createdAt: 'desc' },
+                include: {
+                    cliente: true,
+                }
+            })
+        ])
     }
 
-    async findOne(id: number) {
-        return `This action returns a #${id} precatorio`;
+    async findFirst(args: Prisma.PrecatorioFindFirstArgs) {
+        return this.db.precatorio.findFirst(args);
+
     }
 
-    async update(id: number, updatePrecatorioDto: UpdatePrecatorioDto) {
-        return `This action updates a #${id} precatorio`;
+    async findUnique(args: Prisma.PrecatorioFindUniqueArgs) {
+        return this.db.precatorio.findUnique(args);
     }
 
-    async remove(id: number) {
-        return `This action removes a #${id} precatorio`;
+    async update(updatePrecatorioDto: Prisma.PrecatorioUpdateArgs) {
+        try {
+            const updatedUsuario = await this.db.precatorio.update(updatePrecatorioDto);
+            return updatedUsuario;
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException('Precatório não encontrado.');
+                }
+            }
+
+            throw error;
+        }
+    }
+
+    async delete(id: string) {
+        try {
+            await this.db.precatorio.delete({
+                where: { id },
+            });
+
+            return { message: 'Precatório deletado com sucesso.' };
+
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
+                throw new NotFoundException('Precatório não encontrado para exclusão.');
+            }
+
+            throw error;
+        }
     }
 }
