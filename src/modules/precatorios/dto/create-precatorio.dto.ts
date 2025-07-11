@@ -8,10 +8,10 @@ import {
     IsPositive,
     IsInt,
     Min,
-    Max,
     IsEnum,
     IsUrl,
     IsOptional,
+    Max,
 } from 'class-validator';
 
 export class CreatePrecatorioDto {
@@ -40,16 +40,17 @@ export class CreatePrecatorioDto {
 
     @IsInt({ message: '`rra_meses` deve ser um número inteiro.' })
     @Min(1, { message: '`rra_meses` deve ser no mínimo 1.' })
+    @Max(12, { message: '`rra_meses` deve ser no máximo 12.' })
     rra_meses: number;
 
     @IsString({ message: '`tribunal_pagador` deve ser uma string.' })
     @IsNotEmpty({ message: '`tribunal_pagador` é obrigatório.' })
     tribunal_pagador: string;
 
-    @IsEnum(TipoVerba, { message: '`tipo_verba` deve ser ALIMENTAR ou INDENIZATORIA.' })
+    @IsEnum(TipoVerba, { message: '`tipo_verba` deve ser \'alimentar\', \'auxílio_acidente\', \'indenizatória\' ou \'outros\'.' })
     tipo_verba: TipoVerba;
 
-    @IsEnum(HonorariosDestacados, { message: '`honorarios_destacados` deve ser SIM ou NAO.' })
+    @IsEnum(HonorariosDestacados, { message: '`honorarios_destacados` deve ser \'Sim\' ou \'Não\'.' })
     honorarios_destacados: HonorariosDestacados;
 
     @IsNumber({}, { message: '`percentual_honorario` deve ser um número.' })
