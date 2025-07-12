@@ -110,7 +110,7 @@ model Cliente {
   nome            String
   data_nascimento DateTime
   sexo            Sexo
-  doença_grave   Boolean
+  doenca_grave    Boolean
   laudo_doenca    String
   hipossuficiente Boolean
   createdAt       DateTime @default(now())
