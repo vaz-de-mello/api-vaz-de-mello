@@ -10,6 +10,7 @@ import { OfficesModule } from './modules/offices/offices.module';
 import { AuthGuard, RolesGuard } from './shared/guards';
 import { CalculatorModule } from './modules/calculator/calculator.module';
 import { PrecatoriosModule } from './modules/precatorios/precatorios.module';
+import { ClientsModule } from './modules/clients/clients.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { PrecatoriosModule } from './modules/precatorios/precatorios.module';
         OfficesModule,
         CalculatorModule,
         PrecatoriosModule,
+        ClientsModule,
     ],
     controllers: [],
     providers: [

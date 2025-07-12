@@ -1,21 +1,28 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import {
+    BadRequestException,
+    ConflictException,
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException,
+} from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 
 import { DatabaseService } from '../database/database.service';
 
-import { OfficeEntity } from './entities';
 import { PageDto } from 'src/shared/@types';
 
+import { ClientEntity } from './entities';
+
 @Injectable()
-export class OfficesService {
+export class ClientsService {
     constructor(
         private readonly db: DatabaseService,
     ) { }
 
-    async create(createOfficeDto: Prisma.EscritorioCreateArgs) {
+    async create(createClientArgs: Prisma.ClienteCreateArgs) {
         try {
-            const office = await this.db.escritorio.create(createOfficeDto);
+            const office = await this.db.cliente.create(createClientArgs);
             return office;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
@@ -23,14 +30,14 @@ export class OfficesService {
                     case 'P2002':
                         // Violação de campo único
                         const fields = (error.meta?.target as string[])?.join(', ') || 'campos únicos';
-                        throw new ConflictException(`Já existe um escritório com os seguintes dados duplicados: ${fields}.`);
+                        throw new ConflictException(`Já existe um cliente com os seguintes dados duplicados: ${fields}.`);
 
                     case 'P2009':
                         // Dados inválidos enviados
                         throw new BadRequestException('Dados inválidos enviados para o banco.');
 
                     default:
-                        throw new InternalServerErrorException('Erro desconhecido ao criar escritório.');
+                        throw new InternalServerErrorException('Erro desconhecido ao criar cliente.');
                 }
             }
 
@@ -40,10 +47,10 @@ export class OfficesService {
         }
     }
 
-    async findAll(query: Partial<OfficeEntity>, page: PageDto) {
+    async findAll(query: Partial<ClientEntity>, page: PageDto) {
         return this.db.$transaction([
-            this.db.escritorio.count({ where: query }),
-            this.db.escritorio.findMany({
+            this.db.cliente.count({ where: query }),
+            this.db.cliente.findMany({
                 where: query,
                 ...page,
                 orderBy: { createdAt: 'desc' },
@@ -51,21 +58,18 @@ export class OfficesService {
         ])
     }
 
-
-    async findOne(id: string) {
-        return this.db.escritorio.findUnique({
-            where: { id },
-        });
+    async findUnique(args: Prisma.ClienteFindUniqueArgs) {
+        return this.db.cliente.findUnique(args);
     }
 
-    async update(updateOfficeDto: Prisma.EscritorioUpdateArgs) {
+    async update(updateClientArgs: Prisma.ClienteUpdateArgs) {
         try {
-            const updatedEscritorio = await this.db.escritorio.update(updateOfficeDto);
-            return updatedEscritorio;
+            const updatedClient = await this.db.cliente.update(updateClientArgs);
+            return updatedClient;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException('Escritório não encontrado.');
+                    throw new NotFoundException('Cliente não encontrado.');
                 }
             }
 
@@ -73,16 +77,16 @@ export class OfficesService {
         }
     }
 
-    async delete(id: string) {
+    async remove(id: string) {
         try {
-            await this.db.escritorio.delete({
+            await this.db.cliente.delete({
                 where: { id },
             });
 
-            return { message: 'Escritório deletado com sucesso.' };
+            return { message: 'Cliente deletado com sucesso.' };
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-                throw new NotFoundException('Escritório não encontrado para exclusão.');
+                throw new NotFoundException('Cliente não encontrado para exclusão.');
             }
 
             throw error;

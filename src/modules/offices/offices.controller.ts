@@ -48,7 +48,9 @@ export class OfficesController {
 
     @Roles(ProfileType.ADMIN, ProfileType.ADVOGADO, ProfileType.CLIENTE_INDIVIDUAL)
     @Get(':id')
-    async findOne(@Param('id') id: string) {
+    async findOne(
+        @Param('id') id: string,
+    ) {
         const data = await this.officesService.findOne(id);
         if (!data) throw new NotFoundException('Escritório não encontrado.');
 
