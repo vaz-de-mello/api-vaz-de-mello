@@ -35,7 +35,10 @@ export class ClientsController {
 
     @Get()
     async findAll(
-        @PageQuery() { page, query }: PageQueryDto<Partial<ClientEntity>>
+        @PageQuery({
+            caseSensitive: ['nome'],
+            equals: ['cpf', 'id'],
+        }) { page, query }: PageQueryDto<Partial<ClientEntity>>
     ) {
         const [total, clients] = await this.clientsService.findAll(query, page);
         const response = createPaginatedResponse({

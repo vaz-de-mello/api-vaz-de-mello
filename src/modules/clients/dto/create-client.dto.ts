@@ -27,7 +27,7 @@ export class CreateClientDto {
     })
     sexo: Sexo;
 
-    @IsBoolean({ message: '`doença_grave` deve ser um valor booleano (true ou false).' })
+    @IsBoolean({ message: '`doenca_grave` deve ser um valor booleano (true ou false).' })
     doenca_grave: boolean;
 
     @IsString({ message: '`laudo_doenca` deve ser uma string.' })
