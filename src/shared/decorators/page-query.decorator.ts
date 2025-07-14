@@ -1,6 +1,11 @@
 import { ExecutionContext, createParamDecorator } from "@nestjs/common";
 
-export const PageQuery = createParamDecorator((_, context: ExecutionContext) => {
+export interface PageQueryOptions {
+    equals?: string[];
+    caseSensitive?: string[];
+}
+
+export const PageQuery = createParamDecorator((options: PageQueryOptions, context: ExecutionContext) => {
     const whereContainsQuery = {};
 
     const { query } = context.switchToHttp().getRequest();
@@ -18,7 +23,13 @@ export const PageQuery = createParamDecorator((_, context: ExecutionContext) => 
 
     queryKeys.forEach((key, index) => {
         const value = queryValues[index];
-        whereContainsQuery[key] = { contains: value }
+        whereContainsQuery[key] = {};
+
+        if (options.equals?.includes(key)) whereContainsQuery[key].equals = value;
+        else whereContainsQuery[key].contains = value;
+
+        if (options.caseSensitive?.includes(key)) whereContainsQuery[key].mode = 'insensitive';
+        else whereContainsQuery[key].mode = 'default';
     })
     return { query: whereContainsQuery, page }
 })
