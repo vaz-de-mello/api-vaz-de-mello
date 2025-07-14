@@ -11,6 +11,7 @@ import { AuthGuard, RolesGuard } from './shared/guards';
 import { CalculatorModule } from './modules/calculator/calculator.module';
 import { PrecatoriosModule } from './modules/precatorios/precatorios.module';
 import { ClientsModule } from './modules/clients/clients.module';
+import { RestituicaoModule } from './modules/restituicao/restituicao.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { ClientsModule } from './modules/clients/clients.module';
         CalculatorModule,
         PrecatoriosModule,
         ClientsModule,
+        RestituicaoModule,
     ],
     controllers: [],
     providers: [
