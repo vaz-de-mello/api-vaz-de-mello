@@ -50,7 +50,10 @@ export class PrecatoriosController {
 
     @Get()
     async findAll(
-        @PageQuery() { page, query }: PageQueryDto<Partial<PrecatorioEntity>>
+        @PageQuery({
+            caseSensitive: ['tribunal_pagador'],
+            equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
+        }) { page, query }: PageQueryDto<Partial<PrecatorioEntity>>
     ) {
         const [total, data] = await this.precatoriosService.findAll(query, page);
         const response = createPaginatedResponse({

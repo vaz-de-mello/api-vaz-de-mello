@@ -50,7 +50,10 @@ export class UsersController {
 
     @Get()
     async findAll(
-        @PageQuery() { page, query }: PageQueryDto<Partial<UserEntity>>
+        @PageQuery({
+            caseSensitive: ['nome'],
+            equals: ['cpf', 'escritorio_id', 'login', 'id']
+        }) { page, query }: PageQueryDto<Partial<UserEntity>>
     ) {
         const [total, users] = await this.usersService.findAll(query, page);
         const response = createPaginatedResponse({

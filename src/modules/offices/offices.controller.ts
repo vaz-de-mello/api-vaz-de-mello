@@ -34,7 +34,10 @@ export class OfficesController {
 
     @Get()
     async findAll(
-        @PageQuery() { page, query }: PageQueryDto<Partial<OfficeEntity>>
+        @PageQuery({
+            caseSensitive: ['nome_fantasia', 'responsaveis_legais'],
+            equals: ['cnpj', 'id'],
+        }) { page, query }: PageQueryDto<Partial<OfficeEntity>>
     ) {
         const [total, offices] = await this.officesService.findAll(query, page);
         const response = createPaginatedResponse({
