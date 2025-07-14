@@ -28,11 +28,6 @@ enum TeseAplicada {
   outros
 }
 
-enum NecessitaCalculoJudicial {
-  Sim
-  Não
-}
-
 enum StatusRestituicao {
   em_analise
   elegivel
@@ -152,19 +147,19 @@ model Precatorio {
 }
 
 model Restituicao {
-  id                          String                   @id @default(uuid())
-  precatorio_id               String
-  precatorio                  Precatorio               @relation(fields: [precatorio_id], references: [id])
-  tese_aplicada               TeseAplicada
-  valor_simulador_RRA         Decimal
-  valor_ir_devido             Decimal
-  diferença_IR               Decimal
-  valor_corrigido_SELIC       Decimal
-  necessita_cálculo_judicial NecessitaCalculoJudicial
-  data_cálculo               DateTime
-  status                      StatusRestituicao
-  createdAt                   DateTime                 @default(now())
-  updatedAt                   DateTime                 @default(now())
+  id                         String            @id @default(uuid())
+  precatorio_id              String
+  precatorio                 Precatorio        @relation(fields: [precatorio_id], references: [id])
+  tese_aplicada              TeseAplicada
+  valor_simulador_RRA        Decimal
+  valor_ir_devido            Decimal
+  diferença_IR              Decimal
+  valor_corrigido_SELIC      Decimal
+  necessita_calculo_judicial Boolean
+  data_calculo               DateTime
+  status                     StatusRestituicao
+  createdAt                  DateTime          @default(now())
+  updatedAt                  DateTime          @default(now())
 
   @@map("restituicoes")
 }
