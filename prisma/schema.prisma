@@ -153,7 +153,7 @@ model Restituicao {
   tese_aplicada              TeseAplicada
   valor_simulador_RRA        Decimal
   valor_ir_devido            Decimal
-  diferença_IR              Decimal
+  diferenca_IR               Decimal
   valor_corrigido_SELIC      Decimal
   necessita_calculo_judicial Boolean
   data_calculo               DateTime
