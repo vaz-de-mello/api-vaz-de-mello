@@ -13,6 +13,7 @@ import { PrecatoriesModule } from './modules/precatories/precatories.module';
 import { ClientsModule } from './modules/clients/clients.module';
 import { RestituitionModule } from './modules/restituition/restituition.module';
 import { ProcessesModule } from './modules/processes/processes.module';
+import { DocumentsModule } from './modules/documents/documents.module';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { ProcessesModule } from './modules/processes/processes.module';
         ClientsModule,
         RestituitionModule,
         ProcessesModule,
+        DocumentsModule,
     ],
     controllers: [],
     providers: [

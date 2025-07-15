@@ -78,8 +78,8 @@ export class ClientsController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
-        const { message } = await this.clientsService.remove(id);
+    async delete(@Param('id') id: string) {
+        const { message } = await this.clientsService.delete(id);
         return new Ok({ message });
     }
 }

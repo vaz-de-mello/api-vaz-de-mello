@@ -135,7 +135,7 @@ export class PrecatoriesController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
+    async delete(@Param('id') id: string) {
         const response = await this.precatoriesService.delete(id);
         return new Ok(response);
     }

@@ -82,7 +82,7 @@ export class RestitutionService {
         }
     }
 
-    async remove(id: string) {
+    async delete(id: string) {
         try {
             await this.db.restituicao.delete({
                 where: { id },

@@ -83,8 +83,8 @@ export class RestitutionController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
-        const { message } = await this.restituitionService.remove(id);
+    async delete(@Param('id') id: string) {
+        const { message } = await this.restituitionService.delete(id);
         return new Ok({
             message,
         });

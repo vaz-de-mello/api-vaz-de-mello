@@ -5,39 +5,40 @@ import {
     InternalServerErrorException,
     NotFoundException,
 } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 import { DatabaseService } from '../database/database.service';
-
+import { DocumentEntity } from './entities';
 import { PageDto } from 'src/shared/@types';
 
-import { ClientEntity } from './entities';
 
 @Injectable()
-export class ClientsService {
-    constructor(
-        private readonly db: DatabaseService,
-    ) { }
+export class DocumentsService {
+    constructor(private readonly db: DatabaseService) { }
 
-    async create(createClientArgs: Prisma.ClienteCreateArgs) {
+    async create(createArgs: Prisma.DocumentoCreateArgs) {
         try {
-            const office = await this.db.cliente.create(createClientArgs);
-            return office;
+            const document = await this.db.documento.create(createArgs);
+            return document;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 switch (error.code) {
                     case 'P2002':
                         // Violação de campo único
                         const fields = (error.meta?.target as string[])?.join(', ') || 'campos únicos';
-                        throw new ConflictException(`Já existe um cliente com os seguintes dados duplicados: ${fields}.`);
+                        throw new ConflictException(`Já existe um precatório com os seguintes dados duplicados: ${fields}.`);
+
+                    case 'P2003':
+                        // Chave estrangeira inválida
+                        throw new BadRequestException('Chave estrangeira inválida: um dos IDs fornecidos não existe.');
 
                     case 'P2009':
                         // Dados inválidos enviados
                         throw new BadRequestException('Dados inválidos enviados para o banco.');
 
                     default:
-                        throw new InternalServerErrorException('Erro desconhecido ao criar cliente.');
+                        throw new InternalServerErrorException('Erro desconhecido ao criar precatório.');
                 }
             }
 
@@ -47,29 +48,36 @@ export class ClientsService {
         }
     }
 
-    async findAll(query: Partial<ClientEntity>, page: PageDto) {
+    async findAll(query: Partial<DocumentEntity>, page: PageDto) {
         return this.db.$transaction([
-            this.db.cliente.count({ where: query }),
-            this.db.cliente.findMany({
+            this.db.documento.count({ where: query }),
+            this.db.documento.findMany({
                 where: query,
                 ...page,
                 orderBy: { createdAt: 'desc' },
+                include: {
+                    cliente: true,
+                }
             })
         ])
     }
 
-    async findUnique(args: Prisma.ClienteFindUniqueArgs) {
-        return this.db.cliente.findUnique(args);
+    async findFirst(args: Prisma.DocumentoFindFirstArgs) {
+        return this.db.documento.findFirst(args);
     }
 
-    async update(updateClientArgs: Prisma.ClienteUpdateArgs) {
+    async findUnique(args: Prisma.DocumentoFindUniqueArgs) {
+        return this.db.documento.findUnique(args);
+    }
+
+    async update(updateDocumentArgs: Prisma.DocumentoUpdateArgs) {
         try {
-            const updatedClient = await this.db.cliente.update(updateClientArgs);
-            return updatedClient;
+            const updatedDocument = await this.db.documento.update(updateDocumentArgs);
+            return updatedDocument;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException('Cliente não encontrado.');
+                    throw new NotFoundException('Documento não encontrado.');
                 }
             }
 
@@ -79,14 +87,15 @@ export class ClientsService {
 
     async delete(id: string) {
         try {
-            await this.db.cliente.delete({
+            await this.db.documento.delete({
                 where: { id },
             });
 
-            return { message: 'Cliente deletado com sucesso.' };
+            return { message: 'Documento deletado com sucesso.' };
+
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-                throw new NotFoundException('Cliente não encontrado para exclusão.');
+                throw new NotFoundException('Documento não encontrado para exclusão.');
             }
 
             throw error;

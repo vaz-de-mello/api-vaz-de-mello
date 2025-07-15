@@ -58,5 +58,5 @@ export const PageQuery = createParamDecorator((options: PageQueryOptions, contex
 
         if (options.caseSensitive?.includes(key)) whereContainsQuery[key].mode = 'insensitive';
     })
-    return { query: whereContainsQuery, page }
+    return { query: whereContainsQuery, page, rawQuery: query };
 })

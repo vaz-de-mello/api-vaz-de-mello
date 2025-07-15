@@ -89,7 +89,7 @@ export class ProcessesService {
         }
     }
 
-    async remove(id: string) {
+    async delete(id: string) {
         try {
             await this.db.processo.delete({
                 where: { id },

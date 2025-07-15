@@ -87,8 +87,8 @@ export class ProcessesController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
-        const { message } = await this.processesService.remove(id);
+    async delete(@Param('id') id: string) {
+        const { message } = await this.processesService.delete(id);
         return new Ok({ message });
     }
 }
