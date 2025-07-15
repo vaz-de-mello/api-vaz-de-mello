@@ -38,8 +38,8 @@ export class ProcessesController {
     @Get()
     async findAll(
         @PageQuery({
-            // caseSensitive: ['tribunal_pagador'],
-            // equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
+            caseSensitive: ['vara_juizo'],
+            equals: ['id', 'escritorio_id', 'cliente_id', 'plataforma_distribuicao'],
         }) { page, query }: PageQueryDto<Partial<ProcessEntity>>
     ) {
         const [total, processes] = await this.processesService.findAll(query, page);
@@ -54,7 +54,13 @@ export class ProcessesController {
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const process = await this.processesService.findUnique({ where: { id } });
+        const process = await this.processesService.findUnique({
+            where: { id },
+            include: {
+                cliente: true,
+                escritorio: true,
+            }
+        });
         if (!process) throw new NotFoundException(`Processo com ID ${id} não encontrado.`);
 
         return new Ok({ data: process, message: 'Processo encontrado com sucesso.' });
