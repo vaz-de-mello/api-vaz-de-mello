@@ -1,34 +1,81 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    NotFoundException,
+} from '@nestjs/common';
+
 import { ProcessesService } from './processes.service';
-import { CreateProcessDto } from './dto/create-process.dto';
-import { UpdateProcessDto } from './dto/update-process.dto';
+
+import { Ok } from 'src/shared/responses';
+import { PageQueryDto } from 'src/shared/@types';
+import { PageQuery } from 'src/shared/decorators';
+import { createPaginatedResponse } from 'src/shared/utils';
+
+import { ProcessEntity } from './entities';
+import {
+    CreateProcessDto,
+    UpdateProcessDto,
+} from './dto';
 
 @Controller('processes')
 export class ProcessesController {
-  constructor(private readonly processesService: ProcessesService) {}
+    constructor(private readonly processesService: ProcessesService) { }
 
-  @Post()
-  create(@Body() createProcessDto: CreateProcessDto) {
-    return this.processesService.create(createProcessDto);
-  }
+    @Post()
+    async create(@Body() createProcessDto: CreateProcessDto) {
+        const process = await this.processesService.create({
+            data: createProcessDto,
+        });
 
-  @Get()
-  findAll() {
-    return this.processesService.findAll();
-  }
+        return new Ok({ data: process, message: 'Processo criado com sucesso.' });
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.processesService.findOne(+id);
-  }
+    @Get()
+    async findAll(
+        @PageQuery({
+            // caseSensitive: ['tribunal_pagador'],
+            // equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
+        }) { page, query }: PageQueryDto<Partial<ProcessEntity>>
+    ) {
+        const [total, processes] = await this.processesService.findAll(query, page);
+        const response = createPaginatedResponse({
+            data: processes,
+            total,
+            page,
+        })
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProcessDto: UpdateProcessDto) {
-    return this.processesService.update(+id, updateProcessDto);
-  }
+        return new Ok(response);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.processesService.remove(+id);
-  }
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        const process = await this.processesService.findUnique({ where: { id } });
+        if (!process) throw new NotFoundException(`Processo com ID ${id} não encontrado.`);
+
+        return new Ok({ data: process, message: 'Processo encontrado com sucesso.' });
+    }
+
+    @Patch(':id')
+    async update(
+        @Param('id') id: string,
+        @Body() updateProcessDto: UpdateProcessDto
+    ) {
+        const process = await this.processesService.update({
+            where: { id },
+            data: updateProcessDto,
+        });
+
+        return new Ok({ data: process, message: 'Processo atualizado com sucesso.' });
+    }
+
+    @Delete(':id')
+    async remove(@Param('id') id: string) {
+        const { message } = await this.processesService.remove(id);
+        return new Ok({ message });
+    }
 }
