@@ -8,6 +8,7 @@ import {
     Delete,
     NotFoundException,
 } from '@nestjs/common';
+import { PlataformaDistribuicao } from '@prisma/client';
 
 import { ProcessesService } from './processes.service';
 
@@ -21,7 +22,6 @@ import {
     CreateProcessDto,
     UpdateProcessDto,
 } from './dto';
-import { PlataformaDistribuicao } from '@prisma/client';
 
 @Controller('processes')
 export class ProcessesController {

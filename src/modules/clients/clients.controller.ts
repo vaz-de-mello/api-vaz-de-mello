@@ -18,6 +18,7 @@ import { createPaginatedResponse } from 'src/shared/utils';
 
 import { ClientEntity } from './entities';
 import { CreateClientDto, UpdateClientDto } from './dto';
+import { Sexo } from '@prisma/client';
 
 @Controller('clients')
 export class ClientsController {
@@ -38,6 +39,9 @@ export class ClientsController {
         @PageQuery({
             caseSensitive: ['nome'],
             equals: ['cpf', 'id'],
+            enumValidator: [
+                { key: 'sexo', enum: Sexo },
+            ]
         }) { page, query }: PageQueryDto<Partial<ClientEntity>>
     ) {
         const [total, clients] = await this.clientsService.findAll(query, page);

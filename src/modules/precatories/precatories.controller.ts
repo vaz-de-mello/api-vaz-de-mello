@@ -9,6 +9,7 @@ import {
     BadRequestException,
     NotFoundException,
 } from '@nestjs/common';
+import { HonorariosDestacados, TipoVerba } from '@prisma/client';
 
 import { PrecatoriesService } from './precatories.service';
 import { CalculatorService } from '../calculator/calculator.service';
@@ -17,10 +18,10 @@ import { Ok } from 'src/shared/responses';
 import { PageQuery } from 'src/shared/decorators';
 import { PageQueryDto } from 'src/shared/@types';
 import { createPaginatedResponse, dateFormatted, selicCalculator } from 'src/shared/utils';
+import { MONTHS_STRING_SHORT } from 'src/shared/constants';
 
 import { CreatePrecatoryDto, UpdatePrecatoryDto } from './dto';
 import { PrecatoryEntity } from './entities';
-import { MONTHS_STRING_SHORT } from 'src/shared/constants';
 
 @Controller('precatories')
 export class PrecatoriesController {
@@ -53,6 +54,10 @@ export class PrecatoriesController {
         @PageQuery({
             caseSensitive: ['tribunal_pagador'],
             equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
+            enumValidator: [
+                { key: 'tipo_verba', enum: TipoVerba },
+                { key: 'honorarios_destacados', enum: HonorariosDestacados },
+            ]
         }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>
     ) {
         const [total, data] = await this.precatoriesService.findAll(query, page);

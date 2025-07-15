@@ -8,6 +8,8 @@ import {
     Delete,
     NotFoundException,
 } from '@nestjs/common';
+import { TeseAplicada } from '@prisma/client';
+
 import { RestitutionService } from './restituition.service';
 
 import { Ok } from 'src/shared/responses';
@@ -38,6 +40,9 @@ export class RestitutionController {
     async findAll(
         @PageQuery({
             equals: ['id', 'tese_aplicada', 'necessita_calculo_judicial', 'status'],
+            enumValidator: [
+                { key: 'tese_aplicada', enum: TeseAplicada },
+            ]
         }) { page, query }: PageQueryDto<Partial<RestituitionEntity>>
     ) {
         const [total, restituitions] = await this.restituitionService.findAll(query, page);

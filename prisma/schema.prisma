@@ -1,212 +1,212 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 // Enums
 enum TipoVerba {
-  alimentar
-  indenizatória
-  auxílio_acidente
-  outros
+    alimentar
+    indenizatória
+    auxílio_acidente
+    outros
 }
 
 enum HonorariosDestacados {
-  Sim
-  Não
+    Sim
+    Não
 }
 
 enum TeseAplicada {
-  juros_de_mora
-  idoso // 65+
-  doenca_grave
-  hipossuficiencia
-  outros
+    juros_de_mora
+    idoso // 65+
+    doenca_grave
+    hipossuficiencia
+    outros
 }
 
 enum StatusRestituicao {
-  em_analise
-  elegivel
-  protocolado
-  indeferido
-  pago
+    em_analise
+    elegivel
+    protocolado
+    indeferido
+    pago
 }
 
 enum TipoDocumento {
-  RG
-  contrato
-  outros
+    RG
+    contrato
+    outros
 }
 
 enum Sexo {
-  Masculino
-  Feminino
-  Outro
+    Masculino
+    Feminino
+    Outro
 }
 
 enum PlataformaDistribuicao {
-  Legal_One
-  Projudi
-  PJe
-  Outro
+    Legal_One
+    Projudi
+    PJe
+    Outro
 }
 
 // Models
 
 model Usuario {
-  id               String       @id @default(uuid())
-  nome             String
-  login            String       @unique
-  email            String       @unique
-  senha            String
-  cpf              String       @unique
-  data_nascimento  DateTime
-  escritorio       Escritorio?  @relation(fields: [escritorio_id], references: [id])
-  escritorio_id    String?
-  tipo_perfil      Perfil       @relation(fields: [tipo_perfil_id], references: [id])
-  tipo_perfil_id   Int
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @default(now())
-  email_verificado Boolean      @default(false)
-  email_token      String?
-  status           Int // 1: Ativo, 0: Inativo, 2: Aguardando
-  Precatorio       Precatorio[]
+    id               String       @id @default(uuid())
+    nome             String
+    login            String       @unique
+    email            String       @unique
+    senha            String
+    cpf              String       @unique
+    data_nascimento  DateTime
+    escritorio       Escritorio?  @relation(fields: [escritorio_id], references: [id])
+    escritorio_id    String?
+    tipo_perfil      Perfil       @relation(fields: [tipo_perfil_id], references: [id])
+    tipo_perfil_id   Int
+    createdAt        DateTime     @default(now())
+    updatedAt        DateTime     @default(now())
+    email_verificado Boolean      @default(false)
+    email_token      String?
+    status           Int // 1: Ativo, 0: Inativo, 2: Aguardando
+    Precatorio       Precatorio[]
 
-  @@map("usuarios")
+    @@map("usuarios")
 }
 
 model Escritorio {
-  id                  String   @id @default(uuid())
-  nome_fantasia       String
-  telefone            String
-  email               String
-  cnpj                String
-  api_key             String
-  responsaveis_legais String
-  dominio_white_label String
-  logo                String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @default(now())
+    id                  String   @id @default(uuid())
+    nome_fantasia       String
+    telefone            String
+    email               String
+    cnpj                String
+    api_key             String
+    responsaveis_legais String
+    dominio_white_label String
+    logo                String
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @default(now())
 
-  usuarios   Usuario[]
-  processos  Processo[]
-  Precatorio Precatorio[]
+    usuarios   Usuario[]
+    processos  Processo[]
+    Precatorio Precatorio[]
 
-  @@map("escritorios")
+    @@map("escritorios")
 }
 
 model Cliente {
-  id              String   @id @default(uuid())
-  cpf             String   @unique
-  nome            String
-  data_nascimento DateTime
-  sexo            Sexo
-  doenca_grave    Boolean
-  laudo_doenca    String
-  hipossuficiente Boolean
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+    id              String   @id @default(uuid())
+    cpf             String   @unique
+    nome            String
+    data_nascimento DateTime
+    sexo            Sexo
+    doenca_grave    Boolean
+    laudo_doenca    String
+    hipossuficiente Boolean
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @default(now())
 
-  precatorios Precatorio[]
-  documentos  Documento[]
-  processos   Processo[]
+    precatorios Precatorio[]
+    documentos  Documento[]
+    processos   Processo[]
 
-  @@map("clientes")
+    @@map("clientes")
 }
 
 model Precatorio {
-  id                    String               @id @default(uuid())
-  cliente_id            String
-  cliente               Cliente              @relation(fields: [cliente_id], references: [id])
-  data_levantamento     DateTime
-  valor_bruto           Decimal
-  valor_irrf_retido     Decimal
-  rra_meses             Int
-  tribunal_pagador      String
-  tipo_verba            TipoVerba
-  honorarios_destacados HonorariosDestacados
-  percentual_honorario  Decimal
-  valor_honorario       Decimal
-  processo_origem       String
-  oficio_pdf            String
-  comprovante_pdf       String
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @default(now())
-  usuario_id            String?
-  usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
-  escritorio_id         String?
-  escritorio            Escritorio?          @relation(fields: [escritorio_id], references: [id])
+    id                    String               @id @default(uuid())
+    cliente_id            String
+    cliente               Cliente              @relation(fields: [cliente_id], references: [id])
+    data_levantamento     DateTime
+    valor_bruto           Decimal
+    valor_irrf_retido     Decimal
+    rra_meses             Int
+    tribunal_pagador      String
+    tipo_verba            TipoVerba
+    honorarios_destacados HonorariosDestacados
+    percentual_honorario  Decimal
+    valor_honorario       Decimal
+    processo_origem       String
+    oficio_pdf            String
+    comprovante_pdf       String
+    createdAt             DateTime             @default(now())
+    updatedAt             DateTime             @default(now())
+    usuario_id            String?
+    usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
+    escritorio_id         String?
+    escritorio            Escritorio?          @relation(fields: [escritorio_id], references: [id])
 
-  restituicoes Restituicao[]
+    restituicoes Restituicao[]
 
-  @@map("precatorios")
+    @@map("precatorios")
 }
 
 model Restituicao {
-  id                         String            @id @default(uuid())
-  precatorio_id              String
-  precatorio                 Precatorio        @relation(fields: [precatorio_id], references: [id])
-  tese_aplicada              TeseAplicada
-  valor_simulador_RRA        Decimal
-  valor_ir_devido            Decimal
-  diferenca_IR               Decimal
-  valor_corrigido_SELIC      Decimal
-  necessita_calculo_judicial Boolean
-  data_calculo               DateTime
-  status                     StatusRestituicao
-  createdAt                  DateTime          @default(now())
-  updatedAt                  DateTime          @default(now())
+    id                         String            @id @default(uuid())
+    precatorio_id              String
+    precatorio                 Precatorio        @relation(fields: [precatorio_id], references: [id])
+    tese_aplicada              TeseAplicada
+    valor_simulador_RRA        Decimal
+    valor_ir_devido            Decimal
+    diferenca_IR               Decimal
+    valor_corrigido_SELIC      Decimal
+    necessita_calculo_judicial Boolean
+    data_calculo               DateTime
+    status                     StatusRestituicao
+    createdAt                  DateTime          @default(now())
+    updatedAt                  DateTime          @default(now())
 
-  @@map("restituicoes")
+    @@map("restituicoes")
 }
 
 model Documento {
-  id                  String        @id @default(uuid())
-  cliente_id          String
-  cliente             Cliente       @relation(fields: [cliente_id], references: [id])
-  tipo_documento      TipoDocumento
-  arquivo             String
-  assinatura_validada Boolean
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @default(now())
+    id                  String        @id @default(uuid())
+    cliente_id          String
+    cliente             Cliente       @relation(fields: [cliente_id], references: [id])
+    tipo_documento      TipoDocumento
+    arquivo             String
+    assinatura_validada Boolean
+    createdAt           DateTime      @default(now())
+    updatedAt           DateTime      @default(now())
 
-  @@map("documentos")
+    @@map("documentos")
 }
 
 model Processo {
-  id                      String                 @id @default(uuid())
-  cliente_id              String
-  cliente                 Cliente                @relation(fields: [cliente_id], references: [id])
-  escritorio_id           String
-  escritorio              Escritorio             @relation(fields: [escritorio_id], references: [id])
-  numero_processo         String
-  vara_juizo              String
-  data_protocolo          DateTime
-  documentos_juntados     String
-  plataforma_distribuicao PlataformaDistribuicao
-  createdAt               DateTime               @default(now())
-  updatedAt               DateTime               @default(now())
+    id                      String                 @id @default(uuid())
+    cliente_id              String
+    cliente                 Cliente                @relation(fields: [cliente_id], references: [id])
+    escritorio_id           String
+    escritorio              Escritorio             @relation(fields: [escritorio_id], references: [id])
+    numero_processo         String
+    vara_juizo              String
+    data_protocolo          DateTime
+    documentos_juntados     String
+    plataforma_distribuicao PlataformaDistribuicao
+    createdAt               DateTime               @default(now())
+    updatedAt               DateTime               @default(now())
 
-  @@map("processos")
+    @@map("processos")
 }
 
 model Log {
-  id        String   @id @default(uuid())
-  descricao String
-  createdAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    descricao String
+    createdAt DateTime @default(now())
 
-  @@map("logs")
+    @@map("logs")
 }
 
 model Perfil {
-  id        Int    @id @default(autoincrement())
-  descricao String
+    id        Int    @id @default(autoincrement())
+    descricao String
 
-  usuarios Usuario[]
+    usuarios Usuario[]
 
-  @@map("perfis")
+    @@map("perfis")
 }
