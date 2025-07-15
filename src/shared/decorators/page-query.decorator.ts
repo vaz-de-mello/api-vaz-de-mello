@@ -1,15 +1,39 @@
-import { ExecutionContext, createParamDecorator } from "@nestjs/common";
+import { BadRequestException, ExecutionContext, createParamDecorator } from "@nestjs/common";
+
+interface EnumValidator {
+    key: string;
+    enum: any;
+}
 
 export interface PageQueryOptions {
     equals?: string[];
     caseSensitive?: string[];
     excludes?: string[];
+    enumValidator?: EnumValidator[];
 }
 
 export const PageQuery = createParamDecorator((options: PageQueryOptions, context: ExecutionContext) => {
     const whereContainsQuery = {};
 
     const { query } = context.switchToHttp().getRequest();
+
+    if (options.enumValidator) {
+        const invalidEnumKey = [];
+
+        options.enumValidator.forEach(({ key, enum: enumValues }) => {
+            if (query[key] && !Object.values(enumValues).includes(query[key])) {
+                invalidEnumKey.push({ key, values: Object.values(enumValues) });
+            }
+        });
+
+        if (invalidEnumKey.length) {
+            throw new BadRequestException({
+                message: `Valor inválido para os seguintes enums: ${invalidEnumKey.map(({ key }) => key).join(', ')}`,
+                validValues: invalidEnumKey.map(({ key, values }) => ({ [key]: values }))
+            });
+        }
+    }
+
     const pageQuery = Number(query?.page || 1);
 
     const take = Number(query?.take || 20);;
@@ -33,7 +57,6 @@ export const PageQuery = createParamDecorator((options: PageQueryOptions, contex
         else whereContainsQuery[key].contains = value;
 
         if (options.caseSensitive?.includes(key)) whereContainsQuery[key].mode = 'insensitive';
-        else whereContainsQuery[key].mode = 'default';
     })
     return { query: whereContainsQuery, page }
 })

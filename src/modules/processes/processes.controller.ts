@@ -21,6 +21,7 @@ import {
     CreateProcessDto,
     UpdateProcessDto,
 } from './dto';
+import { PlataformaDistribuicao } from '@prisma/client';
 
 @Controller('processes')
 export class ProcessesController {
@@ -40,6 +41,12 @@ export class ProcessesController {
         @PageQuery({
             caseSensitive: ['vara_juizo'],
             equals: ['id', 'escritorio_id', 'cliente_id', 'plataforma_distribuicao'],
+            enumValidator: [
+                {
+                    key: 'plataforma_distribuicao',
+                    enum: PlataformaDistribuicao,
+                },
+            ]
         }) { page, query }: PageQueryDto<Partial<ProcessEntity>>
     ) {
         const [total, processes] = await this.processesService.findAll(query, page);
