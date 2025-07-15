@@ -21,9 +21,8 @@ export class PrecatoriesService {
 
     async create(createArgs: Prisma.PrecatorioCreateArgs) {
         try {
-            const precatorio = await this.db.precatorio.create(createArgs);
-
-            return precatorio;
+            const precatory = await this.db.precatorio.create(createArgs);
+            return precatory;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 switch (error.code) {
@@ -76,8 +75,8 @@ export class PrecatoriesService {
 
     async update(updatePrecatorioDto: Prisma.PrecatorioUpdateArgs) {
         try {
-            const updatedUsuario = await this.db.precatorio.update(updatePrecatorioDto);
-            return updatedUsuario;
+            const updatedPrecatory = await this.db.precatorio.update(updatePrecatorioDto);
+            return updatedPrecatory;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
