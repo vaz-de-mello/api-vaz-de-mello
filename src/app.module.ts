@@ -9,9 +9,10 @@ import { OfficesModule } from './modules/offices/offices.module';
 
 import { AuthGuard, RolesGuard } from './shared/guards';
 import { CalculatorModule } from './modules/calculator/calculator.module';
-import { PrecatoriosModule } from './modules/precatorios/precatorios.module';
+import { PrecatoriesModule } from './modules/precatories/precatories.module';
 import { ClientsModule } from './modules/clients/clients.module';
-import { RestituicaoModule } from './modules/restituicao/restituicao.module';
+import { RestituitionModule } from './modules/restituition/restituition.module';
+import { ProcessesModule } from './modules/processes/processes.module';
 
 @Module({
     imports: [
@@ -21,9 +22,10 @@ import { RestituicaoModule } from './modules/restituicao/restituicao.module';
         DatabaseModule,
         OfficesModule,
         CalculatorModule,
-        PrecatoriosModule,
+        PrecatoriesModule,
         ClientsModule,
-        RestituicaoModule,
+        RestituitionModule,
+        ProcessesModule,
     ],
     controllers: [],
     providers: [

@@ -1,36 +1,29 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Injectable,
-    InternalServerErrorException,
-    NotFoundException
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { CreateRestituitionDto } from './dto/create-restituition.dto';
+import { UpdateRestituitionDto } from './dto/update-restituition.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-
 import { DatabaseService } from '../database/database.service';
-
-import { PrecatorioEntity } from './entities';
+import { RestituitionEntity } from './entities';
 import { PageDto } from 'src/shared/@types';
 
 @Injectable()
-export class PrecatoriosService {
+export class RestitutionService {
     constructor(
         private readonly db: DatabaseService,
     ) { }
 
-    async create(createArgs: Prisma.PrecatorioCreateArgs) {
+    async create(createArgs: Prisma.RestituicaoCreateArgs) {
         try {
-            const precatorio = await this.db.precatorio.create(createArgs);
-
-            return precatorio;
+            const restituicao = await this.db.restituicao.create(createArgs);
+            return restituicao;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 switch (error.code) {
                     case 'P2002':
                         // Violação de campo único
                         const fields = (error.meta?.target as string[])?.join(', ') || 'campos únicos';
-                        throw new ConflictException(`Já existe um precatório com os seguintes dados duplicados: ${fields}.`);
+                        throw new ConflictException(`Já existe uma restituição com os seguintes dados duplicados: ${fields}.`);
 
                     case 'P2003':
                         // Chave estrangeira inválida
@@ -41,7 +34,7 @@ export class PrecatoriosService {
                         throw new BadRequestException('Dados inválidos enviados para o banco.');
 
                     default:
-                        throw new InternalServerErrorException('Erro desconhecido ao criar precatório.');
+                        throw new InternalServerErrorException('Erro desconhecido ao criar restituição.');
                 }
             }
 
@@ -51,37 +44,37 @@ export class PrecatoriosService {
         }
     }
 
-    async findAll(query: Partial<PrecatorioEntity>, page: PageDto) {
+    async findAll(query: Partial<RestituitionEntity>, page: PageDto) {
         return this.db.$transaction([
-            this.db.precatorio.count({ where: query }),
-            this.db.precatorio.findMany({
+            this.db.restituicao.count({ where: query }),
+            this.db.restituicao.findMany({
                 where: query,
                 ...page,
                 orderBy: { createdAt: 'desc' },
                 include: {
-                    cliente: true,
+                    precatorio: true,
                 }
             })
         ])
     }
 
-    async findFirst(args: Prisma.PrecatorioFindFirstArgs) {
-        return this.db.precatorio.findFirst(args);
+    async findFirst(args: Prisma.RestituicaoFindFirstArgs) {
+        return this.db.restituicao.findFirst(args);
 
     }
 
-    async findUnique(args: Prisma.PrecatorioFindUniqueArgs) {
-        return this.db.precatorio.findUnique(args);
+    async findUnique(args: Prisma.RestituicaoFindUniqueArgs) {
+        return this.db.restituicao.findUnique(args);
     }
 
-    async update(updatePrecatorioDto: Prisma.PrecatorioUpdateArgs) {
+    async update(updateArgs: Prisma.RestituicaoUpdateArgs) {
         try {
-            const updatedUsuario = await this.db.precatorio.update(updatePrecatorioDto);
+            const updatedUsuario = await this.db.restituicao.update(updateArgs);
             return updatedUsuario;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException('Precatório não encontrado.');
+                    throw new NotFoundException('Restituição não encontrada.');
                 }
             }
 
@@ -89,17 +82,17 @@ export class PrecatoriosService {
         }
     }
 
-    async delete(id: string) {
+    async remove(id: string) {
         try {
-            await this.db.precatorio.delete({
+            await this.db.restituicao.delete({
                 where: { id },
             });
 
-            return { message: 'Precatório deletado com sucesso.' };
+            return { message: 'Restituição deletada com sucesso.' };
 
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-                throw new NotFoundException('Precatório não encontrado para exclusão.');
+                throw new NotFoundException('Restituição não encontrada para exclusão.');
             }
 
             throw error;

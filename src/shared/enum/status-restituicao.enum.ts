@@ -1,4 +1,4 @@
-export enum StatusRestituicao {
+export enum StatusRestitution {
     em_analise = 'em_analise',
     elegivel = 'elegivel',
     protocolado = 'protocolado',

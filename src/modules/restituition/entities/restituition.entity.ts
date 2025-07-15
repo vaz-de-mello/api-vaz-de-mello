@@ -1,6 +1,6 @@
 import { StatusRestituicao, TeseAplicada } from "@prisma/client";
 
-export class RestituicaoEntity {
+export class RestituitionEntity {
     id: string;
     precatorio_id: string;
     tese_aplicada: TeseAplicada;

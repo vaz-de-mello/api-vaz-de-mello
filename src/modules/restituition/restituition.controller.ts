@@ -8,28 +8,28 @@ import {
     Delete,
     NotFoundException,
 } from '@nestjs/common';
-import { RestituicaoService } from './restituicao.service';
+import { RestitutionService } from './restituition.service';
 
 import { Ok } from 'src/shared/responses';
 import { PageQueryDto } from 'src/shared/@types';
 import { PageQuery } from 'src/shared/decorators';
 import { createPaginatedResponse } from 'src/shared/utils';
 
-import { UpdateRestituicaoDto, CreateRestituicaoDto } from './dto';
-import { RestituicaoEntity } from './entities';
+import { UpdateRestituitionDto, CreateRestituitionDto } from './dto';
+import { RestituitionEntity } from './entities';
 
-@Controller('restituicao')
-export class RestituicaoController {
-    constructor(private readonly restituicaoService: RestituicaoService) { }
+@Controller('restituition')
+export class RestitutionController {
+    constructor(private readonly restituitionService: RestitutionService) { }
 
     @Post()
-    async create(@Body() createRestituicaoDto: CreateRestituicaoDto) {
-        const restituicao = await this.restituicaoService.create({
-            data: createRestituicaoDto,
+    async create(@Body() createRestitutionDto: CreateRestituitionDto) {
+        const restituition = await this.restituitionService.create({
+            data: createRestitutionDto,
         });
 
         return new Ok({
-            data: restituicao,
+            data: restituition,
             message: 'Restituição criada com sucesso.',
         })
     }
@@ -37,11 +37,10 @@ export class RestituicaoController {
     @Get()
     async findAll(
         @PageQuery({
-            // caseSensitive: ['tribunal_pagador'],
-            // equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
-        }) { page, query }: PageQueryDto<Partial<RestituicaoEntity>>
+            equals: ['id', 'tese_aplicada', 'necessita_calculo_judicial', 'status'],
+        }) { page, query }: PageQueryDto<Partial<RestituitionEntity>>
     ) {
-        const [total, restituitions] = await this.restituicaoService.findAll(query, page);
+        const [total, restituitions] = await this.restituitionService.findAll(query, page);
         const response = createPaginatedResponse({
             data: restituitions,
             total,
@@ -53,7 +52,7 @@ export class RestituicaoController {
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const restituition = await this.restituicaoService.findUnique({ where: { id } });
+        const restituition = await this.restituitionService.findUnique({ where: { id } });
         if (!restituition) throw new NotFoundException('Restituição não encontrada.');
 
         return new Ok({
@@ -65,11 +64,11 @@ export class RestituicaoController {
     @Put(':id')
     async update(
         @Param('id') id: string,
-        @Body() updateRestituicaoDto: UpdateRestituicaoDto
+        @Body() updateRestitutionDto: UpdateRestituitionDto
     ) {
-        const restituition = await this.restituicaoService.update({
+        const restituition = await this.restituitionService.update({
             where: { id },
-            data: updateRestituicaoDto,
+            data: updateRestitutionDto,
         });
 
         return new Ok({
@@ -80,7 +79,7 @@ export class RestituicaoController {
 
     @Delete(':id')
     async remove(@Param('id') id: string) {
-        const { message } = await this.restituicaoService.remove(id);
+        const { message } = await this.restituitionService.remove(id);
         return new Ok({
             message,
         });

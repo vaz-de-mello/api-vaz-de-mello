@@ -14,7 +14,7 @@ import {
     Max,
 } from 'class-validator';
 
-export class CreatePrecatorioDto {
+export class CreatePrecatoryDto {
     @IsUUID(undefined, { message: '`cliente_id` deve ser um UUID válido.' })
     @IsNotEmpty({ message: '`cliente_id` é obrigatório.' })
     cliente_id: string;

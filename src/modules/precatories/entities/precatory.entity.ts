@@ -1,7 +1,7 @@
 import { HonorariosDestacados, TipoVerba } from "@prisma/client";
 
 
-export class PrecatorioEntity {
+export class PrecatoryEntity {
     id: string;
     cliente_id: string;
     data_levantamento: Date;

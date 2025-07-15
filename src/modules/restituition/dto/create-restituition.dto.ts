@@ -9,7 +9,7 @@ import {
     IsBoolean,
 } from 'class-validator';
 
-export class CreateRestituicaoDto {
+export class CreateRestituitionDto {
     @IsUUID(undefined, { message: '`precatorio_id` deve ser um UUID válido.' })
     precatorio_id: string;
 

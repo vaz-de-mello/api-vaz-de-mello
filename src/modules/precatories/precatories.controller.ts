@@ -10,7 +10,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 
-import { PrecatoriosService } from './precatorios.service';
+import { PrecatoriesService } from './precatories.service';
 import { CalculatorService } from '../calculator/calculator.service';
 
 import { Ok } from 'src/shared/responses';
@@ -18,20 +18,20 @@ import { PageQuery } from 'src/shared/decorators';
 import { PageQueryDto } from 'src/shared/@types';
 import { createPaginatedResponse, dateFormatted, selicCalculator } from 'src/shared/utils';
 
-import { CreatePrecatorioDto, UpdatePrecatorioDto } from './dto';
-import { PrecatorioEntity } from './entities';
+import { CreatePrecatoryDto, UpdatePrecatoryDto } from './dto';
+import { PrecatoryEntity } from './entities';
 import { MONTHS_STRING_SHORT } from 'src/shared/constants';
 
-@Controller('precatorios')
-export class PrecatoriosController {
+@Controller('precatories')
+export class PrecatoriesController {
     constructor(
-        private readonly precatoriosService: PrecatoriosService,
+        private readonly precatoriesService: PrecatoriesService,
         private readonly calculatorService: CalculatorService,
     ) { }
 
     @Post()
     async create(
-        @Body() createPrecatorioDto: CreatePrecatorioDto
+        @Body() createPrecatorioDto: CreatePrecatoryDto
     ) {
         if (!createPrecatorioDto.escritorio_id && !createPrecatorioDto.usuario_id)
             throw new BadRequestException('`escritorio_id` ou `usuario_id` deve ser informado. Ambos estão vazios.');
@@ -39,7 +39,7 @@ export class PrecatoriosController {
         if (createPrecatorioDto.escritorio_id && createPrecatorioDto.usuario_id)
             throw new BadRequestException('`escritorio_id` ou `usuario_id` deve estar nulo. Ambos estão preenchidos.');
 
-        const data = await this.precatoriosService.create({
+        const data = await this.precatoriesService.create({
             data: {
                 ...createPrecatorioDto,
             },
@@ -53,9 +53,9 @@ export class PrecatoriosController {
         @PageQuery({
             caseSensitive: ['tribunal_pagador'],
             equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
-        }) { page, query }: PageQueryDto<Partial<PrecatorioEntity>>
+        }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>
     ) {
-        const [total, data] = await this.precatoriosService.findAll(query, page);
+        const [total, data] = await this.precatoriesService.findAll(query, page);
         const response = createPaginatedResponse({
             data,
             total,
@@ -69,7 +69,7 @@ export class PrecatoriosController {
     async findOne(
         @Param('id') id: string
     ) {
-        const data = await this.precatoriosService.findUnique({
+        const data = await this.precatoriesService.findUnique({
             where: { id },
             include: {
                 cliente: true,
@@ -86,7 +86,7 @@ export class PrecatoriosController {
     async calculateRRA(
         @Param('id') id: string,
     ) {
-        const precatorio = await this.precatoriosService.findUnique({ where: { id } });
+        const precatorio = await this.precatoriesService.findUnique({ where: { id } });
         if (!precatorio) throw new NotFoundException('Precatório não encontrado.');
 
         const year = precatorio.data_levantamento.getFullYear();
@@ -119,9 +119,9 @@ export class PrecatoriosController {
     @Put(':id')
     async update(
         @Param('id') id: string,
-        @Body() updatePrecatorioDto: UpdatePrecatorioDto
+        @Body() updatePrecatorioDto: UpdatePrecatoryDto
     ) {
-        const data = await this.precatoriosService.update({
+        const data = await this.precatoriesService.update({
             where: { id },
             data: updatePrecatorioDto,
         });
@@ -131,7 +131,7 @@ export class PrecatoriosController {
 
     @Delete(':id')
     async remove(@Param('id') id: string) {
-        const response = await this.precatoriosService.delete(id);
+        const response = await this.precatoriesService.delete(id);
         return new Ok(response);
     }
 }
