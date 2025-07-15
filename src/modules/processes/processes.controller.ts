@@ -3,7 +3,7 @@ import {
     Get,
     Post,
     Body,
-    Patch,
+    Put,
     Param,
     Delete,
     NotFoundException,
@@ -60,7 +60,7 @@ export class ProcessesController {
         return new Ok({ data: process, message: 'Processo encontrado com sucesso.' });
     }
 
-    @Patch(':id')
+    @Put(':id')
     async update(
         @Param('id') id: string,
         @Body() updateProcessDto: UpdateProcessDto
