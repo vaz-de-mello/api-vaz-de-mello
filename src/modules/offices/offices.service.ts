@@ -77,6 +77,13 @@ export class OfficesService {
         ])
     }
 
+    async findUnique(args: Prisma.EscritorioFindUniqueArgs) {
+        return this.db.escritorio.findUnique(args);
+    }
+
+    async findFirst(args: Prisma.EscritorioFindFirstArgs) {
+        return this.db.escritorio.findFirst(args);
+    }
 
     async findOne(id: string) {
         return this.db.escritorio.findUnique({

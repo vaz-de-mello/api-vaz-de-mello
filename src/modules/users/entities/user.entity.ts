@@ -10,4 +10,7 @@ export class UserEntity {
     tipo_perfil_id: number;
     createdAt: Date;
     updatedAt: Date;
+    email_verificado: boolean;
+    email_token: string | null;
+    status: number; // 1: Ativo, 0: Inativo, 2: Aguardando
 }

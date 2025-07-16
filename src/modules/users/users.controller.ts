@@ -65,7 +65,15 @@ export class UsersController {
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const user = await this.usersService.findUnique({ where: { id } });
+        const user = await this.usersService.findUnique({
+            where: { id },
+            omit: { senha: true },
+            include: {
+                escritorio: true,
+                precatorio: true,
+                tipo_perfil: true,
+            }
+        });
         if (!user) {
             throw new NotFoundException({
                 message: 'Usuário não encontrado.',
@@ -86,6 +94,7 @@ export class UsersController {
         const user = await this.usersService.update({
             where: { id },
             data: updateUserDto,
+            omit: { senha: true },
         });
 
         return new Ok({ data: user, message: 'Usuário atualizado com sucesso.' });

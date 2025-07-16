@@ -74,7 +74,7 @@ model Usuario {
     email_verificado Boolean      @default(false)
     email_token      String?
     status           Int // 1: Ativo, 0: Inativo, 2: Aguardando
-    Precatorio       Precatorio[]
+    precatorio       Precatorio[]
 
     @@map("usuarios")
 }
@@ -94,7 +94,7 @@ model Escritorio {
 
     usuarios   Usuario[]
     processos  Processo[]
-    Precatorio Precatorio[]
+    precatorio Precatorio[]
 
     @@map("escritorios")
 }

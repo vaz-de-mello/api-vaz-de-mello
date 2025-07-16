@@ -54,7 +54,13 @@ export class OfficesController {
     async findOne(
         @Param('id') id: string,
     ) {
-        const office = await this.officesService.findOne(id);
+        const office = await this.officesService.findUnique({
+            where: { id },
+            include: {
+                precatorio: true,
+                processos: true,
+            }
+        });
         if (!office) throw new NotFoundException({
             message: 'Escritório não encontrado.',
             success: false,

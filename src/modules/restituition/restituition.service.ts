@@ -83,9 +83,6 @@ export class RestitutionService {
                 where: query,
                 ...page,
                 orderBy: { createdAt: 'desc' },
-                include: {
-                    precatorio: true,
-                }
             })
         ])
     }

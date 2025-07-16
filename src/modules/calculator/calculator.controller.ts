@@ -13,7 +13,7 @@ export class CalculatorController {
         @Body() body: CalculatorRRADto,
     ) {
         const { numeroMeses, rendimentoTotal, deducoes, ano, mes } = body;
-        const data = this.calculatorService.calculateRRA({
+        const { totalRRA } = this.calculatorService.calculateRRA({
             rendimentoTotal,
             numeroMeses,
             deducoes,
@@ -22,7 +22,7 @@ export class CalculatorController {
         });
 
         return new Ok({
-            data,
+            data: { totalRRA },
             message: "Cálculo de RRA realizado com sucesso.",
         })
     }

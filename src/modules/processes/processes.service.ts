@@ -82,10 +82,6 @@ export class ProcessesService {
                 where: query,
                 ...page,
                 orderBy: { createdAt: 'desc' },
-                include: {
-                    cliente: true,
-                    escritorio: true,
-                }
             })
         ])
     }
