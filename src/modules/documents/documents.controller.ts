@@ -64,7 +64,12 @@ export class DocumentsController {
             where: { id },
             include: { cliente: true },
         });
-        if (!document) throw new NotFoundException(`Documento com ID ${id} não encontrado.`);
+        if (!document) throw new NotFoundException({
+            message: 'Documento não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
         return new Ok({
             data: document,

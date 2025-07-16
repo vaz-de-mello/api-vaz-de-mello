@@ -68,7 +68,12 @@ export class ProcessesController {
                 escritorio: true,
             }
         });
-        if (!process) throw new NotFoundException(`Processo com ID ${id} não encontrado.`);
+        if (!process) throw new NotFoundException({
+            message: 'Processo não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
         return new Ok({ data: process, message: 'Processo encontrado com sucesso.' });
     }

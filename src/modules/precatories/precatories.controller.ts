@@ -35,18 +35,28 @@ export class PrecatoriesController {
         @Body() createPrecatorioDto: CreatePrecatoryDto
     ) {
         if (!createPrecatorioDto.escritorio_id && !createPrecatorioDto.usuario_id)
-            throw new BadRequestException('`escritorio_id` ou `usuario_id` deve ser informado. Ambos estão vazios.');
+            throw new BadRequestException({
+                message: '`escritorio_id` ou `usuario_id` deve ser informado. Ambos estão vazios.',
+                success: false,
+                statusCode: 400,
+                error: 'BadRequest',
+            });
 
         if (createPrecatorioDto.escritorio_id && createPrecatorioDto.usuario_id)
-            throw new BadRequestException('`escritorio_id` ou `usuario_id` deve estar nulo. Ambos estão preenchidos.');
+            throw new BadRequestException({
+                message: '`escritorio_id` ou `usuario_id` deve estar nulo. Ambos estão preenchidos.',
+                success: false,
+                statusCode: 400,
+                error: 'BadRequest',
+            });
 
-        const data = await this.precatoriesService.create({
+        const precatory = await this.precatoriesService.create({
             data: {
                 ...createPrecatorioDto,
             },
         });
 
-        return new Ok({ data, message: 'Precatório criado com sucesso.' });
+        return new Ok({ data: precatory, message: 'Precatório criado com sucesso.' });
     }
 
     @Get()
@@ -60,9 +70,9 @@ export class PrecatoriesController {
             ]
         }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>
     ) {
-        const [total, data] = await this.precatoriesService.findAll(query, page);
+        const [total, preactories] = await this.precatoriesService.findAll(query, page);
         const response = createPaginatedResponse({
-            data,
+            data: preactories,
             total,
             page,
         })
@@ -74,7 +84,7 @@ export class PrecatoriesController {
     async findOne(
         @Param('id') id: string
     ) {
-        const data = await this.precatoriesService.findUnique({
+        const precatory = await this.precatoriesService.findUnique({
             where: { id },
             include: {
                 cliente: true,
@@ -82,32 +92,42 @@ export class PrecatoriesController {
                 usuario: true,
             },
         });
-        if (!data) throw new NotFoundException('Precatório não encontrado.');
+        if (!precatory) throw new NotFoundException({
+            message: 'Precatório não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
-        return new Ok({ data, message: 'Precatório encontrado com sucesso.' });
+        return new Ok({ data: precatory, message: 'Precatório encontrado com sucesso.' });
     }
 
     @Get('rra-calculator/:id')
     async calculateRRA(
         @Param('id') id: string,
     ) {
-        const precatorio = await this.precatoriesService.findUnique({ where: { id } });
-        if (!precatorio) throw new NotFoundException('Precatório não encontrado.');
+        const precatory = await this.precatoriesService.findUnique({ where: { id } });
+        if (!precatory) throw new NotFoundException({
+            message: 'Precatório não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
-        const year = precatorio.data_levantamento.getFullYear();
-        const month = precatorio.data_levantamento.getMonth() + 1;
+        const year = precatory.data_levantamento.getFullYear();
+        const month = precatory.data_levantamento.getMonth() + 1;
 
         const { totalRRA } = this.calculatorService.calculateRRA({
             ano: year,
             deducoes: 0,
             mes: MONTHS_STRING_SHORT[month],
-            numeroMeses: precatorio.rra_meses,
-            rendimentoTotal: +precatorio.valor_bruto
+            numeroMeses: precatory.rra_meses,
+            rendimentoTotal: +precatory.valor_bruto
         });
 
         const irSelicFixed = await selicCalculator({
             endDate: dateFormatted(),
-            startDate: dateFormatted(precatorio.data_levantamento),
+            startDate: dateFormatted(precatory.data_levantamento),
             value: totalRRA,
         })
 
@@ -115,7 +135,7 @@ export class PrecatoriesController {
             data: {
                 irSelicFixed,
                 totalRRA,
-                precatorio,
+                precatorio: precatory,
             },
             message: 'Cálculo de RRA realizado com sucesso.',
         })
@@ -126,17 +146,17 @@ export class PrecatoriesController {
         @Param('id') id: string,
         @Body() updatePrecatorioDto: UpdatePrecatoryDto
     ) {
-        const data = await this.precatoriesService.update({
+        const precatory = await this.precatoriesService.update({
             where: { id },
             data: updatePrecatorioDto,
         });
 
-        return new Ok({ data, message: 'Precatório atualizado com sucesso.' });
+        return new Ok({ data: precatory, message: 'Precatório atualizado com sucesso.' });
     }
 
     @Delete(':id')
     async delete(@Param('id') id: string) {
-        const response = await this.precatoriesService.delete(id);
-        return new Ok(response);
+        const { message } = await this.precatoriesService.delete(id);
+        return new Ok({ message });
     }
 }

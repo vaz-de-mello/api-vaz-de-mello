@@ -10,7 +10,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from '../decorators';
-import { error } from 'console';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -24,6 +23,7 @@ export class AuthGuard implements CanActivate {
         if (isPublic) return true;
 
         const unauthorizedMessage = {
+            success: false,
             message: 'Usuário não autenticado. Por favor realize o login.',
             needLogin: true,
             statusCode: 401,

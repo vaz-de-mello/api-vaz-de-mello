@@ -1,4 +1,8 @@
-import { BadRequestException, ExecutionContext, createParamDecorator } from "@nestjs/common";
+import {
+    BadRequestException,
+    ExecutionContext,
+    createParamDecorator,
+} from "@nestjs/common";
 
 interface EnumValidator {
     key: string;
@@ -28,8 +32,11 @@ export const PageQuery = createParamDecorator((options: PageQueryOptions, contex
 
         if (invalidEnumKey.length) {
             throw new BadRequestException({
+                success: false,
+                statusCode: 400,
                 message: `Valor inválido para os seguintes enums: ${invalidEnumKey.map(({ key }) => key).join(', ')}`,
-                validValues: invalidEnumKey.map(({ key, values }) => ({ [key]: values }))
+                validValues: invalidEnumKey.map(({ key, values }) => ({ [key]: values })),
+                error: 'BadRequest',
             });
         }
     }

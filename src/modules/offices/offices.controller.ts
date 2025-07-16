@@ -54,10 +54,15 @@ export class OfficesController {
     async findOne(
         @Param('id') id: string,
     ) {
-        const data = await this.officesService.findOne(id);
-        if (!data) throw new NotFoundException('Escritório não encontrado.');
+        const office = await this.officesService.findOne(id);
+        if (!office) throw new NotFoundException({
+            message: 'Escritório não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
-        return new Ok({ data, message: 'Escritório encontrado com sucesso.' });
+        return new Ok({ data: office, message: 'Escritório encontrado com sucesso.' });
     }
 
     @Put(':id')

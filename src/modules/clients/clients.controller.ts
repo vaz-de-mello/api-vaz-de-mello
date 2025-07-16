@@ -59,7 +59,12 @@ export class ClientsController {
         @Param('id') id: string,
     ) {
         const client = await this.clientsService.findUnique({ where: { id } });
-        if (!client) throw new NotFoundException('Cliente não encontrado.');
+        if (!client) throw new NotFoundException({
+            message: 'Cliente não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
         return new Ok({ data: client, message: 'Cliente encontrado com sucesso.' });
     }

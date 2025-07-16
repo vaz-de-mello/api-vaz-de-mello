@@ -8,7 +8,6 @@ import {
     NotFoundException,
     Put,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from './users.service';
 
@@ -26,14 +25,13 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
-        private readonly jwtService: JwtService,
     ) { }
 
     @Post()
     async create(
         @Body() createUserDto: CreateUserDto
     ) {
-        const data = await this.usersService.create({
+        const user = await this.usersService.create({
             data: {
                 ...createUserDto,
                 status: 2, // 1: Ativo, 0: Inativo, 2: Aguardando
@@ -45,7 +43,7 @@ export class UsersController {
             omit: { senha: true },
         });
 
-        return new Ok({ data, message: 'Usuário criado com sucesso.' });
+        return new Ok({ data: user, message: 'Usuário criado com sucesso.' });
     }
 
     @Get()
@@ -67,12 +65,17 @@ export class UsersController {
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const data = await this.usersService.findUnique({ where: { id } });
-        if (!data) {
-            throw new NotFoundException('Usuário não encontrado.');
+        const user = await this.usersService.findUnique({ where: { id } });
+        if (!user) {
+            throw new NotFoundException({
+                message: 'Usuário não encontrado.',
+                success: false,
+                statusCode: 404,
+                error: 'NotFound',
+            });
         }
 
-        return new Ok({ data, message: 'Usuário encontrado com sucesso.' });
+        return new Ok({ data: user, message: 'Usuário encontrado com sucesso.' });
     }
 
     @Put(':id')
@@ -80,12 +83,12 @@ export class UsersController {
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
     ) {
-        const data = await this.usersService.update({
+        const user = await this.usersService.update({
             where: { id },
             data: updateUserDto,
         });
 
-        return new Ok({ data, message: 'Usuário atualizado com sucesso.' });
+        return new Ok({ data: user, message: 'Usuário atualizado com sucesso.' });
     }
 
     @Delete(':id')

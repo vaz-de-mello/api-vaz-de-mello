@@ -30,24 +30,49 @@ export class UsersService {
                     case 'P2002':
                         // Violação de campo único
                         const fields = (error.meta?.target as string[])?.join(', ') || 'campos únicos';
-                        throw new ConflictException(`Já existe um usuário com os seguintes dados duplicados: ${fields}.`);
+                        throw new ConflictException({
+                            message: `Já existe um usuário com o(s) seguinte(s) dado(s) duplicado(s): ${fields}.`,
+                            success: false,
+                            statusCode: 409,
+                            error: 'Conflict',
+                        });
 
                     case 'P2003':
                         // Chave estrangeira inválida
-                        throw new BadRequestException('Chave estrangeira inválida: um dos IDs fornecidos não existe.');
+                        throw new BadRequestException({
+                            message: 'Chave estrangeira inválida: um dos IDs fornecidos não existe.',
+                            success: false,
+                            statusCode: 400,
+                            error: 'BadRequest',
+                        });
 
                     case 'P2009':
                         // Dados inválidos enviados
-                        throw new BadRequestException('Dados inválidos enviados para o banco.');
+                        throw new BadRequestException({
+                            message: 'Dados inválidos enviados para o banco.',
+                            success: false,
+                            statusCode: 400,
+                            error: 'BadRequest',
+                        });
 
                     default:
-                        throw new InternalServerErrorException('Erro desconhecido ao criar usuário.');
+                        throw new InternalServerErrorException({
+                            message: 'Erro desconhecido ao criar usuário.',
+                            success: false,
+                            statusCode: 500,
+                            error: 'InternalServerError',
+                        });
                 }
             }
 
             // Erros fora do Prisma
             console.log(error);
-            throw new InternalServerErrorException('Erro interno no servidor.', error.toString());
+            throw new InternalServerErrorException({
+                message: 'Erro interno do servidor.',
+                success: false,
+                statusCode: 500,
+                error: 'InternalServerError',
+            }, error.toString());
         }
     }
 
@@ -85,7 +110,12 @@ export class UsersService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException('Usuário não encontrado.');
+                    throw new NotFoundException({
+                        message: 'Usuário não encontrado para atualização.',
+                        success: false,
+                        statusCode: 404,
+                        error: 'NotFound',
+                    });
                 }
             }
 
@@ -103,7 +133,12 @@ export class UsersService {
 
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-                throw new NotFoundException('Usuário não encontrado para exclusão.');
+                throw new NotFoundException({
+                    message: 'Usuário não encontrado para exclusão.',
+                    success: false,
+                    statusCode: 404,
+                    error: 'NotFound',
+                });
             }
 
             throw error;

@@ -58,7 +58,12 @@ export class RestitutionController {
     @Get(':id')
     async findOne(@Param('id') id: string) {
         const restituition = await this.restituitionService.findUnique({ where: { id } });
-        if (!restituition) throw new NotFoundException('Restituição não encontrada.');
+        if (!restituition) throw new NotFoundException({
+            message: 'Restituição não encontrada.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
 
         return new Ok({
             data: restituition,

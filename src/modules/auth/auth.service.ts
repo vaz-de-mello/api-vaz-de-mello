@@ -25,11 +25,26 @@ export class AuthService {
             where: { login },
         });
 
-        if (!user) throw new UnauthorizedException('Login ou senha inválidos.');
-        if (user.status !== 1) throw new UnauthorizedException('Usuário não está ativo.');
+        if (!user) throw new UnauthorizedException({
+            message: 'Login ou senha inválidos.',
+            success: false,
+            statusCode: 401,
+            error: 'Unauthorized',
+        });
+        if (user.status !== 1) throw new UnauthorizedException({
+            message: 'Usuário não está ativo.',
+            success: false,
+            statusCode: 401,
+            error: 'Unauthorized',
+        });
 
         const isPasswordValid = await bcrypt.compare(senha, user.senha);
-        if (!isPasswordValid) throw new UnauthorizedException('Login ou senha inválidos.');
+        if (!isPasswordValid) throw new UnauthorizedException({
+            message: 'Login ou senha inválidos.',
+            success: false,
+            statusCode: 401,
+            error: 'Unauthorized',
+        });
 
         return this.generateJwtToken(user);
     }
@@ -47,21 +62,41 @@ export class AuthService {
 
             return this.generateJwtToken(user);
         } catch (error) {
-            throw new InternalServerErrorException('Erro ao ativar usuário.', error);
+            throw new InternalServerErrorException({
+                message: 'Erro ao ativar usuário.',
+                success: false,
+                statusCode: 500,
+                error: 'InternalServerError',
+            }, error);
         }
     }
 
     async validateEmail(token: string) {
-        if (!token) throw new UnauthorizedException('Token de validação não fornecido.');
+        if (!token) throw new UnauthorizedException({
+            message: 'Token de validação não fornecido.',
+            success: false,
+            statusCode: 401,
+            error: 'Unauthorized',
+        });
 
         try {
             const user = await this.usersService.findFirst({
                 where: { email_token: token },
             });
-            if (!user) throw new UnauthorizedException('Token de validação inválido ou expirado.');
+            if (!user) throw new UnauthorizedException({
+                message: 'Token de validação inválido ou expirado.',
+                success: false,
+                statusCode: 401,
+                error: 'Unauthorized',
+            });
 
             const isTokenValid = await this.jwtService.verifyAsync(token);
-            if (!isTokenValid) throw new UnauthorizedException('Token de validação inválido ou expirado.');
+            if (!isTokenValid) throw new UnauthorizedException({
+                message: 'Token de validação inválido ou expirado.',
+                success: false,
+                statusCode: 401,
+                error: 'Unauthorized',
+            });
 
             await this.usersService.update({
                 where: { id: user.id },
@@ -70,7 +105,12 @@ export class AuthService {
 
             return this.generateJwtToken(user);
         } catch (error) {
-            throw new InternalServerErrorException('Erro ao validar email.', error);
+            throw new InternalServerErrorException({
+                message: 'Erro ao validar email.',
+                success: false,
+                statusCode: 500,
+                error: 'InternalServerError',
+            }, error);
         }
     }
 
