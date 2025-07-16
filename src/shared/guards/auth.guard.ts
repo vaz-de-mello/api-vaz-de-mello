@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from '../decorators';
-
+import { error } from 'console';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,9 +23,16 @@ export class AuthGuard implements CanActivate {
         ]);
         if (isPublic) return true;
 
+        const unauthorizedMessage = {
+            message: 'Usuário não autenticado. Por favor realize o login.',
+            needLogin: true,
+            statusCode: 401,
+            error: 'Unauthorized',
+        }
+
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
-        if (!token) throw new UnauthorizedException();
+        if (!token) throw new UnauthorizedException(unauthorizedMessage);
 
         try {
             const payload = await this.jwtService.verifyAsync(token, {
@@ -33,7 +40,7 @@ export class AuthGuard implements CanActivate {
             });
             request['user'] = payload;
         } catch {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException(unauthorizedMessage);
         }
         return true;
     }
