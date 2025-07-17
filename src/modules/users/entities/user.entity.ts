@@ -14,3 +14,5 @@ export class UserEntity {
     email_token: string | null;
     status: number; // 1: Ativo, 0: Inativo, 2: Aguardando
 }
+
+export type UserWithoutPassword = Omit<UserEntity, 'senha'>;
