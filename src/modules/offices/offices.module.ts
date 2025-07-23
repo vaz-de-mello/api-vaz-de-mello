@@ -4,6 +4,7 @@ import { OfficesController } from './offices.controller';
 
 @Module({
   controllers: [OfficesController],
-  providers: [OfficesService]
+  providers: [OfficesService],
+  exports: [OfficesService],
 })
-export class OfficesModule {}
+export class OfficesModule { }

@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm install -g @nestjs/cli
+      - npm install
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - zip -r app.zip . -x "node_modules/*"
+      - aws s3 cp app.zip s3://$EB_S3_BUCKET_NAME/$APP_NAME/app.zip
+      - aws elasticbeanstalk create-application-version \
+          --application-name $APP_NAME \
+          --version-label v-${CODEBUILD_RESOLVED_SOURCE_VERSION} \
+          --source-bundle S3Bucket=$EB_S3_BUCKET_NAME,S3Key=$APP_NAME/app.zip
+      - aws elasticbeanstalk update-environment \
+          --environment-name $EB_ENV_NAME \
+          --version-label v-${CODEBUILD_RESOLVED_SOURCE_VERSION}
+
+artifacts:
+  files:
+    - app.zip

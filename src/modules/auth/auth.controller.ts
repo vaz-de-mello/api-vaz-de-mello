@@ -15,7 +15,11 @@ import { Public } from 'src/shared/decorators';
 import { Ok } from 'src/shared/responses';
 import { sendEmail } from 'src/shared/utils';
 
-import { RegisterDto, SignInDto, SignUpDto } from './dto';
+import {
+    RegisterIndividualDto,
+    SignInDto,
+    SignUpDto,
+} from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -55,11 +59,11 @@ export class AuthController {
     }
 
     @Public()
-    @Post('register')
-    async register(
-        @Body() signUpDto: RegisterDto,
+    @Post('register/individual')
+    async registerIndividual(
+        @Body() signUpDto: RegisterIndividualDto,
     ) {
-        const { user, token, newTimeString } = await this.authService.register(signUpDto);
+        const { user, token, newTimeString } = await this.authService.registerIndividual(signUpDto);
         const link = process.env.VALIDATE_EMAIL_LINK + token;
 
         await sendEmail({
@@ -75,5 +79,11 @@ export class AuthController {
         return new Ok({
             message: 'Usuário registrado com sucesso. Verifique seu e-mail para ativar sua conta.',
         })
+    }
+
+    @Public()
+    @Post('register/partner')
+    async registerPartner() {
+
     }
 }

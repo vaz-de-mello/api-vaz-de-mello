@@ -14,6 +14,7 @@ import { ClientsModule } from './modules/clients/clients.module';
 import { RestituitionModule } from './modules/restituition/restituition.module';
 import { ProcessesModule } from './modules/processes/processes.module';
 import { DocumentsModule } from './modules/documents/documents.module';
+import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { DocumentsModule } from './modules/documents/documents.module';
         RestituitionModule,
         ProcessesModule,
         DocumentsModule,
+        BootstrapModule,
     ],
     controllers: [],
     providers: [

@@ -8,10 +8,15 @@ import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
 
-import { SignInDto, SignUpDto, RegisterDto } from './dto';
+import { ProfileType, UserStatus } from 'src/shared/enum';
+
+import {
+    SignInDto,
+    SignUpDto,
+    RegisterIndividualDto,
+} from './dto';
 
 import { UserEntity } from '../users/entities';
-import { ProfileType, UserStatus } from 'src/shared/enum';
 
 @Injectable()
 export class AuthService {
@@ -114,7 +119,7 @@ export class AuthService {
         }
     }
 
-    async register(registerDto: RegisterDto) {
+    async registerIndividual(registerDto: RegisterIndividualDto) {
         const token = await this.jwtService.signAsync({ email: registerDto.email }, { expiresIn: '1h' });
 
         const now = new Date();
