@@ -19,11 +19,9 @@ export class CreatePrecatoryDto {
     @IsNotEmpty({ message: '`cliente_id` é obrigatório.' })
     cliente_id: string;
 
-    @IsOptional()
     @IsUUID(undefined, { message: '`usuario_id` deve ser um UUID válido.' })
     usuario_id: string;
 
-    @IsOptional()
     @IsUUID(undefined, { message: '`escritorio_id` deve ser um UUID válido.' })
     escritorio_id: string;
 

@@ -59,7 +59,7 @@ export class AuthController {
     }
 
     @Public()
-    @Post('register/individual')
+    @Post('register')
     async registerIndividual(
         @Body() signUpDto: RegisterIndividualDto,
     ) {
@@ -79,11 +79,5 @@ export class AuthController {
         return new Ok({
             message: 'Usuário registrado com sucesso. Verifique seu e-mail para ativar sua conta.',
         })
-    }
-
-    @Public()
-    @Post('register/partner')
-    async registerPartner() {
-
     }
 }

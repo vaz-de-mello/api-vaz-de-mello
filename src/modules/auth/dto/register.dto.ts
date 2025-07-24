@@ -1,4 +1,11 @@
-import { IsDateString, IsEmail, IsInt, IsNotEmpty, IsString, isUUID, IsUUID, Length, Matches } from "class-validator";
+import {
+    IsDateString,
+    IsEmail,
+    IsNotEmpty,
+    IsString,
+    Length,
+    Matches,
+} from "class-validator";
 
 export class RegisterIndividualDto {
     @IsString({ message: '`nome` deve ser uma string.' })
@@ -24,9 +31,4 @@ export class RegisterIndividualDto {
     @IsString()
     @Length(8, 100)
     senha: string;
-}
-
-export class RegisterPartnerDto extends RegisterIndividualDto {
-    @IsUUID(undefined, { message: '`escritorio_id` deve ser um UUID válido.' })
-    escritorio_id: string;
 }

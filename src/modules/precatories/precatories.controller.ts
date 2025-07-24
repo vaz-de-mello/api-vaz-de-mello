@@ -34,22 +34,6 @@ export class PrecatoriesController {
     async create(
         @Body() createPrecatorioDto: CreatePrecatoryDto
     ) {
-        if (!createPrecatorioDto.escritorio_id && !createPrecatorioDto.usuario_id)
-            throw new BadRequestException({
-                message: '`escritorio_id` ou `usuario_id` deve ser informado. Ambos estão vazios.',
-                success: false,
-                statusCode: 400,
-                error: 'BadRequest',
-            });
-
-        if (createPrecatorioDto.escritorio_id && createPrecatorioDto.usuario_id)
-            throw new BadRequestException({
-                message: '`escritorio_id` ou `usuario_id` deve estar nulo. Ambos estão preenchidos.',
-                success: false,
-                statusCode: 400,
-                error: 'BadRequest',
-            });
-
         const precatory = await this.precatoriesService.create({
             data: {
                 ...createPrecatorioDto,

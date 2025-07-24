@@ -140,6 +140,7 @@ model Precatorio {
     usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
     escritorio_id         String?
     escritorio            Escritorio?          @relation(fields: [escritorio_id], references: [id])
+    status                Int
 
     restituicoes Restituicao[]
 
