@@ -37,6 +37,7 @@ export class PrecatoriesController {
         const precatory = await this.precatoriesService.create({
             data: {
                 ...createPrecatorioDto,
+                status: 1,
             },
         });
 
