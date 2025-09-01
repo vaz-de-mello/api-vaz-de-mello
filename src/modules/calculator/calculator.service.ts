@@ -78,7 +78,7 @@ export class CalculatorService {
         }
         copyRange('jan-2020', meses2020a2023);
 
-        copyRange('mai-2025', ['jun-2025', 'jul-2025']);
+        copyRange('mai-2025', ['jun-2025', 'jul-2025', 'ago-2025', 'set-2025']);
         copyRange('fev-2024', ['mar-2024', 'abr-2024', 'mai-2024', 'jun-2024', 'jul-2024', 'ago-2024', 'set-2024', 'out-2024', 'nov-2024', 'dez-2024', 'jan-2025', 'fev-2025', 'mar-2025', 'abr-2025']);
         copyRange('mai-2023', ['jun-2023', 'jul-2023', 'ago-2023', 'set-2023', 'out-2023', 'nov-2023', 'dez-2023', 'jan-2024']);
         copyRange('mai-2023', ['jun-2023', 'jul-2023', 'ago-2023', 'set-2023', 'out-2023', 'nov-2023', 'dez-2023', 'jan-2024']);
@@ -87,6 +87,7 @@ export class CalculatorService {
     }
 
     private getFaixasRRA(value: number, mesAbrev: string, ano: number) {
+        console.log(mesAbrev, ano)
         const faixasRRA = this.getTabelaIRRF(mesAbrev, ano);
         return faixasRRA.find(faixa => faixa.max === null || faixa.max >= value);
     }
@@ -97,7 +98,7 @@ export class CalculatorService {
         deducoes,
         ano,
         mes,
-    }: CalculatorRRADto) {
+    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate">) {
         const monthlyValue = +((rendimentoTotal - deducoes) / numeroMeses).toFixed(2);
         const {
             aliquota,

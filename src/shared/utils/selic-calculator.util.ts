@@ -10,6 +10,7 @@ interface SelicCalculatorParams {
 }
 
 export async function selicCalculator({ value, startDate, endDate }: SelicCalculatorParams) {
+    console.log(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=json&dataInicial=${startDate}&dataFinal=${endDate}`)
     const resp = await fetch(
         `https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=json&dataInicial=${startDate}&dataFinal=${endDate}`
     );

@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
+import { IsDate, IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
 
 export class CalculatorRRADto {
     @IsNotEmpty({ message: "O campo `numeroMeses` é obrigatório." })
@@ -27,4 +27,11 @@ export class CalculatorRRADto {
         { message: 'O campo `mes` deve ser um destes valores: jan, fev, mar, abr, mai, jun, jul, ago, set, out, nov, dez.' },
     )
     mes: string;
+
+    @IsDateString(undefined, { message: "O campo `selicStartDate` deve ser uma data." })
+    selicStartDate: Date;
+
+    //{ message: "O campo `selicEndDate` deve ser uma data." }
+    @IsDateString(undefined, { message: "O campo `selicEndDate` deve ser uma data." })
+    selicEndDate: Date;
 }
