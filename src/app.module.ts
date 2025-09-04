@@ -15,6 +15,7 @@ import { RestituitionModule } from './modules/restituition/restituition.module';
 import { ProcessesModule } from './modules/processes/processes.module';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
         ProcessesModule,
         DocumentsModule,
         BootstrapModule,
+        HealthModule,
     ],
     controllers: [],
     providers: [
