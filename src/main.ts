@@ -9,7 +9,8 @@ async function bootstrap() {
     app.enableCors({
         origin: [
             'http://localhost:5173',
-            "https://d1ufbj2ciwzh4u.cloudfront.net"
+            "https://querorestituir.com",
+            "https://www.querorestituir.com",
         ],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
