@@ -1,37 +1,36 @@
-import { IsDate, IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
+import { IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
 
 export class CalculatorRRADto {
-    @IsNotEmpty({ message: "O campo `numeroMeses` é obrigatório." })
-    @IsInt({ message: "O campo `numeroMeses` deve ser um número inteiro." })
-    @IsPositive({ message: "O campo `numeroMeses` deve ser um número positivo." })
+    @IsNotEmpty({ message: "O campo `Número de Meses (RRA)` é obrigatório." })
+    @IsInt({ message: "O campo `Número de Meses` deve ser um número inteiro." })
+    @IsPositive({ message: "O campo `Número de Meses` deve ser um número positivo." })
     numeroMeses: number;
 
-    @IsNotEmpty({ message: "O campo `deducoes` é obrigatório." })
-    @IsInt({ message: "O campo `deducoes` deve ser um número inteiro." })
+    @IsNotEmpty({ message: "O campo `Deduções` é obrigatório." })
+    @IsInt({ message: "O campo `Deduções` deve ser um número inteiro." })
     deducoes: number;
 
-    @IsNotEmpty({ message: "O campo `rendimentoTotal` é obrigatório." })
-    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: "O campo `rendimentoTotal` deve ser um número positivo." })
-    @IsPositive({ message: "O campo `rendimentoTotal` deve ser um número positivo." })
+    @IsNotEmpty({ message: "O campo `Valor principal` é obrigatório." })
+    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: "O campo `Valor principal` deve ser um número positivo." })
+    @IsPositive({ message: "O campo `Valor principal` deve ser um número positivo." })
     rendimentoTotal: number;
 
-    @IsInt({ message: 'O campo `ano` deve ser um número inteiro.' })
-    @Min(2020, { message: 'O campo `ano` mínimo permitido é 2020.' })
-    @Max(2025, { message: 'O campo `ano` máximo permitido é 2025.' })
+    @IsInt({ message: 'O campo `Ano` deve ser um número inteiro.' })
+    @Min(2020, { message: 'O campo `Ano` mínimo permitido é 2020.' })
+    @Max(2025, { message: 'O campo `Ano` máximo permitido é 2025.' })
     ano: number;
 
-    @IsNotEmpty({ message: "O campo `mes` é obrigatório." })
-    @IsString({ message: "O campo `mes` deve ser uma string." })
+    @IsNotEmpty({ message: "O campo `Mês` é obrigatório." })
+    @IsString({ message: "O campo `Mês` deve ser uma string." })
     @IsIn(
         ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
-        { message: 'O campo `mes` deve ser um destes valores: jan, fev, mar, abr, mai, jun, jul, ago, set, out, nov, dez.' },
+        { message: 'O campo `Mês` deve ser um destes valores: jan, fev, mar, abr, mai, jun, jul, ago, set, out, nov, dez.' },
     )
     mes: string;
 
-    @IsDateString(undefined, { message: "O campo `selicStartDate` deve ser uma data." })
+    @IsDateString(undefined, { message: "O campo `Data de Começo da Selic` deve ser uma data." })
     selicStartDate: Date;
 
-    //{ message: "O campo `selicEndDate` deve ser uma data." }
-    @IsDateString(undefined, { message: "O campo `selicEndDate` deve ser uma data." })
+    @IsDateString(undefined, { message: "O campo `Data de Término da Selic` deve ser uma data." })
     selicEndDate: Date;
 }
