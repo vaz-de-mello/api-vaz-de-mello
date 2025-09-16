@@ -87,7 +87,6 @@ export class CalculatorService {
     }
 
     private getFaixasRRA(value: number, mesAbrev: string, ano: number) {
-        console.log(mesAbrev, ano)
         const faixasRRA = this.getTabelaIRRF(mesAbrev, ano);
         return faixasRRA.find(faixa => faixa.max === null || faixa.max >= value);
     }
