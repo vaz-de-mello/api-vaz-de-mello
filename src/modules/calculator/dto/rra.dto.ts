@@ -33,4 +33,7 @@ export class CalculatorRRADto {
 
     @IsDateString(undefined, { message: "O campo `Data de Término da Selic` deve ser uma data." })
     selicEndDate: Date;
+
+    @IsDateString(undefined, { message: "O campo `Data de Nascimento` deve ser uma data." })
+    userBirthDate: Date;
 }

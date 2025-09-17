@@ -97,7 +97,7 @@ export class CalculatorService {
         deducoes,
         ano,
         mes,
-    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate">) {
+    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate" | "userBirthDate">) {
         const monthlyValue = +((rendimentoTotal - deducoes) / numeroMeses).toFixed(2);
         const {
             aliquota,
@@ -132,4 +132,31 @@ export class CalculatorService {
 
         return irTotal;
     }
+
+    calcularIsencao65Anos(dataNascimento: Date, anoReferencia: number, rendimentoTotal: number) {
+        const LIMITE_MENSAL = 1903.98;
+
+        const nascimento = new Date(dataNascimento);
+        const data65Anos = new Date(nascimento);
+        data65Anos.setFullYear(nascimento.getFullYear() + 65);
+
+        const inicioAno = new Date(`${anoReferencia}-01-01`);
+        const fimAno = new Date(`${anoReferencia}-12-31`);
+
+
+        if (data65Anos > fimAno) return { isencao: 0, tributavel: rendimentoTotal };
+
+        // Descobre o mês inicial da isenção (no ano em que completou 65)
+        const mesInicio = data65Anos > inicioAno ? data65Anos.getMonth() + 1 : 1;
+        const mesesIsencao = 12 - mesInicio + 1;
+
+        const deducao = mesesIsencao * LIMITE_MENSAL;
+
+        return {
+            mesesIsencao,
+            isencao: Math.min(deducao, rendimentoTotal).toFixed(2),
+            tributavel: Math.max(rendimentoTotal - deducao, 0).toFixed(2),
+        };
+    }
+
 }

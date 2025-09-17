@@ -23,10 +23,14 @@ export class CalculatorController {
             mes,
             selicEndDate,
             selicStartDate,
+            userBirthDate,
         } = body;
 
+        const { isencao, tributavel } = this.calculatorService.calcularIsencao65Anos(userBirthDate, ano, rendimentoTotal);
+        console.log({ isencao, tributavel });
+
         const { totalRRA } = this.calculatorService.calculateRRA({
-            rendimentoTotal,
+            rendimentoTotal: +tributavel,
             numeroMeses,
             deducoes,
             ano,
