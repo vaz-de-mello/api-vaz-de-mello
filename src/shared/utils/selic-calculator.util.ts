@@ -15,10 +15,10 @@ export async function selicCalculator({ value, startDate, endDate }: SelicCalcul
     );
     const dados: SelicEntry[] = await resp.json();
 
-    const totalFactor = dados.reduce((acc, { valor }) => {
+    const totalFactor = dados?.reduce ? dados.reduce((acc, { valor }) => {
         const selic = parseFloat(valor.replace(',', '.'));
         return acc * (1 + selic / 100);
-    }, 1);
+    }, 1) : 1;
 
     return Number((value * totalFactor).toFixed(2));
 }

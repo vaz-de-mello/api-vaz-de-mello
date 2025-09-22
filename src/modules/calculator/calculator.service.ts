@@ -128,14 +128,11 @@ export class CalculatorService {
         let totalRRAIdoso = 0;
 
         const monthlyValueIdoso = (+(rendimentoTotalIdoso).toFixed(2) / mesesDeIsencaoIdoso) - LIMITE_MENSAL_IDOSO;
-        console.log({ monthlyValueIdoso });
 
         const {
             aliquota: aliquotaIdoso,
             parcela: parcelaIdoso,
         } = this.getFaixasRRA(monthlyValueIdoso, mes, ano);
-
-        console.log({ aliquotaIdoso, parcelaIdoso })
 
         if (aliquotaIdoso) {
             totalRRAIdoso = this.calcularIRTotal({
