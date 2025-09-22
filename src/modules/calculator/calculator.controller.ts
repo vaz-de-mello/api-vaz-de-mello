@@ -4,6 +4,7 @@ import { CalculatorRRADto } from './dto';
 import { Ok } from 'src/shared/responses';
 import { dateFormatted, selicCalculator } from 'src/shared/utils';
 import { Public } from 'src/shared/decorators';
+import { MONTHS_NUMBER_SHORT } from 'src/shared/constants';
 
 @Controller('calculator')
 export class CalculatorController {
@@ -26,13 +27,11 @@ export class CalculatorController {
             userBirthDate,
         } = body;
 
-        const { isencao, tributavel } = this.calculatorService.calcularIsencao65Anos(userBirthDate, ano, rendimentoTotal);
-        console.log({ isencao, tributavel });
+        const mesesDeIsencaoIdoso = this.calculatorService.mesesComMaisDe65(new Date(`${ano}-${MONTHS_NUMBER_SHORT[mes]}-01T00:00:01`), new Date(userBirthDate), numeroMeses);
 
-        const { totalRRA } = this.calculatorService.calculateRRA({
-            rendimentoTotal: +tributavel,
+        const { totalRRA } = this.calculatorService.calculateRRA(mesesDeIsencaoIdoso, {
+            rendimentoTotal: rendimentoTotal - deducoes,
             numeroMeses,
-            deducoes,
             ano,
             mes,
         });

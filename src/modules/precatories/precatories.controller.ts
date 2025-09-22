@@ -102,9 +102,8 @@ export class PrecatoriesController {
         const year = precatory.data_levantamento.getFullYear();
         const month = precatory.data_levantamento.getMonth() + 1;
 
-        const { totalRRA } = this.calculatorService.calculateRRA({
+        const { totalRRA } = this.calculatorService.calculateRRA(0, {
             ano: year,
-            deducoes: 0,
             mes: MONTHS_STRING_SHORT[month],
             numeroMeses: precatory.rra_meses,
             rendimentoTotal: +precatory.valor_bruto

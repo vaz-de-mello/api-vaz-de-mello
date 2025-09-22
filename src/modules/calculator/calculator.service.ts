@@ -91,72 +91,103 @@ export class CalculatorService {
         return faixasRRA.find(faixa => faixa.max === null || faixa.max >= value);
     }
 
-    calculateRRA({
+    calculateRRA(mesesDeIsencaoIdoso: number, {
         rendimentoTotal,
         numeroMeses,
-        deducoes,
         ano,
         mes,
-    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate" | "userBirthDate">) {
-        const monthlyValue = +((rendimentoTotal - deducoes) / numeroMeses).toFixed(2);
+    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate" | "userBirthDate" | "deducoes">) {
+        const LIMITE_MENSAL_IDOSO = 1903.98;
+
+        // imposto sem isenção do idoso
+        const monthlyValue = rendimentoTotal / numeroMeses;
         const {
             aliquota,
             parcela,
-        } = this.getFaixasRRA(monthlyValue, mes, ano);
+        } = this.getFaixasRRA(+(monthlyValue).toFixed(2), mes, ano);
         if (!aliquota) {
             return { totalRRA: 0 };
         }
 
-        const totalRRA = this.calcularIRTotal({
-            rendimentoBruto: rendimentoTotal,
-            deducoesTotais: deducoes,
-            numeroMeses: numeroMeses,
-            aliquota,
-            parcelaADeduzir: parcela,
-        });
+        // meses com imposto do idoso
+        const rendimentoTotalIdoso = (mesesDeIsencaoIdoso * monthlyValue);
+        const rendimentoSemIdoso = rendimentoTotal - +(rendimentoTotalIdoso).toFixed(2);
 
-        return { totalRRA };
+        let totalRRASemIdoso = 0;
+
+        if (numeroMeses - mesesDeIsencaoIdoso > 0) {
+            totalRRASemIdoso = this.calcularIRTotal({
+                rendimentoBruto: rendimentoSemIdoso,
+                numeroMeses: numeroMeses - mesesDeIsencaoIdoso,
+                aliquota,
+                parcelaADeduzir: parcela,
+            });
+        }
+
+        // aliquota do idoso
+        let totalRRAIdoso = 0;
+
+        const monthlyValueIdoso = (+(rendimentoTotalIdoso).toFixed(2) / mesesDeIsencaoIdoso) - LIMITE_MENSAL_IDOSO;
+        console.log({ monthlyValueIdoso });
+
+        const {
+            aliquota: aliquotaIdoso,
+            parcela: parcelaIdoso,
+        } = this.getFaixasRRA(monthlyValueIdoso, mes, ano);
+
+        console.log({ aliquotaIdoso, parcelaIdoso })
+
+        if (aliquotaIdoso) {
+            totalRRAIdoso = this.calcularIRTotal({
+                rendimentoBruto: rendimentoTotalIdoso,
+                numeroMeses: mesesDeIsencaoIdoso,
+                aliquota: aliquotaIdoso,
+                parcelaADeduzir: parcelaIdoso,
+            });
+        }
+
+        return { totalRRA: totalRRASemIdoso + totalRRAIdoso };
     }
 
     private calcularIRTotal({
         rendimentoBruto,
-        deducoesTotais,
         numeroMeses,
         aliquota,
         parcelaADeduzir,
     }: CalculoIRParams): number {
 
-        const baseMensal = roundNumber2Cases((rendimentoBruto - deducoesTotais) / numeroMeses);
+        const baseMensal = roundNumber2Cases((rendimentoBruto) / numeroMeses);
         const irMensal = roundNumber2Cases(baseMensal * aliquota) - parcelaADeduzir;
         const irTotal = roundNumber2Cases(Math.max(irMensal * numeroMeses, 0));
 
         return irTotal;
     }
 
-    calcularIsencao65Anos(dataNascimento: Date, anoReferencia: number, rendimentoTotal: number) {
-        const LIMITE_MENSAL = 1903.98;
+    mesesComMaisDe65(
+        dataInicial: Date,
+        dataNascimento: Date,
+        numeroDeMeses: number
+    ): number {
+        let mesesCom65ouMais = 0;
 
-        const nascimento = new Date(dataNascimento);
-        const data65Anos = new Date(nascimento);
-        data65Anos.setFullYear(nascimento.getFullYear() + 65);
+        for (let i = 0; i < numeroDeMeses; i++) {
+            const dataAtual = new Date(
+                dataInicial.getFullYear(),
+                dataInicial.getMonth() + i,
+                dataInicial.getDate()
+            );
 
-        const inicioAno = new Date(`${anoReferencia}-01-01`);
-        const fimAno = new Date(`${anoReferencia}-12-31`);
+            const data65Anos = new Date(
+                dataNascimento.getFullYear() + 65,
+                dataNascimento.getMonth(),
+                dataNascimento.getDate()
+            );
 
+            if (dataAtual >= data65Anos) {
+                mesesCom65ouMais++;
+            }
+        }
 
-        if (data65Anos > fimAno) return { isencao: 0, tributavel: rendimentoTotal };
-
-        // Descobre o mês inicial da isenção (no ano em que completou 65)
-        const mesInicio = data65Anos > inicioAno ? data65Anos.getMonth() + 1 : 1;
-        const mesesIsencao = 12 - mesInicio + 1;
-
-        const deducao = mesesIsencao * LIMITE_MENSAL;
-
-        return {
-            mesesIsencao,
-            isencao: Math.min(deducao, rendimentoTotal).toFixed(2),
-            tributavel: Math.max(rendimentoTotal - deducao, 0).toFixed(2),
-        };
+        return mesesCom65ouMais;
     }
-
 }
