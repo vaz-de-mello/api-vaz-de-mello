@@ -127,20 +127,22 @@ export class CalculatorService {
         // aliquota do idoso
         let totalRRAIdoso = 0;
 
-        const monthlyValueIdoso = (+(rendimentoTotalIdoso).toFixed(2) / mesesDeIsencaoIdoso) - LIMITE_MENSAL_IDOSO;
+        if (mesesDeIsencaoIdoso > 0) {
+            const monthlyValueIdoso = (+(rendimentoTotalIdoso).toFixed(2) / mesesDeIsencaoIdoso) - LIMITE_MENSAL_IDOSO;
 
-        const {
-            aliquota: aliquotaIdoso,
-            parcela: parcelaIdoso,
-        } = this.getFaixasRRA(monthlyValueIdoso, mes, ano);
-
-        if (aliquotaIdoso) {
-            totalRRAIdoso = this.calcularIRTotal({
-                rendimentoBruto: rendimentoTotalIdoso,
-                numeroMeses: mesesDeIsencaoIdoso,
+            const {
                 aliquota: aliquotaIdoso,
-                parcelaADeduzir: parcelaIdoso,
-            });
+                parcela: parcelaIdoso,
+            } = this.getFaixasRRA(monthlyValueIdoso, mes, ano);
+
+            if (aliquotaIdoso) {
+                totalRRAIdoso = this.calcularIRTotal({
+                    rendimentoBruto: rendimentoTotalIdoso,
+                    numeroMeses: mesesDeIsencaoIdoso,
+                    aliquota: aliquotaIdoso,
+                    parcelaADeduzir: parcelaIdoso,
+                });
+            }
         }
 
         return { totalRRA: totalRRASemIdoso + totalRRAIdoso };
