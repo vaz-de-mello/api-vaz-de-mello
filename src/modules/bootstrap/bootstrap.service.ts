@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 import { DatabaseService } from '../database/database.service';
 import { OfficesService } from '../offices/offices.service';
@@ -57,6 +58,8 @@ export class BootstrapService {
     }
 
     private async createAdmin(officeId: string) {
+        const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, 10);
+
         return this.usersService.create({
             data: {
                 nome: "Admin",
@@ -67,7 +70,7 @@ export class BootstrapService {
                 email_verificado: true,
                 email_token: null,
                 status: 1,
-                senha: process.env.ADMIN_PASS,
+                senha: hashedPassword,
                 escritorio: {
                     connect: { id: officeId }
                 },
