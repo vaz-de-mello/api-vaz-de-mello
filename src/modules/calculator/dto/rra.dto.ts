@@ -10,6 +10,10 @@ export class CalculatorRRADto {
     @IsInt({ message: "O campo `Deduções` deve ser um número inteiro." })
     deducoes: number;
 
+    @IsNotEmpty({ message: "O campo `Imposto Retido` é obrigatório." })
+    @IsInt({ message: "O campo `Imposto Retido` deve ser um número inteiro." })
+    impostoRetido: number;
+
     @IsNotEmpty({ message: "O campo `Valor principal` é obrigatório." })
     @IsNumber({ allowNaN: false, allowInfinity: false }, { message: "O campo `Valor principal` deve ser um número positivo." })
     @IsPositive({ message: "O campo `Valor principal` deve ser um número positivo." })

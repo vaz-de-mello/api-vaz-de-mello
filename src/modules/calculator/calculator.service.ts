@@ -96,7 +96,7 @@ export class CalculatorService {
         numeroMeses,
         ano,
         mes,
-    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate" | "userBirthDate" | "deducoes">) {
+    }: Omit<CalculatorRRADto, "selicStartDate" | "selicEndDate" | "userBirthDate" | "deducoes" | "impostoRetido">) {
         const LIMITE_MENSAL_IDOSO = 1903.98;
 
         // imposto sem isenção do idoso

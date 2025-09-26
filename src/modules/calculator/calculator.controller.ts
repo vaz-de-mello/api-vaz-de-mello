@@ -28,6 +28,7 @@ export class CalculatorController {
             selicEndDate,
             selicStartDate,
             userBirthDate,
+            impostoRetido,
         } = body;
 
         const mesesDeIsencaoIdoso = this.calculatorService.mesesComMaisDe65(new Date(`${ano}-${MONTHS_NUMBER_SHORT[mes]}-01T00:00:01`), new Date(userBirthDate), numeroMeses);
@@ -39,14 +40,16 @@ export class CalculatorController {
             mes,
         });
 
+        const impostoCorrigido = impostoRetido - totalRRA;
+
         const irSelicFixed = await selicCalculator({
             endDate: dateFormatted(selicEndDate),
             startDate: dateFormatted(selicStartDate),
-            value: totalRRA,
+            value: impostoCorrigido,
         })
 
         return new Ok({
-            data: { totalRRA, irSelicFixed },
+            data: { totalRRA: impostoCorrigido, irSelicFixed },
             message: "Cálculo de RRA realizado com sucesso.",
         })
     }
