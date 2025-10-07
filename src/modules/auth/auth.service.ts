@@ -36,12 +36,13 @@ export class AuthService {
             statusCode: 401,
             error: 'Unauthorized',
         });
-        if (user.status !== 1) throw new UnauthorizedException({
+
+        if (user.status === 0) throw new UnauthorizedException({
             message: 'Usuário não está ativo.',
             success: false,
             statusCode: 401,
             error: 'Unauthorized',
-        });
+        })
 
         const isPasswordValid = await bcrypt.compare(senha, user.senha);
         if (!isPasswordValid) throw new UnauthorizedException({
@@ -50,6 +51,11 @@ export class AuthService {
             statusCode: 401,
             error: 'Unauthorized',
         });
+
+        if (user.status === 2) return ({
+            accessToken: null,
+            message: 'Por favor, crie uma senha para ativar seu usuário.',
+        })
 
         return this.generateJwtToken(user);
     }
@@ -162,6 +168,6 @@ export class AuthService {
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: process.env.JWT_TOKEN_EXPIRATION_TIME,
         });
-        return { accessToken };
+        return { accessToken, message: null };
     }
 }

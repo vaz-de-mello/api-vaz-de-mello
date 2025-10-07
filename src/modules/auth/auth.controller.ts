@@ -16,9 +16,9 @@ import { Ok } from 'src/shared/responses';
 import { sendEmail } from 'src/shared/utils';
 
 import {
+    ActivateDto,
     RegisterIndividualDto,
     SignInDto,
-    SignUpDto,
 } from './dto';
 
 @Controller('auth')
@@ -31,21 +31,21 @@ export class AuthController {
     async login(
         @Body() signInDto: SignInDto
     ) {
-        const { accessToken } = await this.authService.signIn(signInDto);
-        const data = { accessToken };
+        const data = await this.authService.signIn(signInDto);
+        const message = data?.message || 'Login realizado com sucesso.';
 
-        return new Ok({ data, message: 'Login realizado com sucesso.' });
+        return new Ok({ data, message });
     }
 
     @Public()
     @Post('activate')
     async activate(
-        @Body() signUpDto: SignUpDto
+        @Body() activateDto: ActivateDto
     ) {
-        const { accessToken } = await this.authService.activate(signUpDto);
+        const { accessToken } = await this.authService.activate(activateDto);
         const data = { accessToken };
 
-        return new Ok({ data, message: 'Usuário registrado com sucesso.' });
+        return new Ok({ data, message: 'Usuário ativado com sucesso.' });
     }
 
     @Public()

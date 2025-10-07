@@ -8,12 +8,13 @@ import {
     NotFoundException,
     Put,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 import { UsersService } from './users.service';
 
 import { Ok } from 'src/shared/responses';
 import { PageQuery, Roles } from 'src/shared/decorators';
-import { createPaginatedResponse } from 'src/shared/utils';
+import { createPaginatedResponse, sendEmail } from 'src/shared/utils';
 import { PageQueryDto } from 'src/shared/@types';
 import { ProfileType } from 'src/shared/enum';
 
@@ -31,17 +32,33 @@ export class UsersController {
     async create(
         @Body() createUserDto: CreateUserDto
     ) {
+        const randomPassword = Math.random().toString(36).slice(-8);
+        const hashedPassword = await bcrypt.hash(createUserDto.senha || randomPassword, 10);
+
+        createUserDto.senha = hashedPassword;
+
         const user = await this.usersService.create({
             data: {
                 ...createUserDto,
                 status: 2, // 1: Ativo, 0: Inativo, 2: Aguardando
-                senha: createUserDto.senha || '',
+                senha: createUserDto.senha || randomPassword,
                 escritorio_id: createUserDto.escritorio_id || null,
                 email_verificado: true,
                 email_token: null,
             },
             omit: { senha: true },
         });
+
+        await sendEmail({
+            to: user.email,
+            subject: 'Registro realizado em querorestituIR!',
+            html: `
+            <p>Bem-vindo ao querorestituIR!</p>
+            <p>Segue abaixo sua senha provisória:</p><br>
+            <p>${randomPassword}</p><br>
+            <p>Faço o primeiro login utilizando esta senha e depois troque para outra.</p>
+            `
+        })
 
         return new Ok({ data: user, message: 'Usuário criado com sucesso.' });
     }
