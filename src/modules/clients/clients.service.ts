@@ -22,8 +22,12 @@ export class ClientsService {
 
     async create(createClientArgs: Prisma.ClienteCreateArgs) {
         try {
-            const office = await this.db.cliente.create(createClientArgs);
-            return office;
+            const client = await this.db.cliente.findUnique({
+                where: { cpf: createClientArgs.data.cpf }
+            })
+            if (client) return client;
+
+            return this.db.cliente.create(createClientArgs);
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 switch (error.code) {
