@@ -1,12 +1,12 @@
 import { HonorariosDestacados, TipoVerba } from "@prisma/client";
 
-
 export class PrecatoryEntity {
     id: string;
     cliente_id: string;
     data_levantamento: Date;
     valor_bruto: number;
     valor_irrf_retido: number;
+    valor_restituicao: number;
     rra_meses: number;
     tribunal_pagador: string;
     tipo_verba: TipoVerba;
@@ -20,4 +20,5 @@ export class PrecatoryEntity {
     updatedAt: Date;
     usuario_id: string;
     escritorio_id: string;
+    status: number;
 }

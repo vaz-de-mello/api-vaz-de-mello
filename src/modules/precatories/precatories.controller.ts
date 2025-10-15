@@ -6,7 +6,6 @@ import {
     Put,
     Param,
     Delete,
-    BadRequestException,
     NotFoundException,
 } from '@nestjs/common';
 import { HonorariosDestacados, TipoVerba } from '@prisma/client';
@@ -15,13 +14,14 @@ import { PrecatoriesService } from './precatories.service';
 import { CalculatorService } from '../calculator/calculator.service';
 
 import { Ok } from 'src/shared/responses';
-import { PageQuery } from 'src/shared/decorators';
+import { PageQuery, User } from 'src/shared/decorators';
 import { PageQueryDto } from 'src/shared/@types';
 import { createPaginatedResponse, dateFormatted, selicCalculator } from 'src/shared/utils';
 import { MONTHS_STRING_SHORT } from 'src/shared/constants';
 
 import { CreatePrecatoryDto, UpdatePrecatoryDto } from './dto';
 import { PrecatoryEntity } from './entities';
+import { UserWithoutPassword } from '../users/entities';
 
 @Controller('precatories')
 export class PrecatoriesController {
@@ -32,12 +32,15 @@ export class PrecatoriesController {
 
     @Post()
     async create(
-        @Body() createPrecatorioDto: CreatePrecatoryDto
+        @Body() createPrecatorioDto: CreatePrecatoryDto,
+        @User() user: UserWithoutPassword,
     ) {
         const precatory = await this.precatoriesService.create({
             data: {
                 ...createPrecatorioDto,
                 status: 1,
+                usuario_id: user.id,
+                escritorio_id: user.escritorio_id,
             },
         });
 

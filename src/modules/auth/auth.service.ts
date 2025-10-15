@@ -12,8 +12,8 @@ import { ProfileType, UserStatus } from 'src/shared/enum';
 
 import {
     SignInDto,
-    SignUpDto,
     RegisterIndividualDto,
+    ActivateDto,
 } from './dto';
 
 import { UserEntity } from '../users/entities';
@@ -60,8 +60,8 @@ export class AuthService {
         return this.generateJwtToken(user);
     }
 
-    async activate(signUpDto: SignUpDto) {
-        const hashedPassword = await bcrypt.hash(signUpDto.senha, 10);
+    async activate(signUpDto: ActivateDto) {
+        const hashedPassword = await bcrypt.hash(signUpDto.novaSenha, 10);
         signUpDto.senha = hashedPassword;
 
         try {

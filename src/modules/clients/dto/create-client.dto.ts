@@ -31,7 +31,6 @@ export class CreateClientDto {
     doenca_grave: boolean;
 
     @IsString({ message: '`laudo_doenca` deve ser uma string.' })
-    @IsNotEmpty({ message: '`laudo_doenca` é obrigatório.' })
     laudo_doenca: string;
 
     @IsBoolean({ message: '`hipossuficiente` deve ser um valor booleano (true ou false).' })

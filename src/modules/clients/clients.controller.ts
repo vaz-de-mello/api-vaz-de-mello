@@ -31,7 +31,7 @@ export class ClientsController {
         const client = await this.clientsService.create({
             data: createClientDto,
         });
-        return client;
+        return new Ok({ data: client, message: 'Cliente cadastrado com sucesso.' });;
     }
 
     @Get()
