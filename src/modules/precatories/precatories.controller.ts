@@ -7,6 +7,7 @@ import {
     Param,
     Delete,
     NotFoundException,
+    Query,
 } from '@nestjs/common';
 import { HonorariosDestacados, TipoVerba } from '@prisma/client';
 
@@ -55,9 +56,13 @@ export class PrecatoriesController {
             enumValidator: [
                 { key: 'tipo_verba', enum: TipoVerba },
                 { key: 'honorarios_destacados', enum: HonorariosDestacados },
-            ]
-        }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>
+            ],
+            excludes: ['status']
+        }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>,
+        @Query('status') status?: string,
     ) {
+        if (status) query.status = +status;
+
         const [total, preactories] = await this.precatoriesService.findAll(query, page);
         const response = createPaginatedResponse({
             data: preactories,
