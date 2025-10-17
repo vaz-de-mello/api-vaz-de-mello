@@ -42,12 +42,6 @@ enum TipoDocumento {
     outros
 }
 
-enum Sexo {
-    Masculino
-    Feminino
-    Outro
-}
-
 enum PlataformaDistribuicao {
     Legal_One
     Projudi
@@ -104,7 +98,6 @@ model Cliente {
     cpf             String   @unique
     nome            String
     data_nascimento DateTime
-    sexo            Sexo
     doenca_grave    Boolean
     laudo_doenca    String
     hipossuficiente Boolean
@@ -119,8 +112,9 @@ model Cliente {
 }
 
 model Precatorio {
-    id                    String               @id @default(uuid())
-    cliente_id            String
+    id         String @id @default(uuid())
+    cliente_id String
+
     cliente               Cliente              @relation(fields: [cliente_id], references: [id])
     data_levantamento     DateTime
     valor_bruto           Decimal

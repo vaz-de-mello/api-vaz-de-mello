@@ -6,7 +6,6 @@ import {
     Matches,
     IsEnum,
 } from 'class-validator';
-import { Sexo } from 'src/shared/enum';
 
 export class CreateClientDto {
     @IsString({ message: '`cpf` deve ser uma string.' })
@@ -21,11 +20,6 @@ export class CreateClientDto {
 
     @IsDateString({}, { message: '`data_nascimento` deve ser uma data válida no formato ISO.' })
     data_nascimento: string;
-
-    @IsEnum(Sexo, {
-        message: '`sexo` deve ser "Masculino", "Feminino" ou "Outro".',
-    })
-    sexo: Sexo;
 
     @IsBoolean({ message: '`doenca_grave` deve ser um valor booleano (true ou false).' })
     doenca_grave: boolean;

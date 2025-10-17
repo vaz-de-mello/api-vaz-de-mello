@@ -59,9 +59,11 @@ export class PrecatoriesController {
             ],
             excludes: ['status']
         }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>,
+        @User() user: UserWithoutPassword,
         @Query('status') status?: string,
     ) {
         if (status) query.status = +status;
+        if (user.tipo_perfil_id !== 1) query.escritorio_id = user.escritorio_id
 
         const [total, preactories] = await this.precatoriesService.findAll(query, page);
         const response = createPaginatedResponse({
