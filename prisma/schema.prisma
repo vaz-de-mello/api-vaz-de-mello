@@ -103,6 +103,7 @@ model Cliente {
     hipossuficiente Boolean
     createdAt       DateTime @default(now())
     updatedAt       DateTime @default(now())
+    doenca          String   @default("")
 
     precatorios Precatorio[]
     documentos  Documento[]
