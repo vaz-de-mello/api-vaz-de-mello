@@ -4,7 +4,6 @@ import {
     IsDateString,
     IsBoolean,
     Matches,
-    IsEnum,
 } from 'class-validator';
 
 export class CreateClientDto {
@@ -26,6 +25,9 @@ export class CreateClientDto {
 
     @IsString({ message: '`laudo_doenca` deve ser uma string.' })
     laudo_doenca: string;
+
+    @IsString({ message: '`doenca` deve ser uma string.' })
+    doenca: string;
 
     @IsBoolean({ message: '`hipossuficiente` deve ser um valor booleano (true ou false).' })
     hipossuficiente: boolean;
