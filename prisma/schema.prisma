@@ -69,6 +69,7 @@ model Usuario {
     email_token      String?
     status           Int // 1: Ativo, 0: Inativo, 2: Aguardando
     precatorio       Precatorio[]
+    Conversa         Conversa[]
 
     @@map("usuarios")
 }
@@ -89,6 +90,7 @@ model Escritorio {
     usuarios   Usuario[]
     processos  Processo[]
     precatorio Precatorio[]
+    Pendencia  Pendencia[]
 
     @@map("escritorios")
 }
@@ -140,6 +142,8 @@ model Precatorio {
     contador              Int                  @default(autoincrement())
 
     restituicoes Restituicao[]
+    Pendencia    Pendencia[]
+    Conversa     Conversa[]
 
     @@map("precatorios")
 }
@@ -207,4 +211,33 @@ model Perfil {
     usuarios Usuario[]
 
     @@map("perfis")
+}
+
+model Pendencia {
+    id            String      @id @default(uuid())
+    precatorio_id String
+    precatorio    Precatorio  @relation(fields: [precatorio_id], references: [id])
+    titulo        String
+    categoria     String
+    status        Int
+    responsaveis  String
+    data_final    DateTime
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @default(now())
+    escritorio_id String?
+    escritorio    Escritorio? @relation(fields: [escritorio_id], references: [id])
+
+    @@map("pendencias")
+}
+
+model Conversa {
+    id            String     @id @default(uuid())
+    texto         String
+    usuario_id    String
+    usuario_nome  String
+    usuario       Usuario    @relation(fields: [usuario_id], references: [id])
+    precatorio_id String
+    precatorio    Precatorio @relation(fields: [precatorio_id], references: [id])
+
+    @@map("conversas")
 }

@@ -16,6 +16,8 @@ import { ProcessesModule } from './modules/processes/processes.module';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
 import { HealthModule } from './modules/health/health.module';
+import { ConversationsModule } from './modules/conversations/conversations.module';
+import { PendingsModule } from './modules/pendings/pendings.module';
 
 @Module({
     imports: [
@@ -32,6 +34,8 @@ import { HealthModule } from './modules/health/health.module';
         DocumentsModule,
         BootstrapModule,
         HealthModule,
+        ConversationsModule,
+        PendingsModule,
     ],
     controllers: [],
     providers: [
