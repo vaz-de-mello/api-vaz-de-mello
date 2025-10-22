@@ -217,7 +217,6 @@ model Pendencia {
     id            String      @id @default(uuid())
     precatorio_id String
     precatorio    Precatorio  @relation(fields: [precatorio_id], references: [id])
-    titulo        String
     categoria     String
     status        Int
     responsaveis  String
