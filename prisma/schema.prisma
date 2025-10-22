@@ -226,6 +226,7 @@ model Pendencia {
     updatedAt     DateTime    @default(now())
     escritorio_id String?
     escritorio    Escritorio? @relation(fields: [escritorio_id], references: [id])
+    conteudo      Json
 
     @@map("pendencias")
 }
