@@ -1,12 +1,11 @@
-import { IsString, IsUUID, IsInt, IsDateString, Length } from 'class-validator';
+import { IsString, IsUUID, IsInt, IsDateString, Length, IsJSON } from 'class-validator';
 
 export class CreatePendingDto {
     @IsUUID(undefined, { message: 'O campo "precatorio_id" deve ser um UUID válido.' })
     precatorio_id: string;
 
-    @IsString({ message: 'O campo "titulo" deve ser um texto.' })
-    @Length(1, 255, { message: 'O campo "titulo" deve ter entre 1 e 255 caracteres.' })
-    titulo: string;
+    @IsJSON({ message: 'O campo "conteudo" deve ser um JSON.' })
+    conteudo: string;
 
     @IsString({ message: 'O campo "categoria" deve ser um texto.' })
     @Length(1, 100, { message: 'O campo "categoria" deve ter entre 1 e 100 caracteres.' })
