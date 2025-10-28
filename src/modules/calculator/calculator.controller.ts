@@ -29,25 +29,31 @@ export class CalculatorController {
             selicStartDate,
             userBirthDate,
             impostoRetido,
+            hasDisease,
+            precatoryDerivedBy,
         } = body;
 
         const mesesDeIsencaoIdoso = this.calculatorService.mesesComMaisDe65(new Date(`${ano}-${MONTHS_NUMBER_SHORT[mes]}-01T00:00:01`), new Date(userBirthDate), numeroMeses);
-        console.log({ mesesDeIsencaoIdoso })
-        const { totalRRA } = this.calculatorService.calculateRRA(mesesDeIsencaoIdoso, {
-            rendimentoTotal: rendimentoTotal - deducoes,
-            numeroMeses,
-            ano,
-            mes,
-        });
+        let impostoCorrigido = 0;
 
-        console.log({ totalRRA })
+        if (hasDisease || precatoryDerivedBy) {
+            impostoCorrigido = impostoRetido;
+        } else {
+            const { totalRRA } = this.calculatorService.calculateRRA(mesesDeIsencaoIdoso, {
+                rendimentoTotal: rendimentoTotal - deducoes,
+                numeroMeses,
+                ano,
+                mes,
+            });
 
-        const impostoCorrigido = impostoRetido - totalRRA;
-        if (impostoCorrigido <= 0) {
-            return new Ok({
-                data: { totalRRA: 0, irSelicFixed: 0 },
-                message: "Cálculo de RRA realizado com sucesso.",
-            })
+            impostoCorrigido = impostoRetido - totalRRA;
+
+            if (impostoCorrigido <= 0) {
+                return new Ok({
+                    data: { totalRRA: 0, irSelicFixed: 0 },
+                    message: "Cálculo de RRA realizado com sucesso.",
+                })
+            }
         }
 
         const irSelicFixed = await selicCalculator({
@@ -55,7 +61,6 @@ export class CalculatorController {
             startDate: dateFormatted(selicStartDate),
             value: impostoCorrigido,
         })
-        console.log({ irSelicFixed })
 
         return new Ok({
             data: { totalRRA: impostoCorrigido, irSelicFixed },

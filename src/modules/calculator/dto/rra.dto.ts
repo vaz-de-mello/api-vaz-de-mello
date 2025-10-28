@@ -1,4 +1,4 @@
-import { IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
+import { IsBoolean, IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
 
 export class CalculatorRRADto {
     @IsNotEmpty({ message: "O campo `Número de Meses (RRA)` é obrigatório." })
@@ -40,4 +40,10 @@ export class CalculatorRRADto {
 
     @IsDateString(undefined, { message: "O campo `Data de Nascimento` deve ser uma data." })
     userBirthDate: Date;
+
+    @IsBoolean({ message: 'O campo `hasDisease` deve ser um booleano.' })
+    hasDisease: boolean;
+
+    @IsString({ message: 'O campo `hasDisease` deve ser um texto.' })
+    precatoryDerivedBy: string;
 }
