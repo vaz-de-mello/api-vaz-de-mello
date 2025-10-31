@@ -36,7 +36,7 @@ export class CalculatorController {
         const mesesDeIsencaoIdoso = this.calculatorService.mesesComMaisDe65(new Date(`${ano}-${MONTHS_NUMBER_SHORT[mes]}-01T00:00:01`), new Date(userBirthDate), numeroMeses);
         let impostoCorrigido = 0;
 
-        if (hasDisease || precatoryDerivedBy) {
+        if (hasDisease || (precatoryDerivedBy != 'OUTROS')) {
             impostoCorrigido = impostoRetido;
         } else {
             const { totalRRA } = this.calculatorService.calculateRRA(mesesDeIsencaoIdoso, {

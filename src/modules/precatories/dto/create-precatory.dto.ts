@@ -9,8 +9,6 @@ import {
     IsInt,
     Min,
     IsEnum,
-    IsUrl,
-    Max,
 } from 'class-validator';
 
 export class CreatePrecatoryDto {

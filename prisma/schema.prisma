@@ -36,12 +36,6 @@ enum StatusRestituicao {
     pago
 }
 
-enum TipoDocumento {
-    RG
-    contrato
-    outros
-}
-
 enum PlataformaDistribuicao {
     Legal_One
     Projudi
@@ -88,7 +82,6 @@ model Escritorio {
     updatedAt           DateTime @default(now())
 
     usuarios   Usuario[]
-    processos  Processo[]
     precatorio Precatorio[]
     Pendencia  Pendencia[]
 
@@ -109,7 +102,6 @@ model Cliente {
 
     precatorios Precatorio[]
     documentos  Documento[]
-    processos   Processo[]
 
     @@map("clientes")
 }
@@ -132,68 +124,44 @@ model Precatorio {
     processo_origem       String
     oficio_pdf            String
     comprovante_pdf       String
-    createdAt             DateTime             @default(now())
-    updatedAt             DateTime             @default(now())
     usuario_id            String?
-    usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
     escritorio_id         String?
+    tese_aplicada         TeseAplicada
+    usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
     escritorio            Escritorio?          @relation(fields: [escritorio_id], references: [id])
     status                Int
     contador              Int                  @default(autoincrement())
+    createdAt             DateTime             @default(now())
+    updatedAt             DateTime             @default(now())
 
-    restituicoes Restituicao[]
-    Pendencia    Pendencia[]
-    Conversa     Conversa[]
-
-    @@map("precatorios")
-}
-
-model Restituicao {
-    id                         String            @id @default(uuid())
-    precatorio_id              String
-    precatorio                 Precatorio        @relation(fields: [precatorio_id], references: [id])
-    tese_aplicada              TeseAplicada
     valor_simulador_RRA        Decimal
     valor_ir_devido            Decimal
     diferenca_IR               Decimal
     valor_corrigido_SELIC      Decimal
     necessita_calculo_judicial Boolean
     data_calculo               DateTime
-    status                     StatusRestituicao
-    createdAt                  DateTime          @default(now())
-    updatedAt                  DateTime          @default(now())
 
-    @@map("restituicoes")
-}
-
-model Documento {
-    id                  String        @id @default(uuid())
-    cliente_id          String
-    cliente             Cliente       @relation(fields: [cliente_id], references: [id])
-    tipo_documento      TipoDocumento
-    arquivo             String
-    assinatura_validada Boolean
-    createdAt           DateTime      @default(now())
-    updatedAt           DateTime      @default(now())
-
-    @@map("documentos")
-}
-
-model Processo {
-    id                      String                 @id @default(uuid())
-    cliente_id              String
-    cliente                 Cliente                @relation(fields: [cliente_id], references: [id])
-    escritorio_id           String
-    escritorio              Escritorio             @relation(fields: [escritorio_id], references: [id])
     numero_processo         String
     vara_juizo              String
     data_protocolo          DateTime
-    documentos_juntados     String
     plataforma_distribuicao PlataformaDistribuicao
-    createdAt               DateTime               @default(now())
-    updatedAt               DateTime               @default(now())
 
-    @@map("processos")
+    Pendencia Pendencia[]
+    Conversa  Conversa[]
+
+    @@map("precatorios")
+}
+
+model Documento {
+    id         String   @id @default(uuid())
+    cliente_id String
+    cliente    Cliente  @relation(fields: [cliente_id], references: [id])
+    arquivo    String
+    tipo       String
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @default(now())
+
+    @@map("documentos")
 }
 
 model Log {
@@ -226,6 +194,7 @@ model Pendencia {
     escritorio_id String?
     escritorio    Escritorio? @relation(fields: [escritorio_id], references: [id])
     conteudo      Json
+    precatorioaId String?
 
     @@map("pendencias")
 }
@@ -238,6 +207,14 @@ model Conversa {
     usuario       Usuario    @relation(fields: [usuario_id], references: [id])
     precatorio_id String
     precatorio    Precatorio @relation(fields: [precatorio_id], references: [id])
+    precatorioaId String?
 
     @@map("conversas")
+}
+
+model Notificacao {
+    id            String @id @default(uuid())
+    precatorio_id String
+    card_id       String
+    mensagem      String
 }

@@ -21,7 +21,8 @@ export class ConversationsController {
                 ...createConversationDto,
                 usuario_nome: user.nome,
                 usuario_id: user.id,
-            }
+            },
+            include: { usuario: true },
         });
         return new Ok({ data: conversation, message: 'Conversa criada com sucesso.' });
     }

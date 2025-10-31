@@ -60,6 +60,7 @@ export class ConversationsService {
     async findByPrecatory(precatorio_id: string) {
         return this.db.conversa.findMany({
             where: { precatorio_id },
+            include: { usuario: true },
         })
     }
 
