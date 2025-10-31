@@ -1,4 +1,4 @@
-import { HonorariosDestacados, TipoVerba } from '@prisma/client';
+import { HonorariosDestacados, TeseAplicada, TipoVerba } from '@prisma/client';
 import {
     IsUUID,
     IsString,
@@ -60,4 +60,7 @@ export class CreatePrecatoryDto {
 
     @IsString({ message: '`comprovante_pdf` deve ser uma string válida.' })
     comprovante_pdf: string;
+
+    @IsEnum(TeseAplicada, { message: '`tese_aplicada` deve ser um desses valores: "outros" | "juros_de_mora" | "idoso" | "doenca_grave" | "hipossuficiencia"' })
+    tese_aplicada: TeseAplicada;
 }

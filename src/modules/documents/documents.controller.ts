@@ -8,7 +8,6 @@ import {
     Delete,
     NotFoundException,
 } from '@nestjs/common';
-import { TipoDocumento } from '@prisma/client';
 
 import { DocumentsService } from './documents.service';
 
@@ -41,9 +40,6 @@ export class DocumentsController {
         @PageQuery({
             equals: ['cliente_id', 'id'],
             excludes: ['assinatura_validada'],
-            enumValidator: [
-                { key: 'tipo_documento', enum: TipoDocumento },
-            ]
         }) { page, query, rawQuery }: PageQueryDto<Partial<DocumentEntity>>
     ) {
         if (rawQuery.assinatura_validada) query.assinatura_validada = String(rawQuery.assinatura_validada) === 'true';

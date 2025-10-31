@@ -11,8 +11,6 @@ import { AuthGuard, RolesGuard } from './shared/guards';
 import { CalculatorModule } from './modules/calculator/calculator.module';
 import { PrecatoriesModule } from './modules/precatories/precatories.module';
 import { ClientsModule } from './modules/clients/clients.module';
-import { RestituitionModule } from './modules/restituition/restituition.module';
-import { ProcessesModule } from './modules/processes/processes.module';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
 import { HealthModule } from './modules/health/health.module';
@@ -29,8 +27,6 @@ import { PendingsModule } from './modules/pendings/pendings.module';
         CalculatorModule,
         PrecatoriesModule,
         ClientsModule,
-        RestituitionModule,
-        ProcessesModule,
         DocumentsModule,
         BootstrapModule,
         HealthModule,

@@ -134,17 +134,17 @@ model Precatorio {
     createdAt             DateTime             @default(now())
     updatedAt             DateTime             @default(now())
 
-    valor_simulador_RRA        Decimal
-    valor_ir_devido            Decimal
-    diferenca_IR               Decimal
-    valor_corrigido_SELIC      Decimal
-    necessita_calculo_judicial Boolean
-    data_calculo               DateTime
+    valor_simulador_RRA        Decimal?
+    valor_ir_devido            Decimal?
+    diferenca_IR               Decimal?
+    valor_corrigido_SELIC      Decimal?
+    necessita_calculo_judicial Boolean?
+    data_calculo               DateTime?
 
-    numero_processo         String
-    vara_juizo              String
-    data_protocolo          DateTime
-    plataforma_distribuicao PlataformaDistribuicao
+    numero_processo         String?
+    vara_juizo              String?
+    data_protocolo          DateTime?
+    plataforma_distribuicao PlataformaDistribuicao?
 
     Pendencia Pendencia[]
     Conversa  Conversa[]

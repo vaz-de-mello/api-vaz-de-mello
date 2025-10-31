@@ -58,7 +58,6 @@ export class OfficesController {
             where: { id },
             include: {
                 precatorio: true,
-                processos: true,
             }
         });
         if (!office) throw new NotFoundException({
