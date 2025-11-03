@@ -133,13 +133,14 @@ model Precatorio {
     contador              Int                  @default(autoincrement())
     createdAt             DateTime             @default(now())
     updatedAt             DateTime             @default(now())
+    numero_card           String
 
     valor_simulador_RRA        Decimal?
     valor_ir_devido            Decimal?
     diferenca_IR               Decimal?
     valor_corrigido_SELIC      Decimal?
     necessita_calculo_judicial Boolean?
-    data_calculo               DateTime?
+    data_base                  DateTime
 
     numero_processo         String?
     vara_juizo              String?
