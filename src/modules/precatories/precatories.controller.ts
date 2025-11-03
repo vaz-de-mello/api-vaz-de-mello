@@ -24,6 +24,8 @@ import { CreatePrecatoryDto, UpdatePrecatoryDto } from './dto';
 import { PrecatoryEntity } from './entities';
 import { UserWithoutPassword } from '../users/entities';
 
+let counter: number = null;
+
 @Controller('precatories')
 export class PrecatoriesController {
     constructor(
@@ -36,12 +38,26 @@ export class PrecatoriesController {
         @Body() createPrecatorioDto: CreatePrecatoryDto,
         @User() user: UserWithoutPassword,
     ) {
+        if (!counter) {
+            const lastPrecatory = await this.precatoriesService.findFirst({
+                orderBy: {
+                    createdAt: 'desc'
+                },
+                select: {
+                    contador: true,
+                }
+            })
+
+            counter = lastPrecatory?.contador || 1;
+        }
+
         const precatory = await this.precatoriesService.create({
             data: {
                 ...createPrecatorioDto,
                 status: 1,
                 usuario_id: user.id,
                 escritorio_id: user.escritorio_id,
+                numero_card: this.precatoriesService.cardNumberGenerator(counter),
             },
         });
 

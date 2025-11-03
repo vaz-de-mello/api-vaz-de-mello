@@ -63,4 +63,7 @@ export class CreatePrecatoryDto {
 
     @IsEnum(TeseAplicada, { message: '`tese_aplicada` deve ser um desses valores: "outros" | "juros_de_mora" | "idoso" | "doenca_grave" | "hipossuficiencia"' })
     tese_aplicada: TeseAplicada;
+
+    @IsDateString({}, { message: '`data_base` deve ser uma data válida no formato ISO.' })
+    data_base: string;
 }

@@ -19,6 +19,13 @@ export class PrecatoriesService {
         private readonly db: DatabaseService,
     ) { }
 
+    cardNumberGenerator(contador: number) {
+        const d = new Date();
+        const day = (d.getDate() < 10) ? `0${d.getDate()}` : d.getDate();
+        const mon = (d.getMonth() + 1 < 10) ? `0${d.getMonth() + 1}` : d.getMonth() + 1;
+        return `${day}${mon}${d.getFullYear()}${contador}`;
+    }
+
     async create(createArgs: Prisma.PrecatorioCreateArgs) {
         try {
             const precatory = await this.db.precatorio.create(createArgs);
