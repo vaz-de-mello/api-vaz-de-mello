@@ -1,4 +1,4 @@
-import { HonorariosDestacados, TeseAplicada, TipoVerba } from '@prisma/client';
+import { HonorariosDestacados, TeseAplicada } from '@prisma/client';
 import {
     IsUUID,
     IsString,
@@ -38,8 +38,8 @@ export class CreatePrecatoryDto {
     @IsString({ message: '`tribunal_pagador` deve ser uma string.' })
     tribunal_pagador: string;
 
-    @IsEnum(TipoVerba, { message: '`tipo_verba` deve ser \'alimentar\', \'auxílio_acidente\', \'indenizatória\' ou \'outros\'.' })
-    tipo_verba: TipoVerba;
+    @IsString({ message: '`tipo_verba` deve ser \'alimentar\', \'auxílio_acidente\', \'indenizatória\' ou \'outros\'.' })
+    tipo_verba: string;
 
     @IsEnum(HonorariosDestacados, { message: '`honorarios_destacados` deve ser \'Sim\' ou \'Não\'.' })
     honorarios_destacados: HonorariosDestacados;

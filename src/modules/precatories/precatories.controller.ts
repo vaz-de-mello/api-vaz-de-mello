@@ -9,7 +9,7 @@ import {
     NotFoundException,
     Query,
 } from '@nestjs/common';
-import { HonorariosDestacados, TipoVerba } from '@prisma/client';
+import { HonorariosDestacados } from '@prisma/client';
 
 import { PrecatoriesService } from './precatories.service';
 import { CalculatorService } from '../calculator/calculator.service';
@@ -24,8 +24,6 @@ import { CreatePrecatoryDto, UpdatePrecatoryDto } from './dto';
 import { PrecatoryEntity } from './entities';
 import { UserWithoutPassword } from '../users/entities';
 
-let counter: number = null;
-
 @Controller('precatories')
 export class PrecatoriesController {
     constructor(
@@ -38,18 +36,17 @@ export class PrecatoriesController {
         @Body() createPrecatorioDto: CreatePrecatoryDto,
         @User() user: UserWithoutPassword,
     ) {
-        if (!counter) {
-            const lastPrecatory = await this.precatoriesService.findFirst({
-                orderBy: {
-                    createdAt: 'desc'
-                },
-                select: {
-                    contador: true,
-                }
-            })
+        let counter: number = 1;
+        const lastPrecatory = await this.precatoriesService.findFirst({
+            orderBy: {
+                createdAt: 'desc'
+            },
+            select: {
+                contador: true,
+            }
+        })
 
-            counter = lastPrecatory?.contador || 1;
-        }
+        if (lastPrecatory) counter = lastPrecatory.contador + 1;
 
         const precatory = await this.precatoriesService.create({
             data: {
@@ -70,7 +67,6 @@ export class PrecatoriesController {
             caseSensitive: ['tribunal_pagador'],
             equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
             enumValidator: [
-                { key: 'tipo_verba', enum: TipoVerba },
                 { key: 'honorarios_destacados', enum: HonorariosDestacados },
             ],
             excludes: ['status']

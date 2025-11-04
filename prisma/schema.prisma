@@ -7,14 +7,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// Enums
-enum TipoVerba {
-    alimentar
-    indenizatória
-    auxílio_acidente
-    outros
-}
-
 enum HonorariosDestacados {
     Sim
     Não
@@ -117,7 +109,7 @@ model Precatorio {
     valor_restituicao     Decimal
     rra_meses             Int
     tribunal_pagador      String
-    tipo_verba            TipoVerba
+    tipo_verba            String
     honorarios_destacados HonorariosDestacados
     percentual_honorario  Decimal
     valor_honorario       Decimal

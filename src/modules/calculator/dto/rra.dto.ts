@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
     IsBoolean,
     IsDateString,
@@ -22,13 +23,19 @@ export class CalculatorRRADto {
     @IsInt({ message: "O campo `Deduções` deve ser um número inteiro." })
     deducoes: number;
 
-    @IsNotEmpty({ message: "O campo `Imposto Retido` é obrigatório." })
-    @IsInt({ message: "O campo `Imposto Retido` deve ser um número inteiro." })
+    @IsNumber(
+        { maxDecimalPlaces: 2 },
+        { message: 'O campo `Imposto Retido` deve ser um número com no máximo duas casas decimais.' }
+    )
+    @IsPositive({ message: 'O campo `Imposto Retido` deve ser um número positivo.' })
+    @Min(0, { message: 'O campo `Imposto Retido` mínimo é 0.' })
+    @Type(() => Number)
     impostoRetido: number;
 
     @IsNotEmpty({ message: "O campo `Valor principal` é obrigatório." })
     @IsNumber({ allowNaN: false, allowInfinity: false }, { message: "O campo `Valor principal` deve ser um número positivo." })
     @IsPositive({ message: "O campo `Valor principal` deve ser um número positivo." })
+    @Type(() => Number)
     rendimentoTotal: number;
 
     @IsInt({ message: 'O campo `Ano` deve ser um número inteiro.' })

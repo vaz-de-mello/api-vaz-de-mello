@@ -46,7 +46,8 @@ export class UpdatePrecatoryDto extends PartialType(CreatePrecatoryDto) {
     @Type(() => Number)
     @IsNumber({}, { message: '`diferenca_IR` deve ser um número.' })
     @Min(0, { message: '`diferenca_IR` não pode ser negativo.' })
-    diferenca_IR: number;
+    @IsOptional()
+    diferenca_IR?: number;
 
     @Type(() => Number)
     @IsNumber({}, { message: '`valor_corrigido_SELIC` deve ser um número.' })

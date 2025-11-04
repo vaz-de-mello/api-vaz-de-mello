@@ -1,4 +1,4 @@
-import { HonorariosDestacados, TipoVerba } from "@prisma/client";
+import { HonorariosDestacados } from "@prisma/client";
 
 export class PrecatoryEntity {
     id: string;
@@ -9,7 +9,7 @@ export class PrecatoryEntity {
     valor_restituicao: number;
     rra_meses: number;
     tribunal_pagador: string;
-    tipo_verba: TipoVerba;
+    tipo_verba: string;
     honorarios_destacados: HonorariosDestacados;
     percentual_honorario: number;
     valor_honorario: number;
