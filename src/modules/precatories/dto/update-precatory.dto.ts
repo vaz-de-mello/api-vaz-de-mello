@@ -9,6 +9,10 @@ export class UpdatePrecatoryDto extends PartialType(CreatePrecatoryDto) {
     @IsOptional()
     status?: number;
 
+    @IsString({ message: '`laudo_doenca` deve ser uma string.' })
+    @IsOptional()
+    laudo_doenca?: string;
+
     // dados do processo \\
     @IsString({ message: '`numero_processo` deve ser uma string.' })
     @IsOptional()

@@ -9,6 +9,7 @@ import {
     IsInt,
     Min,
     IsEnum,
+    IsBoolean,
 } from 'class-validator';
 
 export class CreatePrecatoryDto {
@@ -30,6 +31,14 @@ export class CreatePrecatoryDto {
     @IsNumber({}, { message: '`valor_restituicao` deve ser um número.' })
     @Min(0, { message: '`valor_restituicao` não pode ser negativo.' })
     valor_restituicao: number;
+
+    @IsNumber({}, { message: '`valor_simulador_RRA` deve ser um número.' })
+    @Min(0, { message: '`valor_simulador_RRA` não pode ser negativo.' })
+    valor_simulador_RRA: number;
+
+    @IsNumber({}, { message: '`valor_corrigido_SELIC` deve ser um número.' })
+    @Min(0, { message: '`valor_corrigido_SELIC` não pode ser negativo.' })
+    valor_corrigido_SELIC: number;
 
     @IsInt({ message: '`rra_meses` deve ser um número inteiro.' })
     @Min(0, { message: '`rra_meses` deve ser no mínimo 1.' })
@@ -66,4 +75,13 @@ export class CreatePrecatoryDto {
 
     @IsDateString({}, { message: '`data_base` deve ser uma data válida no formato ISO.' })
     data_base: string;
+
+    @IsString({ message: '`precatorio_derivado` deve ser uma string válida.' })
+    precatorio_derivado: string;
+
+    @IsString({ message: '`doenca` deve ser uma string válida.' })
+    doenca: string;
+
+    @IsBoolean({ message: '`doenca_grave` deve ser um booleano.' })
+    doenca_grave: boolean;
 }

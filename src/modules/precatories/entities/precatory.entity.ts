@@ -1,4 +1,4 @@
-import { HonorariosDestacados } from "@prisma/client";
+import { HonorariosDestacados, PlataformaDistribuicao } from "@prisma/client";
 
 export class PrecatoryEntity {
     id: string;
@@ -21,4 +21,18 @@ export class PrecatoryEntity {
     usuario_id: string;
     escritorio_id: string;
     status: number;
+    numero_card: string;
+    precatoryDerivedBy: string;
+
+    valor_simulador_RRA?: number;
+    valor_corrigido_SELIC?: number;
+    valor_ir_devido?: number;
+    diferenca_IR?: number;
+    necessita_calculo_judicial?: boolean;
+    data_base?: string;
+
+    numero_processo?: string;
+    vara_juizo?: string;
+    data_protocolo?: string;
+    plataforma_distribuicao?: PlataformaDistribuicao;
 }

@@ -50,12 +50,32 @@ export class PrecatoriesController {
 
         const precatory = await this.precatoriesService.create({
             data: {
-                ...createPrecatorioDto,
                 status: 1,
-                usuario_id: user.id,
-                escritorio_id: user.escritorio_id,
                 numero_card: this.precatoriesService.cardNumberGenerator(counter),
-            },
+                usuario: { connect: { id: user.id } },
+                escritorio: { connect: { id: user.escritorio_id } },
+                cliente: { connect: { id: createPrecatorioDto.cliente_id } },
+                comprovante_pdf: createPrecatorioDto.comprovante_pdf,
+                data_base: createPrecatorioDto.data_base,
+                data_levantamento: createPrecatorioDto.data_levantamento,
+                doenca_grave: createPrecatorioDto.doenca_grave,
+                honorarios_destacados: createPrecatorioDto.honorarios_destacados,
+                oficio_pdf: createPrecatorioDto.oficio_pdf,
+                percentual_honorario: createPrecatorioDto.percentual_honorario,
+                precatorio_derivado: createPrecatorioDto.precatorio_derivado,
+                processo_origem: createPrecatorioDto.processo_origem,
+                rra_meses: createPrecatorioDto.rra_meses,
+                tese_aplicada: createPrecatorioDto.tese_aplicada,
+                tipo_verba: createPrecatorioDto.tipo_verba,
+                tribunal_pagador: createPrecatorioDto.tribunal_pagador,
+                valor_bruto: createPrecatorioDto.valor_bruto,
+                valor_honorario: createPrecatorioDto.valor_honorario,
+                valor_irrf_retido: createPrecatorioDto.valor_irrf_retido,
+                valor_restituicao: createPrecatorioDto.valor_restituicao,
+                doenca: createPrecatorioDto.doenca,
+                valor_simulador_RRA: createPrecatorioDto.valor_simulador_RRA,
+                valor_corrigido_SELIC: createPrecatorioDto.valor_corrigido_SELIC
+            }
         });
 
         return new Ok({ data: precatory, message: 'Precatório criado com sucesso.' });

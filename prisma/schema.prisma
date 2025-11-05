@@ -85,12 +85,8 @@ model Cliente {
     cpf             String   @unique
     nome            String
     data_nascimento DateTime
-    doenca_grave    Boolean
-    laudo_doenca    String
-    hipossuficiente Boolean
     createdAt       DateTime @default(now())
     updatedAt       DateTime @default(now())
-    doenca          String   @default("")
 
     precatorios Precatorio[]
     documentos  Documento[]
@@ -126,6 +122,10 @@ model Precatorio {
     createdAt             DateTime             @default(now())
     updatedAt             DateTime             @default(now())
     numero_card           String
+    precatorio_derivado   String
+    doenca_grave          Boolean
+    doenca                String               @default("")
+    laudo_doenca          String?
 
     valor_simulador_RRA        Decimal?
     valor_ir_devido            Decimal?
