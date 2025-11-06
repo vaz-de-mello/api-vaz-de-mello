@@ -12,14 +12,6 @@ enum HonorariosDestacados {
     Não
 }
 
-enum TeseAplicada {
-    juros_de_mora
-    idoso // 65+
-    doenca_grave
-    hipossuficiencia
-    outros
-}
-
 enum StatusRestituicao {
     em_analise
     elegivel
@@ -114,7 +106,7 @@ model Precatorio {
     comprovante_pdf       String
     usuario_id            String?
     escritorio_id         String?
-    tese_aplicada         TeseAplicada
+    tese_aplicada         String
     usuario               Usuario?             @relation(fields: [usuario_id], references: [id])
     escritorio            Escritorio?          @relation(fields: [escritorio_id], references: [id])
     status                Int
