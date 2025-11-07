@@ -21,3 +21,4 @@ HealthService = __decorate([
     (0, common_1.Injectable)()
 ], HealthService);
 exports.HealthService = HealthService;
+//# sourceMappingURL=health.service.js.map

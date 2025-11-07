@@ -19,3 +19,4 @@ HealthModule = __decorate([
     })
 ], HealthModule);
 exports.HealthModule = HealthModule;
+//# sourceMappingURL=health.module.js.map

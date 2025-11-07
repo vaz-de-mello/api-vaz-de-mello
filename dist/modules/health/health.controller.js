@@ -33,3 +33,4 @@ HealthController = __decorate([
     __metadata("design:paramtypes", [health_service_1.HealthService])
 ], HealthController);
 exports.HealthController = HealthController;
+//# sourceMappingURL=health.controller.js.map
