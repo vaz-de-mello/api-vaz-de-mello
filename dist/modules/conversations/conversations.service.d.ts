@@ -6,8 +6,8 @@ export declare class ConversationsService {
     create(createConversationDto: Prisma.ConversaCreateArgs): Promise<{
         id: string;
         usuario_id: string;
-        texto: string;
         precatorio_id: string;
+        texto: string;
         usuario_nome: string;
         precatorioaId: string;
     }>;
@@ -31,16 +31,16 @@ export declare class ConversationsService {
     } & {
         id: string;
         usuario_id: string;
-        texto: string;
         precatorio_id: string;
+        texto: string;
         usuario_nome: string;
         precatorioaId: string;
     })[]>;
     update(updateConversationDto: Prisma.ConversaUpdateArgs): Promise<{
         id: string;
         usuario_id: string;
-        texto: string;
         precatorio_id: string;
+        texto: string;
         usuario_nome: string;
         precatorioaId: string;
     }>;

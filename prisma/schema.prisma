@@ -81,7 +81,6 @@ model Cliente {
     updatedAt       DateTime @default(now())
 
     precatorios Precatorio[]
-    documentos  Documento[]
 
     @@map("clientes")
 }
@@ -131,20 +130,21 @@ model Precatorio {
     data_protocolo          DateTime?
     plataforma_distribuicao PlataformaDistribuicao?
 
-    Pendencia Pendencia[]
-    Conversa  Conversa[]
+    Pendencia  Pendencia[]
+    Conversa   Conversa[]
+    documentos Documento[]
 
     @@map("precatorios")
 }
 
 model Documento {
-    id         String   @id @default(uuid())
-    cliente_id String
-    cliente    Cliente  @relation(fields: [cliente_id], references: [id])
-    arquivo    String
-    tipo       String
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @default(now())
+    id            String     @id @default(uuid())
+    precatorio_id String
+    precatorio    Precatorio @relation(fields: [precatorio_id], references: [id])
+    arquivo       String
+    tipo          String
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @default(now())
 
     @@map("documentos")
 }

@@ -9,8 +9,8 @@ import {
 } from 'class-validator';
 
 export class CreateDocumentDto {
-    @IsUUID(undefined, { message: '`cliente_id` deve ser um UUID válido.' })
-    cliente_id: string;
+    @IsUUID(undefined, { message: '`precatorio_id` deve ser um UUID válido.' })
+    precatorio_id: string;
 
     @IsString({ message: 'O campo `tipo_documento` deve ser uma string.' })
     tipo: string;

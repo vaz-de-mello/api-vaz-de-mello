@@ -7,7 +7,7 @@ export declare class DocumentsController {
     private readonly documentsService;
     constructor(documentsService: DocumentsService);
     create(createDocumentDto: CreateDocumentDto): Promise<Ok>;
-    findAll({ page, query, rawQuery }: PageQueryDto<Partial<DocumentEntity>>): Promise<Ok>;
+    findAll({ page, query }: PageQueryDto<Partial<DocumentEntity>>): Promise<Ok>;
     findOne(id: string): Promise<Ok>;
     update(id: string, updateDocumentDto: UpdateDocumentDto): Promise<Ok>;
     delete(id: string): Promise<Ok>;

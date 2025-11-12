@@ -39,11 +39,8 @@ export class DocumentsController {
     async findAll(
         @PageQuery({
             equals: ['cliente_id', 'id'],
-            excludes: ['assinatura_validada'],
-        }) { page, query, rawQuery }: PageQueryDto<Partial<DocumentEntity>>
+        }) { page, query }: PageQueryDto<Partial<DocumentEntity>>
     ) {
-        if (rawQuery.assinatura_validada) query.assinatura_validada = String(rawQuery.assinatura_validada) === 'true';
-
         const [total, documents] = await this.documentsService.findAll(query, page);
         const response = createPaginatedResponse({
             data: documents,
@@ -58,7 +55,7 @@ export class DocumentsController {
     async findOne(@Param('id') id: string) {
         const document = await this.documentsService.findUnique({
             where: { id },
-            include: { cliente: true },
+            include: { precatorio: true },
         });
         if (!document) throw new NotFoundException({
             message: 'Documento não encontrado.',

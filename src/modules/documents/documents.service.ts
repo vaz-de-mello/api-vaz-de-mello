@@ -81,7 +81,7 @@ export class DocumentsService {
                 ...page,
                 orderBy: { createdAt: 'desc' },
                 include: {
-                    cliente: true,
+                    precatorio: true,
                 }
             })
         ])

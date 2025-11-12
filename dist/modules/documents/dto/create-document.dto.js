@@ -14,9 +14,9 @@ const class_validator_1 = require("class-validator");
 class CreateDocumentDto {
 }
 __decorate([
-    (0, class_validator_1.IsUUID)(undefined, { message: '`cliente_id` deve ser um UUID válido.' }),
+    (0, class_validator_1.IsUUID)(undefined, { message: '`precatorio_id` deve ser um UUID válido.' }),
     __metadata("design:type", String)
-], CreateDocumentDto.prototype, "cliente_id", void 0);
+], CreateDocumentDto.prototype, "precatorio_id", void 0);
 __decorate([
     (0, class_validator_1.IsString)({ message: 'O campo `tipo_documento` deve ser uma string.' }),
     __metadata("design:type", String)

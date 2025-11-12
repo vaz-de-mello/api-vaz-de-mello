@@ -7,52 +7,83 @@ export declare class DocumentsService {
     constructor(db: DatabaseService);
     create(createArgs: Prisma.DocumentoCreateArgs): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        cliente_id: string;
+        precatorio_id: string;
         arquivo: string;
         tipo: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(query: Partial<DocumentEntity>, page: PageDto): Promise<[number, ({
-        cliente: {
+        precatorio: {
             id: string;
-            nome: string;
-            cpf: string;
-            data_nascimento: Date;
             createdAt: Date;
             updatedAt: Date;
+            cliente_id: string;
+            data_levantamento: Date;
+            valor_bruto: Prisma.Decimal;
+            valor_irrf_retido: Prisma.Decimal;
+            valor_restituicao: Prisma.Decimal;
+            rra_meses: number;
+            tribunal_pagador: string;
+            tipo_verba: string;
+            honorarios_destacados: import(".prisma/client").$Enums.HonorariosDestacados;
+            percentual_honorario: Prisma.Decimal;
+            valor_honorario: Prisma.Decimal;
+            processo_origem: string;
+            oficio_pdf: string;
+            comprovante_pdf: string;
+            usuario_id: string;
+            escritorio_id: string;
+            tese_aplicada: string;
+            status: number;
+            contador: number;
+            numero_card: string;
+            precatorio_derivado: string;
+            doenca_grave: boolean;
+            doenca: string;
+            laudo_doenca: string;
+            valor_simulador_RRA: Prisma.Decimal;
+            valor_ir_devido: Prisma.Decimal;
+            diferenca_IR: Prisma.Decimal;
+            valor_corrigido_SELIC: Prisma.Decimal;
+            necessita_calculo_judicial: boolean;
+            data_base: Date;
+            numero_processo: string;
+            vara_juizo: string;
+            data_protocolo: Date;
+            plataforma_distribuicao: import(".prisma/client").$Enums.PlataformaDistribuicao;
         };
     } & {
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        cliente_id: string;
+        precatorio_id: string;
         arquivo: string;
         tipo: string;
+        createdAt: Date;
+        updatedAt: Date;
     })[]]>;
     findFirst(args: Prisma.DocumentoFindFirstArgs): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        cliente_id: string;
+        precatorio_id: string;
         arquivo: string;
         tipo: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findUnique(args: Prisma.DocumentoFindUniqueArgs): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        cliente_id: string;
+        precatorio_id: string;
         arquivo: string;
         tipo: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     update(updateDocumentArgs: Prisma.DocumentoUpdateArgs): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        cliente_id: string;
+        precatorio_id: string;
         arquivo: string;
         tipo: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     delete(id: string): Promise<{
         message: string;

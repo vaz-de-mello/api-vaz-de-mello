@@ -70,7 +70,7 @@ let DocumentsService = class DocumentsService {
         return this.db.$transaction([
             this.db.documento.count({ where: query }),
             this.db.documento.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: { createdAt: 'desc' }, include: {
-                    cliente: true,
+                    precatorio: true,
                 } }))
         ]);
     }

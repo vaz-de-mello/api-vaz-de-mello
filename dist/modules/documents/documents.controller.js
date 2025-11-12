@@ -33,9 +33,7 @@ let DocumentsController = class DocumentsController {
             message: 'Documento criado com sucesso.',
         });
     }
-    async findAll({ page, query, rawQuery }) {
-        if (rawQuery.assinatura_validada)
-            query.assinatura_validada = String(rawQuery.assinatura_validada) === 'true';
+    async findAll({ page, query }) {
         const [total, documents] = await this.documentsService.findAll(query, page);
         const response = (0, utils_1.createPaginatedResponse)({
             data: documents,
@@ -47,7 +45,7 @@ let DocumentsController = class DocumentsController {
     async findOne(id) {
         const document = await this.documentsService.findUnique({
             where: { id },
-            include: { cliente: true },
+            include: { precatorio: true },
         });
         if (!document)
             throw new common_1.NotFoundException({
@@ -89,7 +87,6 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, decorators_1.PageQuery)({
         equals: ['cliente_id', 'id'],
-        excludes: ['assinatura_validada'],
     })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [_types_1.PageQueryDto]),
