@@ -6,8 +6,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { OfficesModule } from './modules/offices/offices.module';
-
-import { AuthGuard, RolesGuard } from './shared/guards';
 import { CalculatorModule } from './modules/calculator/calculator.module';
 import { PrecatoriesModule } from './modules/precatories/precatories.module';
 import { ClientsModule } from './modules/clients/clients.module';
@@ -16,6 +14,9 @@ import { BootstrapModule } from './modules/bootstrap/bootstrap.module';
 import { HealthModule } from './modules/health/health.module';
 import { ConversationsModule } from './modules/conversations/conversations.module';
 import { PendingsModule } from './modules/pendings/pendings.module';
+import { S3Module } from './modules/s3/s3.module';
+
+import { AuthGuard, RolesGuard } from './shared/guards';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { PendingsModule } from './modules/pendings/pendings.module';
         HealthModule,
         ConversationsModule,
         PendingsModule,
+        S3Module,
     ],
     controllers: [],
     providers: [

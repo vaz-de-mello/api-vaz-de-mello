@@ -7,17 +7,19 @@ export declare class DocumentsService {
     constructor(db: DatabaseService);
     create(createArgs: Prisma.DocumentoCreateArgs): Promise<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         precatorio_id: string;
         arquivo: string;
         tipo: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findAll(query: Partial<DocumentEntity>, page: PageDto): Promise<[number, ({
         precatorio: {
             id: string;
+            escritorio_id: string;
             createdAt: Date;
             updatedAt: Date;
+            status: number;
             cliente_id: string;
             data_levantamento: Date;
             valor_bruto: Prisma.Decimal;
@@ -33,9 +35,7 @@ export declare class DocumentsService {
             oficio_pdf: string;
             comprovante_pdf: string;
             usuario_id: string;
-            escritorio_id: string;
             tese_aplicada: string;
-            status: number;
             contador: number;
             numero_card: string;
             precatorio_derivado: string;
@@ -55,35 +55,35 @@ export declare class DocumentsService {
         };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         precatorio_id: string;
         arquivo: string;
         tipo: string;
-        createdAt: Date;
-        updatedAt: Date;
     })[]]>;
     findFirst(args: Prisma.DocumentoFindFirstArgs): Promise<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         precatorio_id: string;
         arquivo: string;
         tipo: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findUnique(args: Prisma.DocumentoFindUniqueArgs): Promise<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         precatorio_id: string;
         arquivo: string;
         tipo: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     update(updateDocumentArgs: Prisma.DocumentoUpdateArgs): Promise<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         precatorio_id: string;
         arquivo: string;
         tipo: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     delete(id: string): Promise<{
         message: string;

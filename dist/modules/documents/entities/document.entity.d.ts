@@ -1,6 +1,6 @@
 export declare class DocumentEntity {
     id: string;
-    cliente_id: string;
+    precatorio_id: string;
     tipo_documento: string;
     arquivo: string;
     createdAt: Date;

@@ -7,9 +7,11 @@ import {
     Param,
     Delete,
     NotFoundException,
+    Query,
 } from '@nestjs/common';
 
 import { DocumentsService } from './documents.service';
+import { S3Service } from '../s3/s3.service';
 
 import { Ok } from 'src/shared/responses';
 import { PageQueryDto } from 'src/shared/@types';
@@ -21,7 +23,10 @@ import { DocumentEntity } from './entities';
 
 @Controller('documents')
 export class DocumentsController {
-    constructor(private readonly documentsService: DocumentsService) { }
+    constructor(
+        private readonly documentsService: DocumentsService,
+        private readonly s3Service: S3Service,
+    ) { }
 
     @Post()
     async create(@Body() createDocumentDto: CreateDocumentDto) {
@@ -35,10 +40,26 @@ export class DocumentsController {
         })
     }
 
+    @Get("presigned-url")
+    async getPresignedUrl(
+        @Query("fileName") fileName: string,
+        @Query("fileType") fileType: string,
+        @Query("method") method: string,
+    ) {
+        const url = method === 'put'
+            ? await this.s3Service.generatePresignedUrl(fileName, fileType)
+            : await this.s3Service.getDownloadUrl(fileName);
+
+        return new Ok({
+            data: { url },
+            message: 'Documento criado com sucesso.',
+        })
+    }
+
     @Get()
     async findAll(
         @PageQuery({
-            equals: ['cliente_id', 'id'],
+            equals: ['precatorio_id', 'id'],
         }) { page, query }: PageQueryDto<Partial<DocumentEntity>>
     ) {
         const [total, documents] = await this.documentsService.findAll(query, page);

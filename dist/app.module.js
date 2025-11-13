@@ -14,7 +14,6 @@ const auth_module_1 = require("./modules/auth/auth.module");
 const users_module_1 = require("./modules/users/users.module");
 const database_module_1 = require("./modules/database/database.module");
 const offices_module_1 = require("./modules/offices/offices.module");
-const guards_1 = require("./shared/guards");
 const calculator_module_1 = require("./modules/calculator/calculator.module");
 const precatories_module_1 = require("./modules/precatories/precatories.module");
 const clients_module_1 = require("./modules/clients/clients.module");
@@ -23,6 +22,8 @@ const bootstrap_module_1 = require("./modules/bootstrap/bootstrap.module");
 const health_module_1 = require("./modules/health/health.module");
 const conversations_module_1 = require("./modules/conversations/conversations.module");
 const pendings_module_1 = require("./modules/pendings/pendings.module");
+const s3_module_1 = require("./modules/s3/s3.module");
+const guards_1 = require("./shared/guards");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -41,6 +42,7 @@ AppModule = __decorate([
             health_module_1.HealthModule,
             conversations_module_1.ConversationsModule,
             pendings_module_1.PendingsModule,
+            s3_module_1.S3Module,
         ],
         controllers: [],
         providers: [

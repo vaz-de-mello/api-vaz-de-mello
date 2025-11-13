@@ -15,14 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DocumentsController = void 0;
 const common_1 = require("@nestjs/common");
 const documents_service_1 = require("./documents.service");
+const s3_service_1 = require("../s3/s3.service");
 const responses_1 = require("../../shared/responses");
 const _types_1 = require("../../shared/@types");
 const decorators_1 = require("../../shared/decorators");
 const utils_1 = require("../../shared/utils");
 const dto_1 = require("./dto");
 let DocumentsController = class DocumentsController {
-    constructor(documentsService) {
+    constructor(documentsService, s3Service) {
         this.documentsService = documentsService;
+        this.s3Service = s3Service;
     }
     async create(createDocumentDto) {
         const document = await this.documentsService.create({
@@ -30,6 +32,15 @@ let DocumentsController = class DocumentsController {
         });
         return new responses_1.Ok({
             data: document,
+            message: 'Documento criado com sucesso.',
+        });
+    }
+    async getPresignedUrl(fileName, fileType, method) {
+        const url = method === 'put'
+            ? await this.s3Service.generatePresignedUrl(fileName, fileType)
+            : await this.s3Service.getDownloadUrl(fileName);
+        return new responses_1.Ok({
+            data: { url },
             message: 'Documento criado com sucesso.',
         });
     }
@@ -84,9 +95,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DocumentsController.prototype, "create", null);
 __decorate([
+    (0, common_1.Get)("presigned-url"),
+    __param(0, (0, common_1.Query)("fileName")),
+    __param(1, (0, common_1.Query)("fileType")),
+    __param(2, (0, common_1.Query)("method")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], DocumentsController.prototype, "getPresignedUrl", null);
+__decorate([
     (0, common_1.Get)(),
     __param(0, (0, decorators_1.PageQuery)({
-        equals: ['cliente_id', 'id'],
+        equals: ['precatorio_id', 'id'],
     })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [_types_1.PageQueryDto]),
@@ -116,7 +136,8 @@ __decorate([
 ], DocumentsController.prototype, "delete", null);
 DocumentsController = __decorate([
     (0, common_1.Controller)('documents'),
-    __metadata("design:paramtypes", [documents_service_1.DocumentsService])
+    __metadata("design:paramtypes", [documents_service_1.DocumentsService,
+        s3_service_1.S3Service])
 ], DocumentsController);
 exports.DocumentsController = DocumentsController;
 //# sourceMappingURL=documents.controller.js.map

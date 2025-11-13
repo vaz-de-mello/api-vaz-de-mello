@@ -1,11 +1,8 @@
 
-import { Type } from 'class-transformer';
 import {
     IsUUID,
-    IsEnum,
     IsString,
     IsNotEmpty,
-    IsBoolean,
 } from 'class-validator';
 
 export class CreateDocumentDto {
