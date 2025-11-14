@@ -16,6 +16,7 @@ async function bootstrap() {
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
     });
+    console.log('ok');
     await app.listen(3000, '0.0.0.0');
 }
 bootstrap();
