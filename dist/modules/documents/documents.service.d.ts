@@ -6,6 +6,7 @@ export declare class DocumentsService {
     private readonly db;
     constructor(db: DatabaseService);
     create(createArgs: Prisma.DocumentoCreateArgs): Promise<{
+        usuario: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -54,6 +55,7 @@ export declare class DocumentsService {
             plataforma_distribuicao: import(".prisma/client").$Enums.PlataformaDistribuicao;
         };
     } & {
+        usuario: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -62,6 +64,7 @@ export declare class DocumentsService {
         tipo: string;
     })[]]>;
     findFirst(args: Prisma.DocumentoFindFirstArgs): Promise<{
+        usuario: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -70,6 +73,7 @@ export declare class DocumentsService {
         tipo: string;
     }>;
     findUnique(args: Prisma.DocumentoFindUniqueArgs): Promise<{
+        usuario: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -78,6 +82,7 @@ export declare class DocumentsService {
         tipo: string;
     }>;
     update(updateDocumentArgs: Prisma.DocumentoUpdateArgs): Promise<{
+        usuario: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;

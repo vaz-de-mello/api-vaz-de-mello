@@ -5,4 +5,5 @@ export class DocumentEntity {
     arquivo: string;
     createdAt: Date;
     updatedAt: Date;
+    usuario: string;
 }

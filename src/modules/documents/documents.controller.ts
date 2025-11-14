@@ -15,11 +15,12 @@ import { S3Service } from '../s3/s3.service';
 
 import { Ok } from 'src/shared/responses';
 import { PageQueryDto } from 'src/shared/@types';
-import { PageQuery } from 'src/shared/decorators';
+import { PageQuery, User } from 'src/shared/decorators';
 import { createPaginatedResponse } from 'src/shared/utils';
 
 import { CreateDocumentDto, UpdateDocumentDto } from './dto';
 import { DocumentEntity } from './entities';
+import { UserWithoutPassword } from '../users/entities';
 
 @Controller('documents')
 export class DocumentsController {
@@ -29,9 +30,15 @@ export class DocumentsController {
     ) { }
 
     @Post()
-    async create(@Body() createDocumentDto: CreateDocumentDto) {
+    async create(
+        @Body() createDocumentDto: CreateDocumentDto,
+        @User() { nome }: UserWithoutPassword,
+    ) {
         const document = await this.documentsService.create({
-            data: createDocumentDto,
+            data: {
+                ...createDocumentDto,
+                usuario: nome
+            },
         });
 
         return new Ok({
@@ -46,9 +53,26 @@ export class DocumentsController {
         @Query("fileType") fileType: string,
         @Query("method") method: string,
     ) {
-        const url = method === 'put'
-            ? await this.s3Service.generatePresignedUrl(fileName, fileType)
-            : await this.s3Service.getDownloadUrl(fileName);
+        let service: Promise<string>;
+
+        switch (method) {
+            case 'get':
+                service = this.s3Service.getDownloadUrl(fileName);
+                break;
+
+            case 'put':
+                service = this.s3Service.generatePresignedUrl(fileName, fileType);
+                break;
+
+            case 'delete':
+                service = this.s3Service.getDeleteUrl(fileName);
+                break;
+
+            default:
+                service = this.s3Service.getDownloadUrl(fileName);
+                break;
+        }
+        const url = await service;
 
         return new Ok({
             data: { url },
@@ -94,11 +118,15 @@ export class DocumentsController {
     @Put(':id')
     async update(
         @Param('id') id: string,
-        @Body() updateDocumentDto: UpdateDocumentDto
+        @Body() updateDocumentDto: UpdateDocumentDto,
+        @User() { nome }: UserWithoutPassword,
     ) {
         const document = await this.documentsService.update({
             where: { id },
-            data: updateDocumentDto,
+            data: {
+                ...updateDocumentDto,
+                usuario: nome,
+            },
         });
 
         return new Ok({

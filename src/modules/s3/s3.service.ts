@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Injectable } from "@nestjs/common";
 
@@ -19,7 +19,7 @@ export class S3Service {
             ContentType: fileType,
         });
 
-        return getSignedUrl(this.s3, command, { expiresIn: 600 });
+        return getSignedUrl(this.s3, command, { expiresIn: 60 });
     }
 
     async getDownloadUrl(fileName: string) {
@@ -28,6 +28,15 @@ export class S3Service {
             Key: fileName,
         });
 
-        return getSignedUrl(this.s3, command, { expiresIn: 600 });
+        return getSignedUrl(this.s3, command, { expiresIn: 60 });
+    }
+
+    async getDeleteUrl(fileName: string) {
+        const command = new DeleteObjectCommand({
+            Bucket: process.env.AWS_S3_BUCKET!,
+            Key: fileName,
+        });
+
+        return getSignedUrl(this.s3, command, { expiresIn: 60 });
     }
 }

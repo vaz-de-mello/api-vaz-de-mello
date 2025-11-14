@@ -145,6 +145,7 @@ model Documento {
     tipo          String
     createdAt     DateTime   @default(now())
     updatedAt     DateTime   @default(now())
+    usuario       String
 
     @@map("documentos")
 }

@@ -26,9 +26,9 @@ let DocumentsController = class DocumentsController {
         this.documentsService = documentsService;
         this.s3Service = s3Service;
     }
-    async create(createDocumentDto) {
+    async create(createDocumentDto, { nome }) {
         const document = await this.documentsService.create({
-            data: createDocumentDto,
+            data: Object.assign(Object.assign({}, createDocumentDto), { usuario: nome }),
         });
         return new responses_1.Ok({
             data: document,
@@ -36,9 +36,22 @@ let DocumentsController = class DocumentsController {
         });
     }
     async getPresignedUrl(fileName, fileType, method) {
-        const url = method === 'put'
-            ? await this.s3Service.generatePresignedUrl(fileName, fileType)
-            : await this.s3Service.getDownloadUrl(fileName);
+        let service;
+        switch (method) {
+            case 'get':
+                service = this.s3Service.getDownloadUrl(fileName);
+                break;
+            case 'put':
+                service = this.s3Service.generatePresignedUrl(fileName, fileType);
+                break;
+            case 'delete':
+                service = this.s3Service.getDeleteUrl(fileName);
+                break;
+            default:
+                service = this.s3Service.getDownloadUrl(fileName);
+                break;
+        }
+        const url = await service;
         return new responses_1.Ok({
             data: { url },
             message: 'Documento criado com sucesso.',
@@ -70,10 +83,10 @@ let DocumentsController = class DocumentsController {
             message: 'Documento encontrado com sucesso.',
         });
     }
-    async update(id, updateDocumentDto) {
+    async update(id, updateDocumentDto, { nome }) {
         const document = await this.documentsService.update({
             where: { id },
-            data: updateDocumentDto,
+            data: Object.assign(Object.assign({}, updateDocumentDto), { usuario: nome }),
         });
         return new responses_1.Ok({
             data: document,
@@ -90,8 +103,9 @@ let DocumentsController = class DocumentsController {
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, decorators_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.CreateDocumentDto]),
+    __metadata("design:paramtypes", [dto_1.CreateDocumentDto, Object]),
     __metadata("design:returntype", Promise)
 ], DocumentsController.prototype, "create", null);
 __decorate([
@@ -123,8 +137,9 @@ __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, decorators_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, dto_1.UpdateDocumentDto]),
+    __metadata("design:paramtypes", [String, dto_1.UpdateDocumentDto, Object]),
     __metadata("design:returntype", Promise)
 ], DocumentsController.prototype, "update", null);
 __decorate([
