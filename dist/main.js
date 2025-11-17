@@ -16,8 +16,7 @@ async function bootstrap() {
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
     });
-    console.log('ok');
-    await app.listen(3000, '0.0.0.0');
+    await app.listen(3001, '0.0.0.0');
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
