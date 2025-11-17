@@ -13,6 +13,7 @@ import { HonorariosDestacados } from '@prisma/client';
 
 import { PrecatoriesService } from './precatories.service';
 import { CalculatorService } from '../calculator/calculator.service';
+import { ClientsService } from '../clients/clients.service';
 
 import { Ok } from 'src/shared/responses';
 import { PageQuery, User } from 'src/shared/decorators';
@@ -20,7 +21,7 @@ import { PageQueryDto } from 'src/shared/@types';
 import { createPaginatedResponse, dateFormatted, selicCalculator } from 'src/shared/utils';
 import { MONTHS_STRING_SHORT } from 'src/shared/constants';
 
-import { CreatePrecatoryDto, UpdatePrecatoryDto } from './dto';
+import { CreatePrecatoryDto, UpdatePrecatoryClientDto, UpdatePrecatoryDto } from './dto';
 import { PrecatoryEntity } from './entities';
 import { UserWithoutPassword } from '../users/entities';
 
@@ -29,6 +30,7 @@ export class PrecatoriesController {
     constructor(
         private readonly precatoriesService: PrecatoriesService,
         private readonly calculatorService: CalculatorService,
+        private readonly clientsService: ClientsService,
     ) { }
 
     @Post()
@@ -178,6 +180,56 @@ export class PrecatoriesController {
         });
 
         return new Ok({ data: precatory, message: 'Precatório atualizado com sucesso.' });
+    }
+
+    @Put(':id/client/:clientId')
+    async updateClient(
+        @Param('id') id: string,
+        @Param('clientId') clientId: string,
+        @Body() updateClient: UpdatePrecatoryClientDto,
+    ) {
+        const clientWithSameCpf = await this.clientsService.findUnique({
+            where: { cpf: updateClient.cpf }
+        });
+
+        if (clientWithSameCpf) {
+            await this.clientsService.update({
+                where: { id: clientWithSameCpf.id },
+                data: {
+                    nome: updateClient.nome,
+                    data_nascimento: updateClient.data_nascimento,
+                }
+            });
+
+            const precatory = (clientWithSameCpf.id !== clientId) ? await this.precatoriesService.update({
+                where: { id },
+                data: {
+                    cliente: { connect: { id: clientWithSameCpf.id } }
+                },
+                include: { cliente: true }
+            }) : await this.precatoriesService.findUnique({ where: { id }, include: { cliente: true } });
+
+            return new Ok({ message: 'Dados do cliente atualizado com sucesso.', data: precatory });
+        } else {
+            const { id: newClientId } = await this.clientsService.create({
+                data: {
+                    cpf: updateClient.cpf,
+                    nome: updateClient.nome,
+                    data_nascimento: updateClient.data_nascimento,
+                },
+                select: { id: true }
+            });
+
+            const precatory = await this.precatoriesService.update({
+                where: { id },
+                data: {
+                    cliente: { connect: { id: newClientId } }
+                },
+                include: { cliente: true }
+            });
+
+            return new Ok({ message: 'Dados do cliente atualizado com sucesso.', data: precatory });
+        }
     }
 
     @Delete(':id')

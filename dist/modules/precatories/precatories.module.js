@@ -11,13 +11,14 @@ const common_1 = require("@nestjs/common");
 const precatories_service_1 = require("./precatories.service");
 const precatories_controller_1 = require("./precatories.controller");
 const calculator_module_1 = require("../calculator/calculator.module");
+const clients_module_1 = require("../clients/clients.module");
 let PrecatoriesModule = class PrecatoriesModule {
 };
 PrecatoriesModule = __decorate([
     (0, common_1.Module)({
         controllers: [precatories_controller_1.PrecatoriesController],
         providers: [precatories_service_1.PrecatoriesService],
-        imports: [calculator_module_1.CalculatorModule],
+        imports: [calculator_module_1.CalculatorModule, clients_module_1.ClientsModule],
     })
 ], PrecatoriesModule);
 exports.PrecatoriesModule = PrecatoriesModule;

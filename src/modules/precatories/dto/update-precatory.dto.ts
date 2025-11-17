@@ -70,3 +70,14 @@ export class UpdatePrecatoryDto extends PartialType(CreatePrecatoryDto) {
     data_calculo?: string;
     // FIM dados da restituição \\
 }
+
+export class UpdatePrecatoryClientDto {
+    @IsString({ message: '`nome` deve ser uma string.' })
+    nome: string;
+
+    @IsString({ message: '`cpf` deve ser uma string.' })
+    cpf: string;
+
+    @IsDateString({}, { message: '`data_nascimento` deve ser uma data válida no formato ISO.' })
+    data_nascimento: string;
+}

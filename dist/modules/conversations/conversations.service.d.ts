@@ -7,7 +7,7 @@ export declare class ConversationsService {
         id: string;
         usuario_id: string;
         precatorio_id: string;
-        texto: string;
+        texto: Prisma.JsonValue;
         usuario_nome: string;
         precatorioaId: string;
     }>;
@@ -32,7 +32,7 @@ export declare class ConversationsService {
         id: string;
         usuario_id: string;
         precatorio_id: string;
-        texto: string;
+        texto: Prisma.JsonValue;
         usuario_nome: string;
         precatorioaId: string;
     })[]>;
@@ -40,7 +40,7 @@ export declare class ConversationsService {
         id: string;
         usuario_id: string;
         precatorio_id: string;
-        texto: string;
+        texto: Prisma.JsonValue;
         usuario_nome: string;
         precatorioaId: string;
     }>;

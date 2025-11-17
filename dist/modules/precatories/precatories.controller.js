@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const precatories_service_1 = require("./precatories.service");
 const calculator_service_1 = require("../calculator/calculator.service");
+const clients_service_1 = require("../clients/clients.service");
 const responses_1 = require("../../shared/responses");
 const decorators_1 = require("../../shared/decorators");
 const _types_1 = require("../../shared/@types");
@@ -24,9 +25,10 @@ const utils_1 = require("../../shared/utils");
 const constants_1 = require("../../shared/constants");
 const dto_1 = require("./dto");
 let PrecatoriesController = class PrecatoriesController {
-    constructor(precatoriesService, calculatorService) {
+    constructor(precatoriesService, calculatorService, clientsService) {
         this.precatoriesService = precatoriesService;
         this.calculatorService = calculatorService;
+        this.clientsService = clientsService;
     }
     async create(createPrecatorioDto, user) {
         let counter = 1;
@@ -140,6 +142,46 @@ let PrecatoriesController = class PrecatoriesController {
         });
         return new responses_1.Ok({ data: precatory, message: 'Precatório atualizado com sucesso.' });
     }
+    async updateClient(id, clientId, updateClient) {
+        const clientWithSameCpf = await this.clientsService.findUnique({
+            where: { cpf: updateClient.cpf }
+        });
+        if (clientWithSameCpf) {
+            await this.clientsService.update({
+                where: { id: clientWithSameCpf.id },
+                data: {
+                    nome: updateClient.nome,
+                    data_nascimento: updateClient.data_nascimento,
+                }
+            });
+            const precatory = (clientWithSameCpf.id !== clientId) ? await this.precatoriesService.update({
+                where: { id },
+                data: {
+                    cliente: { connect: { id: clientWithSameCpf.id } }
+                },
+                include: { cliente: true }
+            }) : await this.precatoriesService.findUnique({ where: { id }, include: { cliente: true } });
+            return new responses_1.Ok({ message: 'Dados do cliente atualizado com sucesso.', data: precatory });
+        }
+        else {
+            const { id: newClientId } = await this.clientsService.create({
+                data: {
+                    cpf: updateClient.cpf,
+                    nome: updateClient.nome,
+                    data_nascimento: updateClient.data_nascimento,
+                },
+                select: { id: true }
+            });
+            const precatory = await this.precatoriesService.update({
+                where: { id },
+                data: {
+                    cliente: { connect: { id: newClientId } }
+                },
+                include: { cliente: true }
+            });
+            return new responses_1.Ok({ message: 'Dados do cliente atualizado com sucesso.', data: precatory });
+        }
+    }
     async delete(id) {
         const { message } = await this.precatoriesService.delete(id);
         return new responses_1.Ok({ message });
@@ -192,6 +234,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PrecatoriesController.prototype, "update", null);
 __decorate([
+    (0, common_1.Put)(':id/client/:clientId'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('clientId')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, dto_1.UpdatePrecatoryClientDto]),
+    __metadata("design:returntype", Promise)
+], PrecatoriesController.prototype, "updateClient", null);
+__decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -201,7 +252,8 @@ __decorate([
 PrecatoriesController = __decorate([
     (0, common_1.Controller)('precatories'),
     __metadata("design:paramtypes", [precatories_service_1.PrecatoriesService,
-        calculator_service_1.CalculatorService])
+        calculator_service_1.CalculatorService,
+        clients_service_1.ClientsService])
 ], PrecatoriesController);
 exports.PrecatoriesController = PrecatoriesController;
 //# sourceMappingURL=precatories.controller.js.map

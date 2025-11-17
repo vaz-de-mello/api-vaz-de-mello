@@ -15,4 +15,9 @@ export declare class UpdatePrecatoryDto extends UpdatePrecatoryDto_base {
     necessita_calculo_judicial?: boolean;
     data_calculo?: string;
 }
+export declare class UpdatePrecatoryClientDto {
+    nome: string;
+    cpf: string;
+    data_nascimento: string;
+}
 export {};

@@ -187,7 +187,7 @@ model Pendencia {
 
 model Conversa {
     id            String     @id @default(uuid())
-    texto         String
+    texto         Json
     usuario_id    String
     usuario_nome  String
     usuario       Usuario    @relation(fields: [usuario_id], references: [id])

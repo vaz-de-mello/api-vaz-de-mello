@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdatePrecatoryDto = void 0;
+exports.UpdatePrecatoryClientDto = exports.UpdatePrecatoryDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
 const create_precatory_dto_1 = require("./create-precatory.dto");
 const class_validator_1 = require("class-validator");
@@ -90,4 +90,19 @@ __decorate([
     __metadata("design:type", String)
 ], UpdatePrecatoryDto.prototype, "data_calculo", void 0);
 exports.UpdatePrecatoryDto = UpdatePrecatoryDto;
+class UpdatePrecatoryClientDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)({ message: '`nome` deve ser uma string.' }),
+    __metadata("design:type", String)
+], UpdatePrecatoryClientDto.prototype, "nome", void 0);
+__decorate([
+    (0, class_validator_1.IsString)({ message: '`cpf` deve ser uma string.' }),
+    __metadata("design:type", String)
+], UpdatePrecatoryClientDto.prototype, "cpf", void 0);
+__decorate([
+    (0, class_validator_1.IsDateString)({}, { message: '`data_nascimento` deve ser uma data válida no formato ISO.' }),
+    __metadata("design:type", String)
+], UpdatePrecatoryClientDto.prototype, "data_nascimento", void 0);
+exports.UpdatePrecatoryClientDto = UpdatePrecatoryClientDto;
 //# sourceMappingURL=update-precatory.dto.js.map
