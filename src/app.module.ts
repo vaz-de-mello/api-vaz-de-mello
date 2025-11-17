@@ -17,6 +17,7 @@ import { PendingsModule } from './modules/pendings/pendings.module';
 import { S3Module } from './modules/s3/s3.module';
 
 import { AuthGuard, RolesGuard } from './shared/guards';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
     imports: [
@@ -34,6 +35,7 @@ import { AuthGuard, RolesGuard } from './shared/guards';
         ConversationsModule,
         PendingsModule,
         S3Module,
+        NotificationsModule,
     ],
     controllers: [],
     providers: [

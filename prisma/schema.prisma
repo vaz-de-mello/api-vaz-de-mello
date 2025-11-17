@@ -199,8 +199,11 @@ model Conversa {
 }
 
 model Notificacao {
-    id            String @id @default(uuid())
-    precatorio_id String
-    card_id       String
-    mensagem      String
+    id         String   @id @default(uuid())
+    usuario_id String
+    mensagem   String
+    goTo       String?
+    created_at DateTime @default(now())
+
+    @@map("notificacoes")
 }
