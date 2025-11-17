@@ -64,10 +64,6 @@ export class DocumentsController {
                 service = this.s3Service.generatePresignedUrl(fileName, fileType);
                 break;
 
-            case 'delete':
-                service = this.s3Service.getDeleteUrl(fileName);
-                break;
-
             default:
                 service = this.s3Service.getDownloadUrl(fileName);
                 break;
@@ -137,7 +133,23 @@ export class DocumentsController {
 
     @Delete(':id')
     async delete(@Param('id') id: string) {
-        const { message } = await this.documentsService.delete(id);
+        const document = await this.documentsService.findUnique({
+            where: { id },
+        });
+        if (!document) throw new NotFoundException({
+            message: 'Documento não encontrado.',
+            success: false,
+            statusCode: 404,
+            error: 'NotFound',
+        });
+
+        const [deleteServiceResponse] = await Promise.all([
+            this.documentsService.delete(id),
+            this.s3Service.deleteFile(`${document.arquivo}_${document.precatorio_id}`),
+        ]);
+
+        const { message } = deleteServiceResponse;
+
         return new Ok({
             message,
         });

@@ -26,6 +26,10 @@ let S3Service = class S3Service {
             Key: fileName,
             ContentType: fileType,
         });
+        console.log({
+            Bucket: process.env.AWS_S3_BUCKET, accessKeyId: process.env.S3_KEY,
+            secretAccessKey: process.env.S3_SECRET_KEY,
+        });
         return (0, s3_request_presigner_1.getSignedUrl)(this.s3, command, { expiresIn: 60 });
     }
     async getDownloadUrl(fileName) {
@@ -35,11 +39,12 @@ let S3Service = class S3Service {
         });
         return (0, s3_request_presigner_1.getSignedUrl)(this.s3, command, { expiresIn: 60 });
     }
-    async getDeleteUrl(fileName) {
+    async deleteFile(fileName) {
         const command = new client_s3_1.DeleteObjectCommand({
             Bucket: process.env.AWS_S3_BUCKET,
             Key: fileName,
         });
+        await this.s3.send(command);
         return (0, s3_request_presigner_1.getSignedUrl)(this.s3, command, { expiresIn: 60 });
     }
 };
