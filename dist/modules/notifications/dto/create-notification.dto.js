@@ -21,5 +21,10 @@ __decorate([
     (0, class_validator_1.IsString)({ message: '`mensagem` deve ser uma string.' }),
     __metadata("design:type", String)
 ], CreateNotificationDto.prototype, "mensagem", void 0);
+__decorate([
+    (0, class_validator_1.IsString)({ message: '`goTo` deve ser uma string.' }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNotificationDto.prototype, "goTo", void 0);
 exports.CreateNotificationDto = CreateNotificationDto;
 //# sourceMappingURL=create-notification.dto.js.map

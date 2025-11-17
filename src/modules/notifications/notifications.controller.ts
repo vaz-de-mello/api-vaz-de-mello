@@ -37,7 +37,7 @@ export class NotificationsController {
         return new Ok({ message });
     }
 
-    @Delete(':id')
+    @Delete('all')
     async deleteByUser(
         @User() user: UserWithoutPassword,
     ) {
