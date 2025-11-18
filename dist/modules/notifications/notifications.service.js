@@ -22,7 +22,7 @@ let NotificationsService = class NotificationsService {
     async create(createNotificationDto) {
         try {
             const notification = await this.db.notificacao.create(createNotificationDto);
-            this.gateway.sendNotification(createNotificationDto.data.usuario_id, createNotificationDto.data.mensagem);
+            this.gateway.sendNotification(createNotificationDto.data.usuario_id, notification);
             return notification;
         }
         catch (error) {

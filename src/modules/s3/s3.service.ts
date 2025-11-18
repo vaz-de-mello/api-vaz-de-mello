@@ -19,11 +19,6 @@ export class S3Service {
             ContentType: fileType,
         });
 
-        console.log({
-            Bucket: process.env.AWS_S3_BUCKET!, accessKeyId: process.env.S3_KEY!,
-            secretAccessKey: process.env.S3_SECRET_KEY!,
-        })
-
         return getSignedUrl(this.s3, command, { expiresIn: 60 });
     }
 

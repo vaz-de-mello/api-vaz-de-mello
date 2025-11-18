@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationsGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
@@ -17,7 +20,6 @@ let NotificationsGateway = class NotificationsGateway {
         this.users = new Map();
     }
     handleConnection(client) {
-        console.log('Client connected:', client.id);
     }
     handleDisconnect(client) {
         for (const [userId, socketId] of this.users.entries()) {
@@ -30,11 +32,11 @@ let NotificationsGateway = class NotificationsGateway {
     registerUser(client, userId) {
         this.users.set(userId, client.id);
     }
-    sendNotification(userId, message) {
+    sendNotification(userId, data) {
         const socketId = this.users.get(userId);
         if (!socketId)
             return;
-        this.server.to(socketId).emit('new_notification', { message });
+        this.server.to(socketId).emit('new_notification', { data });
     }
 };
 __decorate([
@@ -43,6 +45,8 @@ __decorate([
 ], NotificationsGateway.prototype, "server", void 0);
 __decorate([
     (0, websockets_1.SubscribeMessage)('register'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __param(1, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", void 0)
@@ -51,6 +55,8 @@ NotificationsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
             origin: '*',
+            pingInterval: 10000,
+            pingTimeout: 5000,
         }
     })
 ], NotificationsGateway);

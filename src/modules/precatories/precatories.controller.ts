@@ -87,11 +87,11 @@ export class PrecatoriesController {
     async findAll(
         @PageQuery({
             caseSensitive: ['tribunal_pagador'],
-            equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
+            equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id', 'numero_card'],
             enumValidator: [
                 { key: 'honorarios_destacados', enum: HonorariosDestacados },
             ],
-            excludes: ['status']
+            excludes: ['status'],
         }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>,
         @User() user: UserWithoutPassword,
         @Query('status') status?: string,
@@ -167,6 +167,43 @@ export class PrecatoriesController {
             },
             message: 'Cálculo de RRA realizado com sucesso.',
         })
+    }
+
+    @Get('find/card-number/:number')
+    async findByCardNumber(
+        @Param('number') number: string,
+        @User() user: UserWithoutPassword,
+    ) {
+        let query: Record<string, any> = {};
+        if (user.tipo_perfil_id !== 1) {
+            query = {
+                AND: [
+                    {
+                        OR: [
+                            { numero_card: number },
+                            { numero_processo: number },
+                        ]
+                    },
+                    {
+                        escritorio_id: user.escritorio_id,
+                    }
+                ]
+            }
+        } else {
+            query = {
+                OR: [
+                    { numero_card: number },
+                    { numero_processo: number },
+                ]
+            }
+        }
+
+        const precatory = await this.precatoriesService.findFirst({
+            where: query,
+            select: { id: true, numero_card: true, numero_processo: true },
+        });
+
+        return new Ok({ data: precatory, message: 'Precatório encontrado com sucesso.' });
     }
 
     @Put(':id')

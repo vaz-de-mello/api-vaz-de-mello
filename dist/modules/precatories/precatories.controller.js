@@ -135,6 +135,37 @@ let PrecatoriesController = class PrecatoriesController {
             message: 'Cálculo de RRA realizado com sucesso.',
         });
     }
+    async findByCardNumber(number, user) {
+        let query = {};
+        if (user.tipo_perfil_id !== 1) {
+            query = {
+                AND: [
+                    {
+                        OR: [
+                            { numero_card: number },
+                            { numero_processo: number },
+                        ]
+                    },
+                    {
+                        escritorio_id: user.escritorio_id,
+                    }
+                ]
+            };
+        }
+        else {
+            query = {
+                OR: [
+                    { numero_card: number },
+                    { numero_processo: number },
+                ]
+            };
+        }
+        const precatory = await this.precatoriesService.findFirst({
+            where: query,
+            select: { id: true, numero_card: true, numero_processo: true },
+        });
+        return new responses_1.Ok({ data: precatory, message: 'Precatório encontrado com sucesso.' });
+    }
     async update(id, updatePrecatorioDto) {
         const precatory = await this.precatoriesService.update({
             where: { id },
@@ -199,11 +230,11 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, decorators_1.PageQuery)({
         caseSensitive: ['tribunal_pagador'],
-        equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id'],
+        equals: ['id', 'escritorio_id', 'usuario_id', 'cliente_id', 'numero_card'],
         enumValidator: [
             { key: 'honorarios_destacados', enum: client_1.HonorariosDestacados },
         ],
-        excludes: ['status']
+        excludes: ['status'],
     })),
     __param(1, (0, decorators_1.User)()),
     __param(2, (0, common_1.Query)('status')),
@@ -225,6 +256,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], PrecatoriesController.prototype, "calculateRRA", null);
+__decorate([
+    (0, common_1.Get)('find/card-number/:number'),
+    __param(0, (0, common_1.Param)('number')),
+    __param(1, (0, decorators_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PrecatoriesController.prototype, "findByCardNumber", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),

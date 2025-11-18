@@ -103,6 +103,18 @@ export class UsersController {
         return new Ok({ data: user, message: 'Usuário encontrado com sucesso.' });
     }
 
+    // este método tem apenas o propósito de encontrar o ID do admin do sistema para enviar notificações
+    @Roles(ProfileType.ADMIN, ProfileType.BROKER)
+    @Get('admin/id')
+    async findAdminId() {
+        const adminUser = await this.usersService.findFirst({
+            where: { tipo_perfil_id: ProfileType.ADMIN },
+            select: { id: true },
+        });
+
+        return new Ok({ data: adminUser, message: 'Admin encontrado com sucesso.' });
+    }
+
     @Put(':id')
     async update(
         @Param('id') id: string,

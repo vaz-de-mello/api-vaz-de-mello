@@ -96,7 +96,6 @@ export class PrecatoriesService {
 
     async findFirst(args: Prisma.PrecatorioFindFirstArgs) {
         return this.db.precatorio.findFirst(args);
-
     }
 
     async findUnique(args: Prisma.PrecatorioFindUniqueArgs) {

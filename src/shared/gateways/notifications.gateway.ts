@@ -3,13 +3,17 @@ import {
     WebSocketServer,
     SubscribeMessage,
     OnGatewayConnection,
-    OnGatewayDisconnect
+    OnGatewayDisconnect,
+    ConnectedSocket,
+    MessageBody
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
     cors: {
         origin: '*',  // adjust later for production
+        pingInterval: 10000, // send ping every 10s
+        pingTimeout: 5000,   // disconnect if no pong after 5s
     }
 })
 export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -19,7 +23,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
     private users: Map<string, string> = new Map(); // userId -> socketId
 
     handleConnection(client: Socket) {
-        console.log('Client connected:', client.id);
+        // console.log('Client connected:', client.id);
     }
 
     handleDisconnect(client: Socket) {
@@ -32,14 +36,23 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
     }
 
     @SubscribeMessage('register')
-    registerUser(client: Socket, userId: string) {
+    registerUser(
+        @ConnectedSocket() client: Socket,
+        @MessageBody() userId: string,
+    ) {
         this.users.set(userId, client.id);
     }
 
-    sendNotification(userId: string, message: string) {
+    sendNotification(userId: string, data: {
+        id: string;
+        usuario_id: string;
+        mensagem: string;
+        goTo: string | null;
+        created_at: Date;
+    }) {
         const socketId = this.users.get(userId);
         if (!socketId) return;
 
-        this.server.to(socketId).emit('new_notification', { message });
+        this.server.to(socketId).emit('new_notification', { data });
     }
 }

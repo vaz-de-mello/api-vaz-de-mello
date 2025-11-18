@@ -23,7 +23,7 @@ export class NotificationsService {
 
             this.gateway.sendNotification(
                 createNotificationDto.data.usuario_id,
-                createNotificationDto.data.mensagem,
+                notification,
             );
 
             return notification;

@@ -75,6 +75,13 @@ let UsersController = class UsersController {
         }
         return new responses_1.Ok({ data: user, message: 'Usuário encontrado com sucesso.' });
     }
+    async findAdminId() {
+        const adminUser = await this.usersService.findFirst({
+            where: { tipo_perfil_id: enum_1.ProfileType.ADMIN },
+            select: { id: true },
+        });
+        return new responses_1.Ok({ data: adminUser, message: 'Admin encontrado com sucesso.' });
+    }
     async update(id, updateUserDto) {
         const user = await this.usersService.update({
             where: { id },
@@ -112,6 +119,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, decorators_1.Roles)(enum_1.ProfileType.ADMIN, enum_1.ProfileType.BROKER),
+    (0, common_1.Get)('admin/id'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findAdminId", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),

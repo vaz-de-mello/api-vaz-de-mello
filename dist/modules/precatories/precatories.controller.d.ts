@@ -15,6 +15,7 @@ export declare class PrecatoriesController {
     findAll({ page, query }: PageQueryDto<Partial<PrecatoryEntity>>, user: UserWithoutPassword, status?: string): Promise<Ok>;
     findOne(id: string): Promise<Ok>;
     calculateRRA(id: string): Promise<Ok>;
+    findByCardNumber(number: string, user: UserWithoutPassword): Promise<Ok>;
     update(id: string, updatePrecatorioDto: UpdatePrecatoryDto): Promise<Ok>;
     updateClient(id: string, clientId: string, updateClient: UpdatePrecatoryClientDto): Promise<Ok>;
     delete(id: string): Promise<Ok>;

@@ -8,10 +8,6 @@ export declare class PrecatoriesService {
     cardNumberGenerator(contador: number): string;
     create(createArgs: Prisma.PrecatorioCreateArgs): Promise<{
         id: string;
-        escritorio_id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        status: number;
         cliente_id: string;
         data_levantamento: Date;
         valor_bruto: Prisma.Decimal;
@@ -27,8 +23,12 @@ export declare class PrecatoriesService {
         oficio_pdf: string;
         comprovante_pdf: string;
         usuario_id: string;
+        escritorio_id: string;
         tese_aplicada: string;
+        status: number;
         contador: number;
+        createdAt: Date;
+        updatedAt: Date;
         numero_card: string;
         precatorio_derivado: string;
         doenca_grave: boolean;
@@ -48,18 +48,14 @@ export declare class PrecatoriesService {
     findAll(query: Partial<PrecatoryEntity>, page: PageDto): Promise<[number, ({
         cliente: {
             id: string;
-            nome: string;
-            cpf: string;
-            data_nascimento: Date;
             createdAt: Date;
             updatedAt: Date;
+            cpf: string;
+            nome: string;
+            data_nascimento: Date;
         };
     } & {
         id: string;
-        escritorio_id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        status: number;
         cliente_id: string;
         data_levantamento: Date;
         valor_bruto: Prisma.Decimal;
@@ -75,8 +71,12 @@ export declare class PrecatoriesService {
         oficio_pdf: string;
         comprovante_pdf: string;
         usuario_id: string;
+        escritorio_id: string;
         tese_aplicada: string;
+        status: number;
         contador: number;
+        createdAt: Date;
+        updatedAt: Date;
         numero_card: string;
         precatorio_derivado: string;
         doenca_grave: boolean;
@@ -95,10 +95,6 @@ export declare class PrecatoriesService {
     })[]]>;
     findFirst(args: Prisma.PrecatorioFindFirstArgs): Promise<{
         id: string;
-        escritorio_id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        status: number;
         cliente_id: string;
         data_levantamento: Date;
         valor_bruto: Prisma.Decimal;
@@ -114,8 +110,12 @@ export declare class PrecatoriesService {
         oficio_pdf: string;
         comprovante_pdf: string;
         usuario_id: string;
+        escritorio_id: string;
         tese_aplicada: string;
+        status: number;
         contador: number;
+        createdAt: Date;
+        updatedAt: Date;
         numero_card: string;
         precatorio_derivado: string;
         doenca_grave: boolean;
@@ -134,10 +134,6 @@ export declare class PrecatoriesService {
     }>;
     findUnique(args: Prisma.PrecatorioFindUniqueArgs): Promise<{
         id: string;
-        escritorio_id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        status: number;
         cliente_id: string;
         data_levantamento: Date;
         valor_bruto: Prisma.Decimal;
@@ -153,8 +149,12 @@ export declare class PrecatoriesService {
         oficio_pdf: string;
         comprovante_pdf: string;
         usuario_id: string;
+        escritorio_id: string;
         tese_aplicada: string;
+        status: number;
         contador: number;
+        createdAt: Date;
+        updatedAt: Date;
         numero_card: string;
         precatorio_derivado: string;
         doenca_grave: boolean;
@@ -173,10 +173,6 @@ export declare class PrecatoriesService {
     }>;
     update(updatePrecatorioDto: Prisma.PrecatorioUpdateArgs): Promise<{
         id: string;
-        escritorio_id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        status: number;
         cliente_id: string;
         data_levantamento: Date;
         valor_bruto: Prisma.Decimal;
@@ -192,8 +188,12 @@ export declare class PrecatoriesService {
         oficio_pdf: string;
         comprovante_pdf: string;
         usuario_id: string;
+        escritorio_id: string;
         tese_aplicada: string;
+        status: number;
         contador: number;
+        createdAt: Date;
+        updatedAt: Date;
         numero_card: string;
         precatorio_derivado: string;
         doenca_grave: boolean;
