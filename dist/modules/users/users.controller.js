@@ -31,18 +31,8 @@ let UsersController = class UsersController {
         const hashedPassword = await bcrypt.hash(createUserDto.senha || randomPassword, 10);
         createUserDto.senha = hashedPassword;
         const user = await this.usersService.create({
-            data: Object.assign(Object.assign({}, createUserDto), { status: 2, senha: createUserDto.senha || randomPassword, escritorio_id: createUserDto.escritorio_id || null, email_verificado: true, email_token: null }),
+            data: Object.assign(Object.assign({}, createUserDto), { status: 1, senha: createUserDto.senha || randomPassword, escritorio_id: createUserDto.escritorio_id || null, email_verificado: true, email_token: null }),
             omit: { senha: true },
-        });
-        await (0, utils_1.sendEmail)({
-            to: user.email,
-            subject: 'Registro realizado em querorestituIR!',
-            html: `
-            <p>Bem-vindo ao querorestituIR!</p>
-            <p>Segue abaixo sua senha provisória:</p><br>
-            <p>${randomPassword}</p><br>
-            <p>Faço o primeiro login utilizando esta senha e depois troque para outra.</p>
-            `
         });
         return new responses_1.Ok({ data: user, message: 'Usuário criado com sucesso.' });
     }

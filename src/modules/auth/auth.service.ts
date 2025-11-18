@@ -148,7 +148,7 @@ export class AuthService {
         const user = await this.usersService.create({
             data: {
                 ...registerDto,
-                status: 2, // 1: Ativo, 0: Inativo, 2: Aguardando
+                status: 1, // 1: Ativo, 0: Inativo, 2: Aguardando
                 senha: registerDto.senha,
                 escritorio_id: null,
                 email_verificado: false,

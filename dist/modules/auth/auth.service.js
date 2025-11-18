@@ -132,7 +132,7 @@ let AuthService = class AuthService {
         const hashedPassword = await bcrypt.hash(registerDto.senha, 10);
         registerDto.senha = hashedPassword;
         const user = await this.usersService.create({
-            data: Object.assign(Object.assign({}, registerDto), { status: 2, senha: registerDto.senha, escritorio_id: null, email_verificado: false, email_token: token, tipo_perfil_id: enum_1.ProfileType.CLIENTE_INDIVIDUAL }),
+            data: Object.assign(Object.assign({}, registerDto), { status: 1, senha: registerDto.senha, escritorio_id: null, email_verificado: false, email_token: token, tipo_perfil_id: enum_1.ProfileType.CLIENTE_INDIVIDUAL }),
             omit: { senha: true },
         });
         return { user, token, newTimeString };

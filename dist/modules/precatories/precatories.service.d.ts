@@ -54,6 +54,19 @@ export declare class PrecatoriesService {
             nome: string;
             data_nascimento: Date;
         };
+        escritorio: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            nome_fantasia: string;
+            telefone: string;
+            email: string;
+            cnpj: string;
+            api_key: string;
+            responsaveis_legais: string;
+            dominio_white_label: string;
+            logo: string;
+        };
     } & {
         id: string;
         cliente_id: string;

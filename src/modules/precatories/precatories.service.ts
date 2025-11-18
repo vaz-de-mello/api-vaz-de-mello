@@ -89,7 +89,7 @@ export class PrecatoriesService {
                 where: query,
                 ...page,
                 orderBy: { createdAt: 'desc' },
-                include: { cliente: true },
+                include: { cliente: true, escritorio: true },
             })
         ])
     }

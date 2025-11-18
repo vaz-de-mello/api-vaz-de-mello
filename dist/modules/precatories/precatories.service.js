@@ -75,7 +75,7 @@ let PrecatoriesService = class PrecatoriesService {
     async findAll(query, page) {
         return this.db.$transaction([
             this.db.precatorio.count({ where: query }),
-            this.db.precatorio.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: { createdAt: 'desc' }, include: { cliente: true } }))
+            this.db.precatorio.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: { createdAt: 'desc' }, include: { cliente: true, escritorio: true } }))
         ]);
     }
     async findFirst(args) {

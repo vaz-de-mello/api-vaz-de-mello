@@ -40,7 +40,7 @@ export class UsersController {
         const user = await this.usersService.create({
             data: {
                 ...createUserDto,
-                status: 2, // 1: Ativo, 0: Inativo, 2: Aguardando
+                status: 1, // 1: Ativo, 0: Inativo, 2: Aguardando
                 senha: createUserDto.senha || randomPassword,
                 escritorio_id: createUserDto.escritorio_id || null,
                 email_verificado: true,
@@ -49,16 +49,16 @@ export class UsersController {
             omit: { senha: true },
         });
 
-        await sendEmail({
-            to: user.email,
-            subject: 'Registro realizado em querorestituIR!',
-            html: `
-            <p>Bem-vindo ao querorestituIR!</p>
-            <p>Segue abaixo sua senha provisória:</p><br>
-            <p>${randomPassword}</p><br>
-            <p>Faço o primeiro login utilizando esta senha e depois troque para outra.</p>
-            `
-        })
+        // await sendEmail({
+        //     to: user.email,
+        //     subject: 'Registro realizado em querorestituIR!',
+        //     html: `
+        //     <p>Bem-vindo ao querorestituIR!</p>
+        //     <p>Segue abaixo sua senha provisória:</p><br>
+        //     <p>${randomPassword}</p><br>
+        //     <p>Faço o primeiro login utilizando esta senha e depois troque para outra.</p>
+        //     `
+        // })
 
         return new Ok({ data: user, message: 'Usuário criado com sucesso.' });
     }
