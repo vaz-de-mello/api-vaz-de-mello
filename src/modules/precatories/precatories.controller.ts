@@ -9,7 +9,7 @@ import {
     NotFoundException,
     Query,
 } from '@nestjs/common';
-import { HonorariosDestacados } from '@prisma/client';
+import { HonorariosDestacados, Prisma } from '@prisma/client';
 
 import { PrecatoriesService } from './precatories.service';
 import { CalculatorService } from '../calculator/calculator.service';
@@ -91,15 +91,22 @@ export class PrecatoriesController {
             enumValidator: [
                 { key: 'honorarios_destacados', enum: HonorariosDestacados },
             ],
-            excludes: ['status'],
+            excludes: ['status', 'sort'],
         }) { page, query }: PageQueryDto<Partial<PrecatoryEntity>>,
         @User() user: UserWithoutPassword,
         @Query('status') status?: string,
+        @Query('sort') sort?: string,
     ) {
         if (status) query.status = +status;
         if (user.tipo_perfil_id !== 1) query.escritorio_id = user.escritorio_id
 
-        const [total, preactories] = await this.precatoriesService.findAll(query, page);
+        let orderBy: Prisma.PrecatorioOrderByWithRelationInput = { createdAt: 'desc' };
+        if (sort) {
+            const [column, sortOrder] = sort.split('|');
+            orderBy = { [column]: sortOrder } as Prisma.PrecatorioOrderByWithRelationInput;
+        }
+
+        const [total, preactories] = await this.precatoriesService.findAll(query, page, orderBy);
         const response = createPaginatedResponse({
             data: preactories,
             total,

@@ -33,9 +33,9 @@ exports.PageQuery = (0, common_1.createParamDecorator)((options, context) => {
     queryKeys.forEach((key, index) => {
         var _a, _b, _c;
         const value = queryValues[index];
-        whereContainsQuery[key] = {};
         if ((_a = options.excludes) === null || _a === void 0 ? void 0 : _a.includes(key))
             return;
+        whereContainsQuery[key] = {};
         if ((_b = options.equals) === null || _b === void 0 ? void 0 : _b.includes(key))
             whereContainsQuery[key].equals = value;
         else

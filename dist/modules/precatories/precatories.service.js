@@ -72,10 +72,10 @@ let PrecatoriesService = class PrecatoriesService {
             }, error.toString());
         }
     }
-    async findAll(query, page) {
+    async findAll(query, page, orderBy = { createdAt: 'desc' }) {
         return this.db.$transaction([
             this.db.precatorio.count({ where: query }),
-            this.db.precatorio.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: { createdAt: 'desc' }, include: { cliente: true, escritorio: true } }))
+            this.db.precatorio.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: orderBy, include: { cliente: true, escritorio: true } }))
         ]);
     }
     async findFirst(args) {

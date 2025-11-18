@@ -12,7 +12,7 @@ export declare class PrecatoriesController {
     private readonly clientsService;
     constructor(precatoriesService: PrecatoriesService, calculatorService: CalculatorService, clientsService: ClientsService);
     create(createPrecatorioDto: CreatePrecatoryDto, user: UserWithoutPassword): Promise<Ok>;
-    findAll({ page, query }: PageQueryDto<Partial<PrecatoryEntity>>, user: UserWithoutPassword, status?: string): Promise<Ok>;
+    findAll({ page, query }: PageQueryDto<Partial<PrecatoryEntity>>, user: UserWithoutPassword, status?: string, sort?: string): Promise<Ok>;
     findOne(id: string): Promise<Ok>;
     calculateRRA(id: string): Promise<Ok>;
     findByCardNumber(number: string, user: UserWithoutPassword): Promise<Ok>;

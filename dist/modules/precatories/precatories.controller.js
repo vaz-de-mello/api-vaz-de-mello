@@ -73,12 +73,17 @@ let PrecatoriesController = class PrecatoriesController {
         });
         return new responses_1.Ok({ data: precatory, message: 'Precatório criado com sucesso.' });
     }
-    async findAll({ page, query }, user, status) {
+    async findAll({ page, query }, user, status, sort) {
         if (status)
             query.status = +status;
         if (user.tipo_perfil_id !== 1)
             query.escritorio_id = user.escritorio_id;
-        const [total, preactories] = await this.precatoriesService.findAll(query, page);
+        let orderBy = { createdAt: 'desc' };
+        if (sort) {
+            const [column, sortOrder] = sort.split('|');
+            orderBy = { [column]: sortOrder };
+        }
+        const [total, preactories] = await this.precatoriesService.findAll(query, page, orderBy);
         const response = (0, utils_1.createPaginatedResponse)({
             data: preactories,
             total,
@@ -234,12 +239,13 @@ __decorate([
         enumValidator: [
             { key: 'honorarios_destacados', enum: client_1.HonorariosDestacados },
         ],
-        excludes: ['status'],
+        excludes: ['status', 'sort'],
     })),
     __param(1, (0, decorators_1.User)()),
     __param(2, (0, common_1.Query)('status')),
+    __param(3, (0, common_1.Query)('sort')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [_types_1.PageQueryDto, Object, String]),
+    __metadata("design:paramtypes", [_types_1.PageQueryDto, Object, String, String]),
     __metadata("design:returntype", Promise)
 ], PrecatoriesController.prototype, "findAll", null);
 __decorate([

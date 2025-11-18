@@ -82,13 +82,17 @@ export class PrecatoriesService {
         }
     }
 
-    async findAll(query: Partial<PrecatoryEntity>, page: PageDto) {
+    async findAll(
+        query: Partial<PrecatoryEntity>,
+        page: PageDto,
+        orderBy: Prisma.PrecatorioOrderByWithRelationInput = { createdAt: 'desc' }
+    ) {
         return this.db.$transaction([
             this.db.precatorio.count({ where: query }),
             this.db.precatorio.findMany({
                 where: query,
                 ...page,
-                orderBy: { createdAt: 'desc' },
+                orderBy: orderBy,
                 include: { cliente: true, escritorio: true },
             })
         ])

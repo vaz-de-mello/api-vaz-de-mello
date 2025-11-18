@@ -55,10 +55,10 @@ export const PageQuery = createParamDecorator((options: PageQueryOptions, contex
 
     queryKeys.forEach((key, index) => {
         const value = queryValues[index];
-        whereContainsQuery[key] = {};
-
         // Se o parametro estiver dentro de excludes, não adiciona à query do Prisma
         if (options.excludes?.includes(key)) return;
+
+        whereContainsQuery[key] = {};
 
         if (options.equals?.includes(key)) whereContainsQuery[key].equals = value;
         else whereContainsQuery[key].contains = value;
