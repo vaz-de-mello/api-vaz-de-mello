@@ -12,7 +12,7 @@ const responses_1 = require("../../shared/responses");
 let HealthService = class HealthService {
     health() {
         return new responses_1.Ok({
-            data: { version: '1.1.1' },
+            data: { version: '1.1.2' },
             message: 'API rodando!'
         });
     }
