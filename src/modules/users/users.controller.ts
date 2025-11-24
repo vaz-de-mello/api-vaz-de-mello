@@ -70,7 +70,7 @@ export class UsersController {
             equals: ['cpf', 'escritorio_id', 'login', 'id']
         }) { page, query }: PageQueryDto<Partial<UserEntity>>
     ) {
-        const [total, users] = await this.usersService.findAll(query, page);
+        const [total, users] = await this.usersService.findAllPaginated(query, page);
         const response = createPaginatedResponse({
             data: users,
             total,
@@ -113,6 +113,18 @@ export class UsersController {
         });
 
         return new Ok({ data: adminUser, message: 'Admin encontrado com sucesso.' });
+    }
+
+    // este método tem apenas o propósito de encontrar o IDs de todos os admins do sistema para enviar notificações
+    @Roles(ProfileType.ADMIN, ProfileType.BROKER)
+    @Get('admin/id/all')
+    async findAllAdminIds() {
+        const adminUser = await this.usersService.findAll({
+            where: { tipo_perfil_id: ProfileType.ADMIN },
+            select: { id: true },
+        });
+
+        return new Ok({ data: adminUser, message: 'Admins encontrados com sucesso.' });
     }
 
     @Put(':id')

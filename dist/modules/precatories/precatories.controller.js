@@ -140,15 +140,24 @@ let PrecatoriesController = class PrecatoriesController {
             message: 'Cálculo de RRA realizado com sucesso.',
         });
     }
-    async findByCardNumber(number, user) {
+    async findByCardNumber(search, user, { page }) {
         let query = {};
         if (user.tipo_perfil_id !== 1) {
             query = {
                 AND: [
                     {
                         OR: [
-                            { numero_card: number },
-                            { numero_processo: number },
+                            { numero_card: search },
+                            { numero_processo: search },
+                            { cpf: search },
+                            {
+                                cliente: {
+                                    OR: [
+                                        { cpf: search },
+                                        { nome: { contains: search, mode: 'insensitive' } }
+                                    ]
+                                },
+                            }
                         ]
                     },
                     {
@@ -160,16 +169,26 @@ let PrecatoriesController = class PrecatoriesController {
         else {
             query = {
                 OR: [
-                    { numero_card: number },
-                    { numero_processo: number },
+                    { numero_card: search },
+                    { numero_processo: search },
+                    {
+                        cliente: {
+                            OR: [
+                                { cpf: search },
+                                { nome: { contains: search, mode: 'insensitive' } }
+                            ]
+                        }
+                    },
                 ]
             };
         }
-        const precatory = await this.precatoriesService.findFirst({
-            where: query,
-            select: { id: true, numero_card: true, numero_processo: true },
+        const [total, data] = await this.precatoriesService.findAll(query, page);
+        const response = (0, utils_1.createPaginatedResponse)({
+            data,
+            total,
+            page,
         });
-        return new responses_1.Ok({ data: precatory, message: 'Precatório encontrado com sucesso.' });
+        return new responses_1.Ok(response);
     }
     async update(id, updatePrecatorioDto) {
         const precatory = await this.precatoriesService.update({
@@ -263,11 +282,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PrecatoriesController.prototype, "calculateRRA", null);
 __decorate([
-    (0, common_1.Get)('find/card-number/:number'),
-    __param(0, (0, common_1.Param)('number')),
+    (0, common_1.Post)('find'),
+    __param(0, (0, common_1.Body)('search')),
     __param(1, (0, decorators_1.User)()),
+    __param(2, (0, decorators_1.PageQuery)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Object, _types_1.PageQueryDto]),
     __metadata("design:returntype", Promise)
 ], PrecatoriesController.prototype, "findByCardNumber", null);
 __decorate([

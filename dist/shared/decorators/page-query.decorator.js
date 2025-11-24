@@ -5,7 +5,7 @@ const common_1 = require("@nestjs/common");
 exports.PageQuery = (0, common_1.createParamDecorator)((options, context) => {
     const whereContainsQuery = {};
     const { query } = context.switchToHttp().getRequest();
-    if (options.enumValidator) {
+    if (options === null || options === void 0 ? void 0 : options.enumValidator) {
         const invalidEnumKey = [];
         options.enumValidator.forEach(({ key, enum: enumValues }) => {
             if (query[key] && !Object.values(enumValues).includes(query[key])) {

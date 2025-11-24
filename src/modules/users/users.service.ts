@@ -76,7 +76,7 @@ export class UsersService {
         }
     }
 
-    async findAll(query: Partial<UserEntity>, page: PageDto) {
+    async findAllPaginated(query: Partial<UserEntity>, page: PageDto) {
         return this.db.$transaction([
             this.db.usuario.count({ where: query }),
             this.db.usuario.findMany({
@@ -90,6 +90,10 @@ export class UsersService {
                 }
             })
         ])
+    }
+
+    async findAll(args: Prisma.UsuarioFindManyArgs) {
+        return this.db.usuario.findMany(args);
     }
 
     async findFirst(args: Prisma.UsuarioFindFirstArgs) {

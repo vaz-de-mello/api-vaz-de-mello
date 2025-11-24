@@ -10,6 +10,7 @@ export declare class UsersController {
     findAll({ page, query }: PageQueryDto<Partial<UserEntity>>): Promise<Ok>;
     findOne(id: string): Promise<Ok>;
     findAdminId(): Promise<Ok>;
+    findAllAdminIds(): Promise<Ok>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<Ok>;
     delete(id: string): Promise<Ok>;
 }

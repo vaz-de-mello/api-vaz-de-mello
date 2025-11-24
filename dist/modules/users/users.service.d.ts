@@ -21,7 +21,7 @@ export declare class UsersService {
         email_token: string;
         status: number;
     }>;
-    findAll(query: Partial<UserEntity>, page: PageDto): Promise<[number, ({
+    findAllPaginated(query: Partial<UserEntity>, page: PageDto): Promise<[number, ({
         escritorio: {
             id: string;
             email: string;
@@ -54,6 +54,22 @@ export declare class UsersService {
         email_token: string;
         status: number;
     })[]]>;
+    findAll(args: Prisma.UsuarioFindManyArgs): Promise<{
+        senha: string;
+        login: string;
+        id: string;
+        nome: string;
+        email: string;
+        cpf: string;
+        data_nascimento: Date;
+        escritorio_id: string;
+        tipo_perfil_id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email_verificado: boolean;
+        email_token: string;
+        status: number;
+    }[]>;
     findFirst(args: Prisma.UsuarioFindFirstArgs): Promise<{
         senha: string;
         login: string;

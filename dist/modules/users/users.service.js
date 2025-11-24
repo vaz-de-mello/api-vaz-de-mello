@@ -66,7 +66,7 @@ let UsersService = class UsersService {
             }, error.toString());
         }
     }
-    async findAll(query, page) {
+    async findAllPaginated(query, page) {
         return this.db.$transaction([
             this.db.usuario.count({ where: query }),
             this.db.usuario.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: { createdAt: 'desc' }, omit: { senha: true }, include: {
@@ -74,6 +74,9 @@ let UsersService = class UsersService {
                     escritorio: true,
                 } }))
         ]);
+    }
+    async findAll(args) {
+        return this.db.usuario.findMany(args);
     }
     async findFirst(args) {
         return this.db.usuario.findFirst(args);

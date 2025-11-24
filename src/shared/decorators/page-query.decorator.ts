@@ -21,7 +21,7 @@ export const PageQuery = createParamDecorator((options: PageQueryOptions, contex
 
     const { query } = context.switchToHttp().getRequest();
 
-    if (options.enumValidator) {
+    if (options?.enumValidator) {
         const invalidEnumKey = [];
 
         options.enumValidator.forEach(({ key, enum: enumValues }) => {

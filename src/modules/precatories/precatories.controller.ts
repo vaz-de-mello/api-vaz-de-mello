@@ -176,10 +176,11 @@ export class PrecatoriesController {
         })
     }
 
-    @Get('find/card-number/:number')
+    @Post('find')
     async findByCardNumber(
-        @Param('number') number: string,
+        @Body('search') search: string,
         @User() user: UserWithoutPassword,
+        @PageQuery() { page }: PageQueryDto<Partial<any>>,
     ) {
         let query: Record<string, any> = {};
         if (user.tipo_perfil_id !== 1) {
@@ -187,8 +188,17 @@ export class PrecatoriesController {
                 AND: [
                     {
                         OR: [
-                            { numero_card: number },
-                            { numero_processo: number },
+                            { numero_card: search },
+                            { numero_processo: search },
+                            { cpf: search },
+                            {
+                                cliente: {
+                                    OR: [
+                                        { cpf: search },
+                                        { nome: { contains: search, mode: 'insensitive' } }
+                                    ]
+                                },
+                            }
                         ]
                     },
                     {
@@ -199,18 +209,28 @@ export class PrecatoriesController {
         } else {
             query = {
                 OR: [
-                    { numero_card: number },
-                    { numero_processo: number },
+                    { numero_card: search },
+                    { numero_processo: search },
+                    {
+                        cliente: {
+                            OR: [
+                                { cpf: search },
+                                { nome: { contains: search, mode: 'insensitive' } }
+                            ]
+                        }
+                    },
                 ]
             }
         }
 
-        const precatory = await this.precatoriesService.findFirst({
-            where: query,
-            select: { id: true, numero_card: true, numero_processo: true },
-        });
+        const [total, data] = await this.precatoriesService.findAll(query, page);
+        const response = createPaginatedResponse({
+            data,
+            total,
+            page,
+        })
 
-        return new Ok({ data: precatory, message: 'Precatório encontrado com sucesso.' });
+        return new Ok(response);
     }
 
     @Put(':id')
