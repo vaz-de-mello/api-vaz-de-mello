@@ -149,7 +149,6 @@ let PrecatoriesController = class PrecatoriesController {
                         OR: [
                             { numero_card: search },
                             { numero_processo: search },
-                            { cpf: search },
                             {
                                 cliente: {
                                     OR: [
