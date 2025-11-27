@@ -109,7 +109,7 @@ export class UsersController {
     async findAdminId() {
         const adminUser = await this.usersService.findFirst({
             where: { tipo_perfil_id: ProfileType.ADMIN },
-            select: { id: true, login: true },
+            select: { id: true, nome: true },
         });
 
         return new Ok({ data: adminUser, message: 'Admin encontrado com sucesso.' });
@@ -121,7 +121,7 @@ export class UsersController {
     async findAllAdminIds() {
         const adminUser = await this.usersService.findAll({
             where: { tipo_perfil_id: ProfileType.ADMIN },
-            select: { id: true, login: true },
+            select: { id: true, nome: true },
         });
 
         return new Ok({ data: adminUser, message: 'Admins encontrados com sucesso.' });
