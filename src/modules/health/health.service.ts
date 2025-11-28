@@ -5,7 +5,7 @@ import { Ok } from 'src/shared/responses';
 export class HealthService {
     health() {
         return new Ok({
-            data: { version: '1.1.2' },
+            data: { version: '1.1.3' },
             message: 'API rodando!'
         })
     }
