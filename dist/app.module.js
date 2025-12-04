@@ -25,6 +25,7 @@ const pendings_module_1 = require("./modules/pendings/pendings.module");
 const s3_module_1 = require("./modules/s3/s3.module");
 const guards_1 = require("./shared/guards");
 const notifications_module_1 = require("./modules/notifications/notifications.module");
+const charts_module_1 = require("./modules/charts/charts.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -45,6 +46,7 @@ AppModule = __decorate([
             pendings_module_1.PendingsModule,
             s3_module_1.S3Module,
             notifications_module_1.NotificationsModule,
+            charts_module_1.ChartsModule,
         ],
         controllers: [],
         providers: [

@@ -18,6 +18,7 @@ import { S3Module } from './modules/s3/s3.module';
 
 import { AuthGuard, RolesGuard } from './shared/guards';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ChartsModule } from './modules/charts/charts.module';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
         PendingsModule,
         S3Module,
         NotificationsModule,
+        ChartsModule,
     ],
     controllers: [],
     providers: [

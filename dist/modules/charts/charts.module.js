@@ -6,19 +6,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HealthService = void 0;
+exports.ChartsModule = void 0;
 const common_1 = require("@nestjs/common");
-const responses_1 = require("../../shared/responses");
-let HealthService = class HealthService {
-    health() {
-        return new responses_1.Ok({
-            data: { version: '1.1.4' },
-            message: 'API rodando!'
-        });
-    }
+const charts_service_1 = require("./charts.service");
+const charts_controller_1 = require("./charts.controller");
+let ChartsModule = class ChartsModule {
 };
-HealthService = __decorate([
-    (0, common_1.Injectable)()
-], HealthService);
-exports.HealthService = HealthService;
-//# sourceMappingURL=health.service.js.map
+ChartsModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [charts_controller_1.ChartsController],
+        providers: [charts_service_1.ChartsService]
+    })
+], ChartsModule);
+exports.ChartsModule = ChartsModule;
+//# sourceMappingURL=charts.module.js.map
