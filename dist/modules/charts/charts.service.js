@@ -50,7 +50,6 @@ let ChartsService = class ChartsService {
         });
     }
     async getPrecatoriesByYearAndUser({ officeId, userId, year, }) {
-        console.log(userId);
         const result = userId ? await this.db.$queryRaw `
             SELECT
             usuario_id,

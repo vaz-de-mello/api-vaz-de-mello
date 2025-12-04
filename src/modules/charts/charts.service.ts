@@ -57,8 +57,6 @@ export class ChartsService {
         userId,
         year,
     }: { year: string; userId?: string; officeId: string }) {
-        console.log(userId)
-
         const result = userId ? await this.db.$queryRaw`
             SELECT
             usuario_id,
