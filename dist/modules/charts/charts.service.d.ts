@@ -24,14 +24,18 @@ export declare class ChartsService {
     }): import(".prisma/client").Prisma.PrismaPromise<({
         cliente: {
             id: string;
+            nome: string;
+            cpf: string;
+            data_nascimento: Date;
             createdAt: Date;
             updatedAt: Date;
-            cpf: string;
-            nome: string;
-            data_nascimento: Date;
         };
     } & {
         id: string;
+        escritorio_id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: number;
         cliente_id: string;
         data_levantamento: Date;
         valor_bruto: import("@prisma/client/runtime/library").Decimal;
@@ -47,12 +51,8 @@ export declare class ChartsService {
         oficio_pdf: string;
         comprovante_pdf: string;
         usuario_id: string;
-        escritorio_id: string;
         tese_aplicada: string;
-        status: number;
         contador: number;
-        createdAt: Date;
-        updatedAt: Date;
         numero_card: string;
         precatorio_derivado: string;
         doenca_grave: boolean;

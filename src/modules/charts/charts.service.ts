@@ -79,7 +79,7 @@ export class ChartsService {
         `;
 
         return (result as {
-            usuario_id: string;
+            usuario_id?: string;
             mon: string;
             amount: number;
             total_rows: BigInt;
