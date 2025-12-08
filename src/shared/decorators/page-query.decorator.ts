@@ -49,6 +49,7 @@ export const PageQuery = createParamDecorator((options: PageQueryOptions, contex
     const page = { skip, take };
 
     delete query.page;
+    delete query.take;
 
     const queryValues = Object.values(query);
     const queryKeys = Object.keys(query);

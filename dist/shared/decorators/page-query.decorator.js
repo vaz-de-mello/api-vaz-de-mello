@@ -28,6 +28,7 @@ exports.PageQuery = (0, common_1.createParamDecorator)((options, context) => {
     const skip = isNaN(pageQuery) ? 0 : (take * (pageQuery - 1));
     const page = { skip, take };
     delete query.page;
+    delete query.take;
     const queryValues = Object.values(query);
     const queryKeys = Object.keys(query);
     queryKeys.forEach((key, index) => {
