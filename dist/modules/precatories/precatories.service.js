@@ -76,10 +76,10 @@ let PrecatoriesService = class PrecatoriesService {
         return this.db.$transaction([
             this.db.precatorio.count({ where: query }),
             this.db.precatorio.findMany(Object.assign(Object.assign({ where: query }, page), { orderBy: orderBy, include: {
-                cliente: true,
-                escritorio: true,
-                usuario: { select: { nome: true } }
-            }}))
+                    cliente: true,
+                    escritorio: true,
+                    usuario: { select: { nome: true } }
+                } }))
         ]);
     }
     async findFirst(args) {
