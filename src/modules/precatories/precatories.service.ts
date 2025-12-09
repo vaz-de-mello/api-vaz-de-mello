@@ -93,7 +93,11 @@ export class PrecatoriesService {
                 where: query,
                 ...page,
                 orderBy: orderBy,
-                include: { cliente: true, escritorio: true },
+                include: {
+                    cliente: true,
+                    escritorio: true,
+                    usuario: { select: { nome: true } }
+                },
             })
         ])
     }
