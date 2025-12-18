@@ -19,11 +19,11 @@ export declare class AuthService {
     }>;
     registerIndividual(registerDto: RegisterIndividualDto): Promise<{
         user: {
-            senha: string;
-            login: string;
             id: string;
             nome: string;
+            login: string;
             email: string;
+            senha: string;
             cpf: string;
             data_nascimento: Date;
             escritorio_id: string;

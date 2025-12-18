@@ -35,6 +35,7 @@ export class ChartsController {
             3: { count: 0 },
             4: { count: 0 },
             5: { count: 0 },
+            6: { count: 0 },
         };
 
         getTotalByStatus.forEach(({ status, _count }) => totalByStatusObj[status].count = _count.id);

@@ -13,13 +13,13 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from './users.service';
 
 import { Ok } from 'src/shared/responses';
-import { PageQuery, Roles } from 'src/shared/decorators';
+import { PageQuery, Roles, User } from 'src/shared/decorators';
 import { createPaginatedResponse, sendEmail } from 'src/shared/utils';
 import { PageQueryDto } from 'src/shared/@types';
 import { ProfileType } from 'src/shared/enum';
 
-import { UserEntity } from './entities';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { UserEntity, UserWithoutPassword } from './entities';
+import { CreateUserDto, UpdateUserDto, UpdateUserPasswordDto } from './dto';
 
 @Roles(ProfileType.ADMIN)
 @Controller('users')
@@ -40,6 +40,7 @@ export class UsersController {
         const user = await this.usersService.create({
             data: {
                 ...createUserDto,
+                data_nascimento: createUserDto.data_nascimento || new Date().toISOString(),
                 status: 1, // 1: Ativo, 0: Inativo, 2: Aguardando
                 senha: createUserDto.senha || randomPassword,
                 escritorio_id: createUserDto.escritorio_id || null,
@@ -139,6 +140,21 @@ export class UsersController {
         });
 
         return new Ok({ data: user, message: 'Usuário atualizado com sucesso.' });
+    }
+
+    @Put('profile/password')
+    async updatePassword(
+        @User() { id }: UserWithoutPassword,
+        @Body() { password }: UpdateUserPasswordDto,
+    ) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await this.usersService.update({
+            where: { id },
+            data: { senha: hashedPassword },
+        })
+
+        return new Ok({ message: 'Senha atualizada com sucesso.' });
     }
 
     @Delete(':id')

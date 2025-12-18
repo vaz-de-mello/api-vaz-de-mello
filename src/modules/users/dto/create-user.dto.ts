@@ -28,6 +28,7 @@ export class CreateUserDto {
     })
     cpf: string;
 
+    @IsOptional()
     @IsDateString({}, { message: '`data_nascimento` deve ser uma data válida no formato ISO.' })
     data_nascimento: string;
 

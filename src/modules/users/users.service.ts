@@ -110,7 +110,6 @@ export class UsersService {
             const updatedUsuario = await this.db.usuario.update(updateUserDto);
 
             return updatedUsuario;
-
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {

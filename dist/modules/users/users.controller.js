@@ -31,7 +31,7 @@ let UsersController = class UsersController {
         const hashedPassword = await bcrypt.hash(createUserDto.senha || randomPassword, 10);
         createUserDto.senha = hashedPassword;
         const user = await this.usersService.create({
-            data: Object.assign(Object.assign({}, createUserDto), { status: 1, senha: createUserDto.senha || randomPassword, escritorio_id: createUserDto.escritorio_id || null, email_verificado: true, email_token: null }),
+            data: Object.assign(Object.assign({}, createUserDto), { data_nascimento: createUserDto.data_nascimento || new Date().toISOString(), status: 1, senha: createUserDto.senha || randomPassword, escritorio_id: createUserDto.escritorio_id || null, email_verificado: true, email_token: null }),
             omit: { senha: true },
         });
         return new responses_1.Ok({ data: user, message: 'Usuário criado com sucesso.' });
@@ -87,6 +87,14 @@ let UsersController = class UsersController {
         });
         return new responses_1.Ok({ data: user, message: 'Usuário atualizado com sucesso.' });
     }
+    async updatePassword({ id }, { password }) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await this.usersService.update({
+            where: { id },
+            data: { senha: hashedPassword },
+        });
+        return new responses_1.Ok({ message: 'Senha atualizada com sucesso.' });
+    }
     async delete(id) {
         const response = await this.usersService.delete(id);
         return new responses_1.Ok(response);
@@ -138,6 +146,14 @@ __decorate([
     __metadata("design:paramtypes", [String, dto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
+__decorate([
+    (0, common_1.Put)('profile/password'),
+    __param(0, (0, decorators_1.User)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, dto_1.UpdateUserPasswordDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

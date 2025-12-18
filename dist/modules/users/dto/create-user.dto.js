@@ -35,6 +35,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "cpf", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)({}, { message: '`data_nascimento` deve ser uma data válida no formato ISO.' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "data_nascimento", void 0);
