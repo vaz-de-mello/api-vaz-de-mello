@@ -6,11 +6,11 @@ export declare class UsersService {
     private readonly db;
     constructor(db: DatabaseService);
     create(createUserDto: Prisma.UsuarioCreateArgs): Promise<{
+        senha: string;
+        login: string;
         id: string;
         nome: string;
-        login: string;
         email: string;
-        senha: string;
         cpf: string;
         data_nascimento: Date;
         escritorio_id: string;
@@ -40,9 +40,9 @@ export declare class UsersService {
             descricao: string;
         };
     } & {
+        login: string;
         id: string;
         nome: string;
-        login: string;
         email: string;
         cpf: string;
         data_nascimento: Date;
@@ -55,11 +55,11 @@ export declare class UsersService {
         status: number;
     })[]]>;
     findAll(args: Prisma.UsuarioFindManyArgs): Promise<{
+        senha: string;
+        login: string;
         id: string;
         nome: string;
-        login: string;
         email: string;
-        senha: string;
         cpf: string;
         data_nascimento: Date;
         escritorio_id: string;
@@ -71,11 +71,11 @@ export declare class UsersService {
         status: number;
     }[]>;
     findFirst(args: Prisma.UsuarioFindFirstArgs): Promise<{
+        senha: string;
+        login: string;
         id: string;
         nome: string;
-        login: string;
         email: string;
-        senha: string;
         cpf: string;
         data_nascimento: Date;
         escritorio_id: string;
@@ -87,11 +87,11 @@ export declare class UsersService {
         status: number;
     }>;
     findUnique(args: Prisma.UsuarioFindUniqueArgs): Promise<{
+        senha: string;
+        login: string;
         id: string;
         nome: string;
-        login: string;
         email: string;
-        senha: string;
         cpf: string;
         data_nascimento: Date;
         escritorio_id: string;
@@ -103,11 +103,11 @@ export declare class UsersService {
         status: number;
     }>;
     update(updateUserDto: Prisma.UsuarioUpdateArgs): Promise<{
+        senha: string;
+        login: string;
         id: string;
         nome: string;
-        login: string;
         email: string;
-        senha: string;
         cpf: string;
         data_nascimento: Date;
         escritorio_id: string;

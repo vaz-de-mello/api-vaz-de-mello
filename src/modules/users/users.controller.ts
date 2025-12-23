@@ -128,6 +128,7 @@ export class UsersController {
         return new Ok({ data: adminUser, message: 'Admins encontrados com sucesso.' });
     }
 
+    @Roles(ProfileType.ADMIN, ProfileType.BROKER)
     @Put(':id')
     async update(
         @Param('id') id: string,
@@ -142,6 +143,7 @@ export class UsersController {
         return new Ok({ data: user, message: 'Usuário atualizado com sucesso.' });
     }
 
+    @Roles(ProfileType.ADMIN, ProfileType.BROKER)
     @Put('profile/password')
     async updatePassword(
         @User() { id }: UserWithoutPassword,

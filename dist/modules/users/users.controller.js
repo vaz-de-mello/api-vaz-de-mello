@@ -139,6 +139,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findAllAdminIds", null);
 __decorate([
+    (0, decorators_1.Roles)(enum_1.ProfileType.ADMIN, enum_1.ProfileType.BROKER),
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -147,6 +148,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([
+    (0, decorators_1.Roles)(enum_1.ProfileType.ADMIN, enum_1.ProfileType.BROKER),
     (0, common_1.Put)('profile/password'),
     __param(0, (0, decorators_1.User)()),
     __param(1, (0, common_1.Body)()),
